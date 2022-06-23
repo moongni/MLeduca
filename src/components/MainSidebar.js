@@ -11,14 +11,14 @@ import { Link, NavLink } from 'react-router-dom';
 
 import './MainSidebar.css'
 
-function MainSidebar() {
-    const [isOpen, setMenu] = useState(true);
+const MainSidebar = (props) => {
+    // const [isOpen, setMenu] = useState(true);
     const [isShowMenu1, setShowMenu1] = useState(false);
     const [isShowMenu2, setShowMenu2] = useState(false);
 
     return (
         <div >
-            <div className={`${isOpen? "sidebar": "sidebar close"} border-solid border-r-2 border-slate-200`}>
+            <div className={`${props.isOpen? "sidebar": "sidebar close"} border-solid border-r-2 border-slate-200 ease-in-out duration-300`}>
                 <div className='logo-details cursor-pointer'>
                     <i className=''><RiComputerLine/></i>
                     <span className='logo_name'>Deep learning</span>
@@ -94,7 +94,7 @@ function MainSidebar() {
             </div>
             <section className='home-section border-solid border-b-2 border-slate-200'>
                 <div className='home-content '>
-                    <i className="cursor-pointer" onClick={()=> setMenu(!isOpen)}><AiOutlineMenu/></i>
+                    <i className="cursor-pointer" onClick={()=> props.setMenu(!props.isOpen)}><AiOutlineMenu/></i>
                     {/* <span className='text'>Drop Down Sidebar</span> */}
                 </div>    
             </section>
