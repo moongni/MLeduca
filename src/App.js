@@ -1,24 +1,19 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import MainSidebar from './components/MainSidebar'
+import { ModelDashBoard } from './components/ModelDashBoard';
+import Home from './pages/Home';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <div className="App w-full">
+    <MainSidebar />
+      <div className='relative flex pl-72 top-16 mt-2 bg-slate-100'>
+        <Home />
+      </div>
+    <ModelDashBoard />
+  </div>
   );
 }
 
