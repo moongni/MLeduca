@@ -16,13 +16,13 @@ function App() {
   return (
   <div className="App">
     <MainSidebar isOpen={isOpen} setMenu={setMenu}/>
-    <div className='relative w-full bg-yellow-200'
+    <div className='relative w-full'
     style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
       <div className={`${isOpen? 'ml-72': 'ml-24'} mr-80 pt-20 px-8 pb-4
       bg-red-500 ease-in-out duration-500`}>
         <Home />
       </div>
-      <footer className='bottom-0 left-0 h-4 bg-blue-600 z-50'/>
+      <footer className='absolute bottom-0 left-0 w-full h-4 bg-blue-600 z-40'/>
     </div>
     <ModelDashBoard />
   </div>

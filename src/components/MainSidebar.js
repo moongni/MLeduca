@@ -12,7 +12,6 @@ import { Link, NavLink } from 'react-router-dom';
 import './MainSidebar.css'
 
 const MainSidebar = (props) => {
-    // const [isOpen, setMenu] = useState(true);
     const [isShowMenu1, setShowMenu1] = useState(false);
     const [isShowMenu2, setShowMenu2] = useState(false);
 
