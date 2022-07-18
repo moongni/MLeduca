@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import './App.css';
 import MainSidebar from './components/MainSidebar'
 import { ModelDashBoard } from './components/ModelDashBoard';
@@ -7,13 +7,23 @@ import Home from './pages/Home';
 function App() {
   const [isOpen, setMenu] = useState(true);
 
+  useEffect(() => {
+    let vh = 0;
+    vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }, [window.innerHeight]);
+
   return (
-  <div className="App w-full">
-    <MainSidebar isOpen={isOpen} setMenu={setMenu} />
-      <div className={`relative flex ${isOpen? 'ml-72': 'ml-24'} mr-80 mt-2 p-8 top-16 rounded-xl
+  <div className="App">
+    <MainSidebar isOpen={isOpen} setMenu={setMenu}/>
+    <div className='relative w-full bg-yellow-200'
+    style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
+      <div className={`${isOpen? 'ml-72': 'ml-24'} mr-80 pt-20 px-8 pb-4
       bg-red-500 ease-in-out duration-500`}>
         <Home />
       </div>
+      <footer className='bottom-0 left-0 h-4 bg-blue-600 z-50'/>
+    </div>
     <ModelDashBoard />
   </div>
   );
