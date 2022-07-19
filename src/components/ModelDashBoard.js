@@ -1,4 +1,5 @@
 import React from 'react'
+import data from '../data/data.json';
 
 
 export const ModelDashBoard = () => {
@@ -12,7 +13,11 @@ export const ModelDashBoard = () => {
             <h1 className='mt-2 text-lg text-center font-medium border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
                 <li ><a href='#'>model : {}</a></li>
-                <li><a href='#'>Hyper Param : {}</a></li>
+                <ul><li>Hyper Param</li>
+                    {data.modelSelection.map(selection => {
+                        return <li className=''><a href='#'>{selection.id} : </a></li>
+                    })}
+                </ul>
             </div>
             
         </div>

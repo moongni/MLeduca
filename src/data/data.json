@@ -1,0 +1,51 @@
+{
+    "modelSelection" : [
+        {
+            "id":"Gradients",
+            "contents" : ["gred", "grads", "customGrad", "valueAndGrad", "valueAndGrads", "variableGrads"]
+        },
+        {
+            "id": "Optimizers",
+            "contents" : ["sgd", "momentum", "adagrad", "adadelta", "adam", "adamax", "rmsprop"]
+        },
+        {
+            "id": "Losses",
+            "contents" : ["absoluteDifference", "computeWeightedLoss", "cosineDistance", "hingeLoss", "huberLoss", "logLoss",
+            "meanSquaredError", "sigmoidCrossEntropy", "softmaxCrossEntropy"]
+        }
+    ],
+    "modelSelectionColumns" : [
+        {
+          "accessor": "gred",
+          "Header": "tf.grad"
+        },
+        {
+          "accessor": "grads",
+          "Header": "tf.grads"
+        },
+        {
+          "accessor": "customGrad",
+          "Header": "tf.customGrad"
+        },
+        {
+          "accessor": "valueAndGrad",
+          "Header": "tf.valueAndGrad"
+        },
+        {
+          "accessor": "valueAndGrads",
+          "Header": "tf.valueAndGrads"
+        },
+        {
+            "accessor": "variableGrads",
+            "Header": "tf.variableGrads"
+        }
+    ],
+    "modelSelectionData": [{
+        "gred": "미분",
+        "greds": "편미분",
+        "customGrad": "사용자 미분",
+        "valueAndGrad": "값 미분",
+        "valueAndGrads": "값 편미분",
+        "variableGreds": "변수 미분"
+        }]
+}

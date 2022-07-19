@@ -4,14 +4,8 @@
     box-sizing: border-box;
   }
   .sidebar{
-    position: fixed;
-    top:0;
-    left: 0;
-    height: 100%;
     width: 260px;
-    background: white; /*black*/
-    z-index: 30;
-    transition: all 0.5s ease;
+    /* transition: all 0.5s ease; */
   }
   .sidebar.close{
     width: 78px;
@@ -33,9 +27,9 @@
     line-height: 57px;
   }
   .sidebar .logo-details .logo_name {
-    font-size: 22px;
+    font-size: 20px;
     color: black;
-    font-weight: 600;
+    font-weight: 500;
   }
   .sidebar.close .logo-details .logo_name,
   .sidebar.close .nav-links .link-name,

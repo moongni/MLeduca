@@ -8,28 +8,35 @@ import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu } from "react-icons/
 import { FaFileExport } from "react-icons/fa"
 import { RiComputerLine } from "react-icons/ri"
 import { Link, NavLink } from 'react-router-dom';
-
-import './MainSidebar.css'
+import data from '../data/data.json';
+import './MainSidebar.css';
 
 const MainSidebar = (props) => {
     const [isShowMenu1, setShowMenu1] = useState(false);
     const [isShowMenu2, setShowMenu2] = useState(false);
 
     return (
-        <div >
-            <div className={`${props.isOpen? "sidebar": "sidebar close"} border-solid border-r-2 border-slate-200 ease-in-out duration-300`}>
+        <div className='p-0 m-0 box-border'>
+            <div className={`${props.isOpen? "sidebar": "sidebar close"} fixed top-0 left-0 h-full 
+            bg-white border-solid border-r-2 border-slate-200 ease-in-out duration-300 z-30`}>
                 <div className='logo-details cursor-pointer'>
-                    <i className=''><RiComputerLine/></i>
-                    <span className='logo_name'>Deep learning</span>
+                    <i ><RiComputerLine/></i>
+                    <span className='logo_name'>Machine learning</span>
                 </div>
                 <ul className='nav-links'>
-                    <li>
-                        <a href='#'>
-                            <i ><FiGrid/></i>
-                            <span className='link-name'>Model Selection</span>
-                        </a>
-                        <ul className='sub-menu blank'>
+                    <li className="showMenu">
+                        <div className='icon-link'>
+                            <a href='#'>
+                                <i ><FiGrid/></i>
+                                <span className='link-name'>Model Selection</span>
+                            </a>
+                        </div>
+                        <ul className='sub-menu'>
                             <li><a className='submenu-name' href='#'>Model Selection</a></li>
+                            {data.modelSelection.map((category) => {
+                                console.log(category.id);
+                                return (<li><a href='#'>{category.id}</a></li>)
+                            })}
                         </ul>
                     </li>
                     <li className={isShowMenu1? "showMenu":""} onClick={()=> setShowMenu1(!isShowMenu1)}>
