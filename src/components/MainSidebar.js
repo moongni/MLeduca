@@ -34,7 +34,6 @@ const MainSidebar = (props) => {
                         <ul className='sub-menu'>
                             <li><a className='submenu-name' href='#'>Model Selection</a></li>
                             {data.modelSelection.map((category) => {
-                                console.log(category.id);
                                 return (<li><a href='#'>{category.id}</a></li>)
                             })}
                         </ul>
