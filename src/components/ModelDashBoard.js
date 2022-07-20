@@ -1,6 +1,6 @@
 import React from 'react'
 import data from '../data/data.json';
-
+import { Link } from 'react-router-dom';
 
 export const ModelDashBoard = () => {
 
@@ -12,10 +12,11 @@ export const ModelDashBoard = () => {
         <div className='table-row w-full h-5/6 overflow-auto'>
             <h1 className='mt-2 text-lg text-center font-medium border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
-                <li ><a href='#'>model : {}</a></li>
+                <ul><li><Link to='#'>model : </Link></li>
+                </ul>
                 <ul><li>Hyper Param</li>
                     {data.modelSelection.map(selection => {
-                        return <li className=''><a href='#'>{selection.id} : </a></li>
+                        return <li className='pl-2'><Link to='#'>{selection.id} : </Link></li>
                     })}
                 </ul>
             </div>

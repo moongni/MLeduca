@@ -1,0 +1,59 @@
+{
+    "sidebarLinkName":
+    [
+        {
+            "name":"Model Create",
+            "subLinkName": 
+            [
+                {
+                    "name":"Make Layers",
+                    "link":"/layers"
+                },
+                {
+                    "name":"Loading File",
+                    "link":"/loading"
+                }
+            ],
+            "icon":"BsCollection",
+            "link":"#"
+        },
+        {
+            "name":"Model Selection",
+            "subLinkName": 
+            [
+                {
+                    "name":"Gradients",
+                    "link":"/gradients"
+                },
+                {
+                    "name":"Optimizers",
+                    "link":"/optimizers"
+                },
+                {
+                    "name":"Losses",
+                    "link":"/losses"
+                }
+            ],
+            "icon":"FiGrid",
+            "link":"#"
+        },        
+        {
+            "name":"Analytic",
+            "subLinkName": [],
+            "icon":"IoMdAnalytics",
+            "link":"#"
+        },
+        {
+            "name":"Predict",
+            "subLinkName": [],
+            "icon":"AiOutlineLineChart",
+            "link":"#"
+        },
+        {
+            "name":"Download",
+            "subLinkName": [],
+            "icon":"FaFileExport",
+            "link":"#"
+        }
+    ]
+}

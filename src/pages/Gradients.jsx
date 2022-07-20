@@ -5,7 +5,6 @@ import data from "../data/data.json"
 function Gradients() {
 
     const optimizers = data.modelSelection.filter(v => v.id === "Gradients");
-    console.log(optimizers[0])
 
     return (
         <div>{optimizers[0].contents.map((optimizer) => {

@@ -5,7 +5,6 @@ import data from "../data/data.json"
 function Losses() {
 
     const optimizers = data.modelSelection.filter(v => v.id === "Losses");
-    console.log(optimizers[0])
 
     return (
         <div>{optimizers[0].contents.map((optimizer) => {
