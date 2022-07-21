@@ -4,11 +4,11 @@ import data from "../data/data.json"
 
 function Gradients() {
 
-    const optimizers = data.modelSelection.filter(v => v.id === "Gradients");
+    const optimizers = data.modelSelection.filter(v => v.title === "Gradients");
 
     return (
-        <div>{optimizers[0].contents.map((optimizer) => {
-            return (<Box header={optimizer}></Box>);
+        <div>{optimizers.map((info) => {
+            return (<Box info={info}></Box>);
         })}</div>
     );
 }

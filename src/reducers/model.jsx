@@ -29,7 +29,6 @@ const modelInfoSlice = createSlice({
             state.info.push({
                 title: newInfo.title,
                 info: newInfo.info,
-                description: newInfo.description
             });
         },
         removeInfo(state, action) {

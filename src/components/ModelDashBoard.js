@@ -1,14 +1,18 @@
 import React from 'react'
 import data from '../data/data.json';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export const ModelDashBoard = (props) => {
+export const ModelDashBoard = () => {
+    const modelInfo = useSelector((state) => state.modelInfo.info);
+    console.log(typeof(modelInfo.title))
+    console.log(modelInfo)
 
   return (
     <div className='fixed top-16 mt-2.5 mr-2.5 w-72
     bg-slate-200 rounded-xl border-soild border-slate-200 
     table'
-    style={{'height': '600px', 'left':'calc(100% - 300px)'}}>
+    style={{'height': '85%', 'left':'calc(100% - 300px)'}}>
         <div className='table-row w-full h-5/6 overflow-auto'>
             <h1 className='mt-2 text-lg text-center font-medium border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
@@ -16,7 +20,7 @@ export const ModelDashBoard = (props) => {
                 </ul>
                 <ul><li>Hyper Param</li>
                     {data.modelSelection.map(selection => {
-                        return <li className='pl-2'><Link to='#'>{selection.id} : </Link></li>
+                        return <li className='pl-2'><Link to='#'>{selection.title} : {modelInfo.map(v => {return v.title == selection.title ? v.info: `...`})}</Link></li>
                     })}
                 </ul>
             </div>

@@ -1,51 +1,112 @@
 {
-    "modelSelection" : [
-        {
-            "id":"Gradients",
-            "contents" : ["gred", "grads", "customGrad", "valueAndGrad", "valueAndGrads", "variableGrads"]
-        },
-        {
-            "id": "Optimizers",
-            "contents" : ["sgd", "momentum", "adagrad", "adadelta", "adam", "adamax", "rmsprop"]
-        },
-        {
-            "id": "Losses",
-            "contents" : ["absoluteDifference", "computeWeightedLoss", "cosineDistance", "hingeLoss", "huberLoss", "logLoss",
-            "meanSquaredError", "sigmoidCrossEntropy", "softmaxCrossEntropy"]
-        }
-    ],
-    "modelSelectionColumns" : [
-        {
-          "accessor": "gred",
-          "Header": "tf.grad"
-        },
-        {
-          "accessor": "grads",
-          "Header": "tf.grads"
-        },
-        {
-          "accessor": "customGrad",
-          "Header": "tf.customGrad"
-        },
-        {
-          "accessor": "valueAndGrad",
-          "Header": "tf.valueAndGrad"
-        },
-        {
-          "accessor": "valueAndGrads",
-          "Header": "tf.valueAndGrads"
-        },
-        {
-            "accessor": "variableGrads",
-            "Header": "tf.variableGrads"
-        }
-    ],
-    "modelSelectionData": [{
-        "gred": "미분",
-        "greds": "편미분",
-        "customGrad": "사용자 미분",
-        "valueAndGrad": "값 미분",
-        "valueAndGrads": "값 편미분",
-        "variableGreds": "변수 미분"
-        }]
-}
+  "modelSelection" : [
+    {
+    "title": "Gradients",
+    "info": "gred",
+    "description":"미분"
+    },
+    {
+      "title":"Gradients",
+      "info":"grads",
+      "description":"편미분"
+    },
+    {
+      "title":"Gradients",
+      "info":"customGrad",
+      "description":"사용자 미분"
+    },
+    {
+      "title":"Gradients",
+      "info":"valueAndGrad",
+      "description":"가치미분"
+    }, 
+    {
+      "title":"Gradients",
+      "info":"valueAndGrads",
+      "description":"가치 편미분"
+    }, 
+    {
+      "title":"Gradients",
+      "info":"variableGrads",
+      "description":"변수 미분"
+    },
+    {
+      "title":"Optimizers",
+      "info":"sgd",
+      "description":"확률적 경사 하강법"
+    }, 
+    {
+      "title":"Optimizers",
+      "info":"momentum",
+      "description":"모멘텀"},
+    {
+      "title":"Optimizers",
+      "info":"adagrad",
+      "description":"에이다 미분"
+    }, 
+    {
+      "title": "Optimizers",
+      "info":"adadelta",
+      "description":"에이다 델타"
+    }, 
+    {
+      "title":"Optimizers",
+      "info":"adam",
+      "description":"에이다 엠"
+    }, 
+    {
+      "title":"Optimizers",
+      "info":"adamax",
+      "description":"에이다 맥스"
+    }, 
+    {
+      "title":"Optimizers",
+      "info":"rmsprop",
+      "description":"rmsprop"
+    },
+    {
+      "title":"Losses",
+      "info":"absoluteDifference",
+      "description":"절대값오차"
+    }, 
+    {
+      "title":"Losses",
+      "info":"computeWeightedLoss",
+      "description":"compute 가중치 손실함수"
+    }, 
+    {
+      "title":"Losses",
+      "info":"cosineDistance",
+      "description":"코사인 거리"
+    }, 
+    {
+      "title":"Losses",
+      "info":"hingeLoss",
+      "description":"힌지 손실 함수"
+    },
+    { 
+      "title":"Losses",
+      "info":"huberLoss",
+      "description":"휴버 손실 함수"
+    },
+    { 
+      "title":"Losses",
+      "info":"logLoss",
+      "description":"로그 손실 함수"
+    },
+    {
+      "title":"Losses",
+      "info":"meanSquaredError",
+      "description":"제곱근오차"
+    },
+    {
+      "title":"Losses",
+      "info":"sigmoidCrossEntropy",
+      "description":"시그모이드 엔트로피"
+    },
+    {
+      "title":"Losses",
+      "info":"softmaxCrossEntropy",
+      "description":"소프트맥스 엔트로피"
+    }
+]}
