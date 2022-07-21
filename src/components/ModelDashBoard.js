@@ -2,7 +2,7 @@ import React from 'react'
 import data from '../data/data.json';
 import { Link } from 'react-router-dom';
 
-export const ModelDashBoard = () => {
+export const ModelDashBoard = (props) => {
 
   return (
     <div className='fixed top-16 mt-2.5 mr-2.5 w-72

@@ -4,6 +4,7 @@ import Optimizers from './pages/Optimizers';
 import Losses from './pages/Losses';
 import { useRoutes } from 'react-router-dom';
 import { ModelDashBoard } from './components/ModelDashBoard';
+import MakeLayers from './pages/MakeLayers';
 
 function Routes() {
   let element = useRoutes([
@@ -11,9 +12,10 @@ function Routes() {
       path: '/',
       element: <Home/>,
     },
-    { path: '/Gradients/', element: <Gradients /> },
-    { path: '/Optimizers/', element: <Optimizers /> },
-    { path: '/Losses/', element: <Losses /> }
+    { path: '/gradients/', element: <Gradients /> },
+    { path: '/optimizers/', element: <Optimizers /> },
+    { path: '/losses/', element: <Losses /> },
+    { path: '/layers/', element: <MakeLayers /> }
   ]);
   return element;
 }
