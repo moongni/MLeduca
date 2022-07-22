@@ -109,4 +109,16 @@
       "info":"softmaxCrossEntropy",
       "description":"소프트맥스 엔트로피"
     }
-]}
+],
+  "modelCreate":[
+    {
+      "id":1,
+      "title": "Sequence",
+      "info": ["units", "inputShape", "batchInputShape"]
+    },
+    {
+      "id":2,
+      "title": "Model",
+      "info": ["units", "shape", "activation"]
+    }  
+  ]}
