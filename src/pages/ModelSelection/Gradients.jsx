@@ -8,12 +8,12 @@ function Gradients() {
     const optimizers = data.modelSelection.filter(v => v.title === "Gradients");
 
     return (
-        <div>
+        <div className="w-full">
             <ResetButton title="Gradients"/>
             <div>{optimizers.map((info) => {
                 return (<Box info={info} style={{"minHeight": "200px"}}></Box>);
             })}</div>
-            </div>
+        </div>
     );
 }
 

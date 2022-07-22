@@ -8,7 +8,7 @@ function ResetButton(props) {
         dispatch(modelInfoActions.removeInfo(props));
     };
     return (
-        <button className="h-10 w-20 bg-red-200 rounded-md  hover:bg-red-400 cursor-pointer"
+        <button className="h-10 w-20 mb-2 bg-red-200 rounded-md  hover:bg-red-400 cursor-pointer"
         onClick={()=>resetBtn(props.title)}>Reset</button>
     )
 }

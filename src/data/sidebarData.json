@@ -57,5 +57,35 @@
             "icon":"FaFileExport",
             "link":"#"
         }
+    ],
+    "ModelDashBoard":[
+        {
+            "name":"Model Create",
+            "subLinkName": 
+            [
+                {
+                    "name":"Make Layers",
+                    "link":"/layers"
+                }
+            ]
+        },
+        {
+            "name":"Model Selection",
+            "subLinkName": 
+            [
+                {
+                    "name":"Gradients",
+                    "link":"/gradients"
+                },
+                {
+                    "name":"Optimizers",
+                    "link":"/optimizers"
+                },
+                {
+                    "name":"Losses",
+                    "link":"/losses"
+                }
+            ]
+        }
     ]
 }
