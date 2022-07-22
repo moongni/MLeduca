@@ -21,7 +21,7 @@ function App() {
     <BrowserRouter>
       <MainSidebar isOpen={isOpen} setMenu={setMenu}/>
         <div className='relative w-full'>
-          <div className={`${isOpen? 'ml-72': 'ml-24'} mr-80 pt-20 px-8 pb-4
+          <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} mr-80 pt-20 px-4 pb-4
       ease-in-out duration-500`}>
             <Router/>
           </div>

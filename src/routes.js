@@ -1,10 +1,9 @@
 import Home from './pages/Home';
-import Gradients from './pages/Gradients';
-import Optimizers from './pages/Optimizers';
-import Losses from './pages/Losses';
+import Gradients from './pages/ModelSelection/Gradients';
+import Optimizers from './pages/ModelSelection/Optimizers';
+import Losses from './pages/ModelSelection/Losses';
 import { useRoutes } from 'react-router-dom';
-import { ModelDashBoard } from './components/ModelDashBoard';
-import MakeLayers from './pages/MakeLayers';
+import MakeLayers from './pages/ModelCreate/MakeLayers';
 
 function Routes() {
   let element = useRoutes([

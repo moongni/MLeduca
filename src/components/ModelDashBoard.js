@@ -1,12 +1,10 @@
 import React from 'react'
-import data from '../data/data.json';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import sidebars from '../data/sidebarData.json';
 
 export const ModelDashBoard = () => {
     const modelInfo = useSelector((state) => state.modelInfo.info);
-    console.log(typeof(modelInfo.title))
-    console.log(modelInfo)
 
   return (
     <div className='fixed top-16 mt-2.5 mr-2.5 w-72
@@ -14,17 +12,19 @@ export const ModelDashBoard = () => {
     table'
     style={{'height': '85%', 'left':'calc(100% - 300px)'}}>
         <div className='table-row w-full h-5/6 overflow-auto'>
-            <h1 className='mt-2 text-lg text-center font-medium border-b-2 border-slate-400'>Model Info</h1>
+            <h1 className='mt-2 text-lg text-center font-semibold border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
-                <ul><li><Link to='#'>model : </Link></li>
-                </ul>
-                <ul><li>Hyper Param</li>
-                    {data.modelSelection.map(selection => {
-                        return <li className='pl-2'><Link to='#'>{selection.title} : {modelInfo.map(v => {return v.title == selection.title ? v.info: `...`})}</Link></li>
+                {sidebars.sidebarLinkName.map(names => {
+                    return (
+                    <ul className='mb-2'><li className=' text-lg font-medium'><Link to='#'>{names.name}</Link></li>
+                    {names.subLinkName.map(params => {
+                        return (
+                            <li className='pl-2'><Link to={params.link}>{params.name}:&nbsp; &nbsp;{modelInfo.map(v => {return v.title == params.name? v.info: ""})}</Link></li>
+                        )
                     })}
-                </ul>
+                    </ul>
+                )})}
             </div>
-            
         </div>
         <div className='table-row h-14'>
             <form className='flex mt-2 items-center justify-center'>

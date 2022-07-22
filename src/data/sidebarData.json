@@ -15,7 +15,8 @@
                 }
             ],
             "icon":"BsCollection",
-            "link":"#"
+            "link":"#",
+            "clsName":"isShowMenu1"
         },
         {
             "name":"Model Selection",
@@ -35,7 +36,8 @@
                 }
             ],
             "icon":"FiGrid",
-            "link":"#"
+            "link":"#",
+            "clsName":"isShowMenu2"
         },        
         {
             "name":"Analytic",
