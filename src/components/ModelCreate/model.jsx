@@ -9,7 +9,9 @@ function Model(props) {
                     <div className="flex justify-between items-center h-14 w-full 
                     bg-yellow-400">
                         <span className="ml-10">{v}</span>
-                        <input className=" mr-10 border-2 border-black bg-yellow-400"></input>
+                        <form className="mr-10 border-2 border-black bg-yellow-400">
+                            <input className=""></input>
+                        </form>
                     </div>
                 )
             })}

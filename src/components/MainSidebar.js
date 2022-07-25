@@ -2,7 +2,7 @@ import React, { useState , useEffect } from 'react';
 import { IoMdAnalytics } from "react-icons/io";
 import { FiGrid } from "react-icons/fi"
 import { BsCollection } from "react-icons/bs"
-import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu } from "react-icons/ai"
+import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft } from "react-icons/ai"
 import { FaFileExport } from "react-icons/fa"
 import { RiComputerLine } from "react-icons/ri"
 import { Link } from 'react-router-dom';
@@ -42,7 +42,7 @@ const MainSidebar = (props) => {
             bg-white border-solid border-r-2 border-slate-200 ease-in-out duration-300 z-30`}>
                 <Link className="logo-details cursor-pointer" to='/'>
                     <i ><RiComputerLine/></i>
-                    <span className='logo_name'>Machine learning</span>
+                    <span className='logo_name'>Deep learning</span>
                 </Link>
                 <ul className='nav-links'>
                     {sidebars.sidebarLinkName.map(sidebar => {
@@ -76,6 +76,7 @@ const MainSidebar = (props) => {
             <section className='home-section border-solid border-b-2 border-slate-200'>
                 <div className='home-content '>
                     <i className="cursor-pointer" onClick={()=> props.setMenu(!props.isOpen)}><AiOutlineMenu/></i>
+                    <i className={`cursor-pointer ${props.isDashboardOpen? "":"rotate-180"} ease-in-out duration-300`} onClick={()=> props.setDashboard(!props.isDashboardOpen)}><AiOutlineArrowLeft/></i>
                 </div>    
             </section>
         </div>

@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import sidebars from '../data/sidebarData.json';
 
-export const ModelDashBoard = () => {
+export const ModelDashBoard = (props) => {
     const modelInfo = useSelector((state) => state.modelInfo.info);
 
   return (
-    <div className='fixed top-16 mt-2.5 mr-2.5 w-72
-    bg-slate-200 rounded-xl border-soild border-slate-200 
-    table'
-    style={{'height': '85%', 'left':'calc(100% - 300px)'}}>
+    <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
+    py-16 m-0 border-l-2 border-slate-200 ease-in-out duration-300 
+    bg-slate-200 border-soild table`}
+    style={{'width':`}`}}>
         <div className='table-row w-full h-5/6 overflow-auto'>
             <h1 className='mt-2 text-lg text-center font-semibold border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
@@ -36,3 +36,5 @@ export const ModelDashBoard = () => {
     </div>
   )
 }
+
+// top-16 mt-2.5 mr-2.5 w-72

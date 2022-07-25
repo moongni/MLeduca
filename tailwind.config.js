@@ -4,8 +4,7 @@ module.exports = {
     extend: {
       width: {
       '260px':"16.25rem",
-      "78px" :"4.875rem",
-      '260px':'16.25rem'
+      "78px" :"4.875rem"
       },
       height: {
         "60px":"3.75rem",
@@ -13,6 +12,9 @@ module.exports = {
       },
       minHeight: {
         "78px": "4.875rem"
+      },
+      right: {
+        '-260px':"-16.25rem"
       }
     },
   },

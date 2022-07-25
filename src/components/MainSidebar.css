@@ -163,6 +163,7 @@
     height: 60px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   .home-section .home-content i {
     color: #11101d;

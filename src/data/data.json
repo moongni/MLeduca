@@ -114,7 +114,73 @@
     {
       "id":1,
       "title": "Sequence",
-      "info": ["units", "inputShape", "batchInputShape"]
+      "info": [
+        {
+          "name": "mainParams",
+          "params": [
+            {
+              "kind":"input",
+              "title":"units",
+              "type": "number",
+              "min":"1"
+            }, 
+            {
+              "kind":"input",
+              "title":"inputShape",
+              "type":"number",
+              "min":"0"
+            }, 
+            {
+              "kind":"input",
+              "title":"batchInputShape",
+              "type":"number",
+              "min":"0"
+            },
+            {
+              "kind":"select",
+              "title":"activation",
+              "list": [
+                "elu","hardSigmoid","linear","relu","relu6", "selu",
+                "sigmoid","softmax","softplus","softsign","tanh",
+                "swish","mish"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "subParams",
+          "params": [
+            { "kind":"select",
+              "title":"kernelInitializer",
+              "list": [
+                "constant","glorotNormal","glorotUniform","heNormal",
+                "heUniform","identity", "leCunNormal","leCunUniform",
+                "ones","orthogonal","randomNormal", "randomUniform",
+                "truncatedNormal","varianceScaling","zeros"
+              ]
+            },
+            {
+              "kind":"select",
+              "title":"biasInitializer",
+              "list": [
+                "constant","glorotNormal","glorotUniform","heNormal",
+                "heUniform","identity", "leCunNormal","leCunUniform",
+                "ones","orthogonal","randomNormal", "randomUniform",
+                "truncatedNormal","varianceScaling","zeros"
+              ]
+            },
+            {
+              "kind":"input",
+              "title":"inputDim",
+              "min":1
+            },
+            {
+              "kind":"bool",
+              "title":"useBias",
+              "init":true
+            }
+          ]}
+      ]
     },
     {
       "id":2,
