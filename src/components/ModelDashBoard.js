@@ -14,11 +14,11 @@ export const ModelDashBoard = (props) => {
         <div className='table-row w-full h-5/6 overflow-auto'>
             <h1 className='mt-2 text-lg text-center font-semibold border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
-                {sidebars.ModelDashBoard.map(names => {
+                {sidebars.ModelDashBoard.map(titles => {
                     return (
                     <ul className='mb-2'>
-                        <li className=' text-lg font-medium'><Link to='#'>{names.name}</Link></li>
-                        {names.subLinkName.map(params => {
+                        <li className=' text-lg font-medium'><Link to='#'>{titles.name}</Link></li>
+                        {titles.subLinkName.map(params => {
                             return (
                                 <li className='pl-2'><Link to={params.link}>{params.name}:&nbsp; &nbsp;{modelInfo.map(v => {return v.title == params.name? v.info: ""})}</Link></li>
                             )

@@ -1,14 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { modelInfoActions } from '../reducers/model';
+import { modelSelectionActions } from '../reducers/modelSelectionSlice';
 
 function Box(props){
     const modelInfo = useSelector((state) => state.modelInfo.info);
     const dispatch = useDispatch();
 
     const selectInfoHandler = () => {
-        modelInfo.length > 0 && dispatch(modelInfoActions.removeInfo(props.info.title));
-        dispatch(modelInfoActions.addInfo(props.info))
+        modelInfo.length > 0 && dispatch(modelSelectionActions.removeModelSelection(props.info.title));
+        dispatch(modelSelectionActions.addModelSelection(props.info))
     };
     return (
         <button className="relative mb-4 w-full rounded-lg bg-blue-100 hover:bg-slate-300 cursor-pointer"
