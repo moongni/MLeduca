@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
-
+import { useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
 
 function TfTest() {
     const [currentTab, setCurrentTab] = useState('1');
+    const modelInfo = useSelector((state) => state.modelInfo.info);
+    const sequence = useSelector((state) => state.sequence.info);
 
     async function getData() {
     const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
@@ -43,9 +45,11 @@ function TfTest() {
 
   function createModel() {
     const model = tf.sequential();
-  
-    model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
-    model.add(tf.layers.dense({units: 1, useBias: true}));
+    // sequence.map(layer => {
+    //   model.add(tf.layers.dense(layer.info));
+    // })
+    // model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
+    // model.add(tf.layers.dense({units: 1, useBias: true}));
   
     return model;
   }
@@ -53,7 +57,8 @@ function TfTest() {
     
     return(
         <div className="relative w-full">
-            {tf.sequential().toJSON()}
+            {createModel().toJSON()}
+            {/* {tf.sequential().toJSON()} */}
             {/* {run()} */}
         </div>
     )

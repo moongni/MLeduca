@@ -15,6 +15,9 @@ module.exports = {
       },
       right: {
         '-260px':"-16.25rem"
+      },
+      maxWidth: {
+      '260px':"16.25rem",
       }
     },
   },

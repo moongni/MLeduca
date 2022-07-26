@@ -10,13 +10,18 @@ const sequenceSlice = createSlice({
         addLayer(state, action) {
             const newInfo = action.payload;
             state.info.push({
-                idx: newInfo.idx,
-                info: newInfo.info,
+                idx: state.info.length + 1,
+                info: newInfo
             });
         },
         removeLayer(state, action) {
             const idx = action.payload;
             state.info = state.info.filter((information) => information.idx !== idx)
+        },
+        reIndexing(state, action) {
+            state.info.map((layer, idx) => {
+                layer.idx = idx + 1;
+            })
         }
     }
 })

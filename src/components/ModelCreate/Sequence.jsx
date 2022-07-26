@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sequenceActions } from "../../reducers/sequenceSlice"
@@ -7,8 +8,20 @@ function Sequence(props) {
     const sequence = useSelector((state) => state.sequence.info);
     // const model = useSelector((state) => state.model.info)
     const dispatch = useDispatch();
-    const [layerIdx, setLayerIdx] = useState(1);
     const [inputs, setInputs] = useState({});
+
+    useEffect(() => {
+        props.info[0].params.map(v => {
+            console.log(v.title, v.default);
+            setInputs((preState)=>{
+                return {
+                    ...preState,
+                    [v.title]: v.default
+                }
+            });
+        })
+        console.log(inputs);
+    },[]);
 
     const Contents = (props) => {
         props = props.v
@@ -24,12 +37,13 @@ function Sequence(props) {
                             type={props.type}
                             min={props.min}
                             value={inputs[props.title]}
+                            defaultValue={props.default}
                             onChange={(e) => {
                                 const { value, name } = e.target;
-                                setInputs({
-                                    ...inputs,
+                                setInputs((preState)=> {return {
+                                    ...preState,
                                     [name]: value
-                                });
+                                }});
                             }}/> 
                     </div>
                     )
@@ -44,10 +58,10 @@ function Sequence(props) {
                             value={inputs[props.title]}
                             onChange={(e) => {
                                 const { value, name } = e.target;
-                                setInputs({
-                                    ...inputs,
+                                setInputs((preState)=> {return {
+                                    ...preState,
                                     [name]: value
-                                });
+                                }});
                             }}>
                             {props.list.map(l => {
                                 return <option value={l}>{l}</option>
@@ -63,12 +77,13 @@ function Sequence(props) {
     const handleSubmit = async (event) =>{
         setDisabled(true);
         event.preventDefault();
-        const newLayer = {
-            idx: layerIdx,
-            info: inputs
-        };
-        dispatch(sequenceActions.addLayer(newLayer));
-        setLayerIdx(layerIdx + 1);
+        dispatch(sequenceActions.addLayer(inputs));
+        setDisabled(false);
+    }
+    const handleRemove = async (idx) => {
+        setDisabled(true);
+        dispatch(sequenceActions.removeLayer(idx));
+        dispatch(sequenceActions.reIndexing());
         setDisabled(false);
     }
     const [isSubOpen, setSubOpen] = useState(false);
@@ -77,19 +92,23 @@ function Sequence(props) {
             <span className="ml-6 mt-2">sequence 설명</span>
             <form className="relative border-2 pb-20 border-black bg-yellow-400"
             onSubmit={handleSubmit}>
+                <div>
                 {props.info.filter((n)=> n.name === "mainParams")[0].params.map(v => {
                 return (
                     <Contents v={v}/>
                     )
                 })}
-                <button className="cursor-pointer" onClick={()=>setSubOpen(!isSubOpen)}>
+                </div>
+                <button className="cursor-pointer" type="button" onClick={()=>setSubOpen(!isSubOpen)}>
                     Advanced setting
                 </button>
+                <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
                 {props.info.filter((n)=>n.name === "subParams")[0].params.map(v => {
                     return (
-                        <Contents className="opacity-0" v={v}/>
+                        <Contents v={v}/>
                     )
                 })}
+                </div>
                 <button className="absolute w-fit h-10 bottom-3 left-1/2
                 bg-green-200 hover:bg-green-400 cursor-pointer disabled:bg-slate-400" 
                 type="submit"
@@ -101,7 +120,13 @@ function Sequence(props) {
                 <div className="w-full bg-blue-200">
                     {
                         sequence.map(layer=>{
-                            return <p>{layer.idx} layer {JSON.stringify(layer.info)}</p>
+                            return (
+                            <div className="flex justify-between">
+                                <p>{layer.idx} layer {JSON.stringify(layer.info)}</p>
+                                <button className="h-5 w-5 mr-4 text-center items-center rounded-md hover:bg-red-500"
+                                type="button"
+                                onClick={()=>handleRemove(layer.idx)}>X</button>
+                            </div>)
                         })
                     }
                 </div>

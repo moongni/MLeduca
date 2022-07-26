@@ -122,20 +122,35 @@
               "kind":"input",
               "title":"units",
               "type": "number",
-              "min":"1"
+              "min":1,
+              "default":1
             }, 
             {
               "kind":"input",
               "title":"inputShape",
               "type":"number",
-              "min":"0"
+              "min":1,
+              "default":[1]
             }, 
             {
               "kind":"input",
               "title":"batchInputShape",
               "type":"number",
-              "min":"0"
+              "min":1,
+              "default":1
             },
+            {
+              "kind":"select",
+              "title":"useBias",
+              "list": ["true", "false"],
+              "default":true
+            }
+
+          ]
+        },
+        {
+          "name": "subParams",
+          "params": [
             {
               "kind":"select",
               "title":"activation",
@@ -143,41 +158,40 @@
                 "elu","hardSigmoid","linear","relu","relu6", "selu",
                 "sigmoid","softmax","softplus","softsign","tanh",
                 "swish","mish"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "subParams",
-          "params": [
+              ],
+              "default":"relu"
+            },
             { "kind":"select",
-              "title":"kernelInitializer",
+              "title":"kerneldefaultializer",
               "list": [
                 "constant","glorotNormal","glorotUniform","heNormal",
                 "heUniform","identity", "leCunNormal","leCunUniform",
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
-              ]
+              ],
+              "default":"constant"
             },
             {
               "kind":"select",
-              "title":"biasInitializer",
+              "title":"biasdefaultializer",
               "list": [
                 "constant","glorotNormal","glorotUniform","heNormal",
                 "heUniform","identity", "leCunNormal","leCunUniform",
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
-              ]
+              ],
+              "default":"constant"
             },
             {
               "kind":"input",
               "title":"inputDim",
-              "min":1
+              "min":1,
+              "default":1
             },
             {
               "kind":"bool",
               "title":"useBias",
-              "init":true
+              "default":true
             }
           ]}
       ]
