@@ -126,18 +126,21 @@
               "default":1
             }, 
             {
-              "kind":"input",
+              "kind":"array",
               "title":"inputShape",
-              "type":"number",
-              "min":1,
-              "default":[1]
+              "type":"text",
+              "placeholder":"[ , ...]",
+              "default":"[1]"
             }, 
             {
-              "kind":"input",
-              "title":"batchInputShape",
-              "type":"number",
-              "min":1,
-              "default":1
+              "kind":"select",
+              "title":"activation",
+              "list": [
+                "elu","hardSigmoid","linear","relu","relu6", "selu",
+                "sigmoid","softmax","softplus","softsign","tanh",
+                "swish","mish"
+              ],
+              "default":"linear"
             },
             {
               "kind":"select",
@@ -152,14 +155,11 @@
           "name": "subParams",
           "params": [
             {
-              "kind":"select",
-              "title":"activation",
-              "list": [
-                "elu","hardSigmoid","linear","relu","relu6", "selu",
-                "sigmoid","softmax","softplus","softsign","tanh",
-                "swish","mish"
-              ],
-              "default":"relu"
+              "kind":"input",
+              "title":"batchInputShape",
+              "type":"number",
+              "min":1,
+              "default":[null, 1]
             },
             { "kind":"select",
               "title":"kerneldefaultializer",
@@ -169,7 +169,7 @@
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
               ],
-              "default":"constant"
+              "default":"varianceScaling"
             },
             {
               "kind":"select",
@@ -180,18 +180,13 @@
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
               ],
-              "default":"constant"
+              "default":null
             },
             {
               "kind":"input",
               "title":"inputDim",
               "min":1,
               "default":1
-            },
-            {
-              "kind":"bool",
-              "title":"useBias",
-              "default":true
             }
           ]}
       ]

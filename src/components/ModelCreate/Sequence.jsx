@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sequenceActions } from "../../reducers/sequenceSlice"
+import InputArray from "./InputArray";
 
 function Sequence(props) {
     const sequence = useSelector((state) => state.sequence.info);
@@ -12,7 +13,6 @@ function Sequence(props) {
 
     useEffect(() => {
         props.info[0].params.map(v => {
-            console.log(v.title, v.default);
             setInputs((preState)=>{
                 return {
                     ...preState,
@@ -20,11 +20,9 @@ function Sequence(props) {
                 }
             });
         })
-        console.log(inputs);
     },[]);
 
-    const Contents = (props) => {
-        props = props.v
+    const Contents = ({props}) => {
         switch(props.kind){
             case "input":
                 return (
@@ -47,6 +45,18 @@ function Sequence(props) {
                             }}/> 
                     </div>
                     )
+
+            case "array":
+                return (
+                    <div className="flex justify-between items-center h-14 w-fullbg-yellow-400">
+                        <label className="ml-10" htmlFor={props.title}>
+                            {props.title}
+                        </label>
+                        <InputArray info={props}/>
+
+                    </div>
+                )
+
             case "select":
                 return (
                     <div className="flex justify-between items-center h-14 w-fullbg-yellow-400">
@@ -77,6 +87,21 @@ function Sequence(props) {
     const handleSubmit = async (event) =>{
         setDisabled(true);
         event.preventDefault();
+        props.info.map((params) => {
+            params.params.map(async param => {
+                if (param.kind === "array") {
+                    console.log('set');
+                    setInputs((preState) => {
+                        console.log('set')
+                        return {
+                            ...preState,
+                            [param.title]: event.target[param.title].value
+                        }}
+                    );
+                }
+            })
+        })
+        console.log('dispatch');
         dispatch(sequenceActions.addLayer(inputs));
         setDisabled(false);
     }
@@ -90,22 +115,25 @@ function Sequence(props) {
     return(
         <div className="w-full bg-yellow-200">
             <span className="ml-6 mt-2">sequence 설명</span>
+
             <form className="relative border-2 pb-20 border-black bg-yellow-400"
             onSubmit={handleSubmit}>
                 <div>
                 {props.info.filter((n)=> n.name === "mainParams")[0].params.map(v => {
                 return (
-                    <Contents v={v}/>
+                    <Contents props={v}/>
                     )
                 })}
                 </div>
+
                 <button className="cursor-pointer" type="button" onClick={()=>setSubOpen(!isSubOpen)}>
                     Advanced setting
                 </button>
+                
                 <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
                 {props.info.filter((n)=>n.name === "subParams")[0].params.map(v => {
                     return (
-                        <Contents v={v}/>
+                        <Contents props={v}/>
                     )
                 })}
                 </div>
@@ -116,6 +144,7 @@ function Sequence(props) {
                     Add Layer
                 </button>
             </form>
+
             <div className="w-full">
                 <div className="w-full bg-blue-200">
                     {

@@ -48,6 +48,8 @@ function TfTest() {
     // sequence.map(layer => {
     //   model.add(tf.layers.dense(layer.info));
     // })
+    model.add(tf.layers.dense({units:1, inputShape:[1], useBias: true}));
+
     // model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
     // model.add(tf.layers.dense({units: 1, useBias: true}));
   
