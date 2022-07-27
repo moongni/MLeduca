@@ -3,12 +3,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sequenceActions } from "../../reducers/sequenceSlice"
+import { seqActions } from "../../reducers/sequence";
 import InputArray from "./InputArray";
 
 function Sequence(props) {
     const sequence = useSelector((state) => state.sequence.info);
     // const model = useSelector((state) => state.model.info)
     const dispatch = useDispatch();
+    const seq = useSelector(state=> state.seq.info);
     const [inputs, setInputs] = useState({});
 
     useEffect(() => {
@@ -20,6 +22,9 @@ function Sequence(props) {
                 }
             });
         })
+        // dispatch(seqActions.onChangeState({name:'units', value:1}))
+        console.log(seq);
+        dispatch(seqActions.initialize());
     },[]);
 
     const Contents = ({props}) => {
