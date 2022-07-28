@@ -50,6 +50,7 @@ function TfTest() {
 
   function createModel() {
     console.log('createModel 호출');
+    // model sequence 
     const model = tf.sequential();
 
     sequenceLayers.map(layer => {

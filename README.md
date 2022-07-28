@@ -1,7 +1,16 @@
 만들어야 될 것
 
+seq
+
+model
+
+전처리
+
+
+
+
 모델 데이터 받기
-주소, csv 등등
+주소, csv image 등등
 
 model param 에포크 배치 사이즈 등등
 
@@ -10,6 +19,13 @@ tf.model 사용하여 만들기
 결과 디자인
 
 ui 디자인
+
+쿠키 - redux persist
+
+훈련완료된 모델 export
+import
+
+
 
 # Getting Started with Create React App
 

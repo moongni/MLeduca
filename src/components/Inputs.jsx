@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 const Inputs = ({props}) => {
     const [string, setString] = useState("");
     const [name, setName] = useState("");
+
+    // state 디폴트 값으로 set
     useEffect(() => {
         props.default &&
         props.setValue((preValue) => {
@@ -14,6 +16,7 @@ const Inputs = ({props}) => {
         console.log(props.value)
     },[]);
     
+    // int 배열 변환하여 set
     useEffect(() => {
         let value = string
         value = value.replace("[", "");
