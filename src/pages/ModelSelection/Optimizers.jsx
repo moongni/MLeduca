@@ -5,11 +5,11 @@ import ResetButton from "../../components/ModelSelection/ResetButton";
 
 function Optimizers() {
 
-    const optimizers = data.modelSelection.filter(v => v.title === "Optimizers");
+    const optimizers = data.modelSelection.filter(v => v.title === "optimizer");
 
     return (
         <div>
-            <ResetButton title="Optimizers"/>
+            <ResetButton title="optimizer"/>
             <div>{optimizers.map((info) => {
                 return (<Box info={info} style={{"minHeight": "200px"}}></Box>);
             })}</div>

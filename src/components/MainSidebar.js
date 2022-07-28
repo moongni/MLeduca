@@ -5,6 +5,7 @@ import { BsCollection } from "react-icons/bs"
 import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft } from "react-icons/ai"
 import { FaFileExport } from "react-icons/fa"
 import { RiComputerLine } from "react-icons/ri"
+import { GoTriangleRight, GoDiffModified } from "react-icons/go"
 import { Link } from 'react-router-dom';
 import sidebars from '../data/sidebarData.json';
 import './MainSidebar.css';
@@ -19,6 +20,8 @@ const MainSidebar = (props) => {
             case 'IoMdAnalytics': return <IoMdAnalytics/>
             case 'AiOutlineLineChart': return <AiOutlineLineChart/>
             case 'FaFileExport': return <FaFileExport/>
+            case 'GoTriangleRight': return <GoTriangleRight/>
+            case 'GoDiffModified' : return <GoDiffModified/>
             default: return null
         }
     };

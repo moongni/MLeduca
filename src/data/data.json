@@ -1,111 +1,111 @@
 {
   "modelSelection" : [
     {
-    "title": "Gradients",
+    "title": "gradient",
     "info": "gred",
     "description":"미분"
     },
     {
-      "title":"Gradients",
+      "title":"gradient",
       "info":"grads",
       "description":"편미분"
     },
     {
-      "title":"Gradients",
+      "title":"gradient",
       "info":"customGrad",
       "description":"사용자 미분"
     },
     {
-      "title":"Gradients",
+      "title":"gradient",
       "info":"valueAndGrad",
       "description":"가치미분"
     }, 
     {
-      "title":"Gradients",
+      "title":"gradient",
       "info":"valueAndGrads",
       "description":"가치 편미분"
     }, 
     {
-      "title":"Gradients",
+      "title":"gradient",
       "info":"variableGrads",
       "description":"변수 미분"
     },
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"sgd",
       "description":"확률적 경사 하강법"
     }, 
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"momentum",
       "description":"모멘텀"},
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"adagrad",
       "description":"에이다 미분"
     }, 
     {
-      "title": "Optimizers",
+      "title": "optimizer",
       "info":"adadelta",
       "description":"에이다 델타"
     }, 
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"adam",
       "description":"에이다 엠"
     }, 
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"adamax",
       "description":"에이다 맥스"
     }, 
     {
-      "title":"Optimizers",
+      "title":"optimizer",
       "info":"rmsprop",
       "description":"rmsprop"
     },
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"absoluteDifference",
       "description":"절대값오차"
     }, 
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"computeWeightedLoss",
       "description":"compute 가중치 손실함수"
     }, 
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"cosineDistance",
       "description":"코사인 거리"
     }, 
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"hingeLoss",
       "description":"힌지 손실 함수"
     },
     { 
-      "title":"Losses",
+      "title":"loss",
       "info":"huberLoss",
       "description":"휴버 손실 함수"
     },
     { 
-      "title":"Losses",
+      "title":"loss",
       "info":"logLoss",
       "description":"로그 손실 함수"
     },
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"meanSquaredError",
       "description":"제곱근오차"
     },
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"sigmoidCrossEntropy",
       "description":"시그모이드 엔트로피"
     },
     {
-      "title":"Losses",
+      "title":"loss",
       "info":"softmaxCrossEntropy",
       "description":"소프트맥스 엔트로피"
     }
@@ -130,7 +130,7 @@
               "title":"inputShape",
               "type":"text",
               "placeholder":"[ , ...]",
-              "default":"[1]"
+              "default":[1]
             }, 
             {
               "kind":"select",
@@ -155,11 +155,10 @@
           "name": "subParams",
           "params": [
             {
-              "kind":"input",
+              "kind":"array",
               "title":"batchInputShape",
-              "type":"number",
-              "min":1,
-              "default":[null, 1]
+              "type":"text",
+              "placeholder":"[null, 1]"
             },
             { "kind":"select",
               "title":"kerneldefaultializer",
@@ -168,8 +167,7 @@
                 "heUniform","identity", "leCunNormal","leCunUniform",
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
-              ],
-              "default":"varianceScaling"
+              ]
             },
             {
               "kind":"select",
@@ -179,14 +177,12 @@
                 "heUniform","identity", "leCunNormal","leCunUniform",
                 "ones","orthogonal","randomNormal", "randomUniform",
                 "truncatedNormal","varianceScaling","zeros"
-              ],
-              "default":null
+              ]
             },
             {
               "kind":"input",
               "title":"inputDim",
-              "min":1,
-              "default":1
+              "min":1
             }
           ]}
       ]
@@ -196,4 +192,23 @@
       "title": "Model",
       "info": ["units", "shape", "activation"]
     }  
-  ]}
+  ],
+  "modelParams":[
+    {
+      "kind":"input",
+      "title":"batchSize",
+      "type":"number",
+      "placeholder":"number",
+      "min":1,
+      "default":32
+    },
+    {
+      "kind":"input",
+      "title":"epochs",
+      "type":"number",
+      "placeholder":"number",
+      "min":1,
+      "default":50
+    }
+  ]
+}

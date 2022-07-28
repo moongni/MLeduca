@@ -5,11 +5,11 @@ import ResetButton from "../../components/ModelSelection/ResetButton";
 
 function Gradients() {
 
-    const optimizers = data.modelSelection.filter(v => v.title === "Gradients");
+    const optimizers = data.modelSelection.filter(v => v.title === "gradient");
 
     return (
         <div className="w-full">
-            <ResetButton title="Gradients"/>
+            <ResetButton title="gradient"/>
             <div>{optimizers.map((info) => {
                 return (<Box info={info} style={{"minHeight": "200px"}}></Box>);
             })}</div>

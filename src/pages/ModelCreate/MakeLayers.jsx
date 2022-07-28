@@ -4,6 +4,7 @@ import Tabs from "../../components/ModelCreate/Tabs"
 import data from "../../data/data.json"
 import Sequence from "../../components/ModelCreate/Sequence";
 import Model from "../../components/ModelCreate/model";
+
 function MakeLayers() {
     const [currentTab, setCurrentTab] = useState('1');
     

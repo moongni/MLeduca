@@ -1,13 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
+import { input } from "@tensorflow/tfjs";
 
 function TfTest() {
-    const [currentTab, setCurrentTab] = useState('1');
     const modelInfo = useSelector((state) => state.modelInfo.info);
-    const sequence = useSelector((state) => state.sequence.info);
+    const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
 
     async function getData() {
     const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
@@ -27,7 +26,6 @@ function TfTest() {
       x: d.horsepower,
       y: d.mpg,
     }));
-  
     tfvis.render.scatterplot(
       {name: 'Horsepower v MPG'},
       {values},
@@ -40,30 +38,92 @@ function TfTest() {
 
     const model = createModel();
     tfvis.show.modelSummary({name: 'Model Summary'}, model);
+
+    const tensorData = convertToTensor(data);
+    console.log('convertToTensor 완료');
+    const {inputs, labels} = tensorData;
+
+    await trainModel(model, inputs, labels);
+    console.log('Done Training');
   }
 
 
   function createModel() {
+    console.log('createModel 호출');
     const model = tf.sequential();
-    // sequence.map(layer => {
-    //   model.add(tf.layers.dense(layer.info));
-    // })
-    model.add(tf.layers.dense({units:1, inputShape:[1], useBias: true}));
 
+    sequenceLayers.map(layer => {
+      console.log(layer.info);
+      model.add(tf.layers.dense(layer.info));
+    })
     // model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
     // model.add(tf.layers.dense({units: 1, useBias: true}));
   
     return model;
   }
 
-    
+  function convertToTensor(data) {
+    console.log('convertToTensor 호출');
+    return tf.tidy(() => {
+      // 1. 데이터 셔플
+      tf.util.shuffle(data);
+
+      // 2. 텐서로 데이터 변환
+      const inputs = data.map(d => d.horsepower);
+      const labels = data.map(d => d.mpg);
+
+      const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
+      const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
+
+      // 3. 정규화
+      const inputMax = inputTensor.max();
+      const inputMin = inputTensor.min();
+      const labelMax = labelTensor.max();
+      const labelMin = labelTensor.min();
+
+      const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+      const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+      
+      return {
+        inputs: normalizedInputs,
+        labels: normalizedLabels,
+        // 최솟값 최댓값 반환
+        inputMax,
+        inputMin,
+        labelMax,
+        labelMin,
+      }
+    })
+  }
+  
+  async function trainModel(model, inputs, labels) {
+    model.compile({
+      optimizer: modelInfo.filter(info => info.title == 'optimizer')[0].info,
+      loss: modelInfo.filter(info => info.title == 'loss')[0].info,
+    })
+
+    const batchSize = 32;
+    const epochs = 50;
+
+    return await model.fit(inputs, labels, {
+      batchSize,
+      epochs,
+      shuffle: true,
+      callbacks: tfvis.show.fitCallbacks(
+        { name: 'Training Performance'},
+        ['loss', 'mse'],
+        { height: 200, callbacks: ['onEpochEnd']}
+      )
+    })
+  }
+
     return(
         <div className="relative w-full">
-            {createModel().toJSON()}
+            {/* {createModel().toJSON()} */}
             {/* {tf.sequential().toJSON()} */}
-            {/* {run()} */}
+            {run()}
         </div>
     )
 }
 
-export default TfTest
+export default React.memo(TfTest)

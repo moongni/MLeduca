@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { info: [] };
 
-const layersSlice = createSlice({
-    name: 'sequence',
+const sequenceLayersSlice = createSlice({
+    name: 'sequenceLayer',
     initialState,
 
     reducers: {
@@ -24,11 +24,11 @@ const layersSlice = createSlice({
             })
         },
         initialize(state, action){
-            Object.assign(state, initialState);
+            state.info = initialState;
         }
     }
 })
 
-export const layersActions = layersSlice.actions;
+export const SequenceLayersActions = sequenceLayersSlice.actions;
 
-export default layersSlice;
+export default sequenceLayersSlice

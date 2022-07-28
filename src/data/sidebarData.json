@@ -10,7 +10,7 @@
                     "link":"/layers"
                 },
                 {
-                    "name":"Loading File",
+                    "name":"Loading Layers File",
                     "link":"/loading"
                 }
             ],
@@ -38,7 +38,13 @@
             "icon":"FiGrid",
             "link":"#",
             "clsName":"isShowMenu2"
-        },        
+        },
+        {
+            "name":"Model Parameter",
+            "subLinkName":[],
+            "icon":"GoDiffModified",
+            "link":"/setparams"
+        },
         {
             "name":"Analytic",
             "subLinkName": [],
@@ -56,6 +62,12 @@
             "subLinkName": [],
             "icon":"FaFileExport",
             "link":"#"
+        },
+        {
+            "name":"fit",
+            "subLinkName": [],
+            "icon":"GoTriangleRight",
+            "link":"/tfjs_test/"
         }
     ],
     "ModelDashBoard":[
@@ -74,15 +86,15 @@
             "subLinkName": 
             [
                 {
-                    "name":"Gradients",
+                    "name":"gradient",
                     "link":"/gradients"
                 },
                 {
-                    "name":"Optimizers",
+                    "name":"optimizer",
                     "link":"/optimizers"
                 },
                 {
-                    "name":"Losses",
+                    "name":"loss",
                     "link":"/losses"
                 }
             ]

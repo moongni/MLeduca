@@ -1,3 +1,16 @@
+만들어야 될 것
+
+모델 데이터 받기
+주소, csv 등등
+
+model param 에포크 배치 사이즈 등등
+
+tf.model 사용하여 만들기
+
+결과 디자인
+
+ui 디자인
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
