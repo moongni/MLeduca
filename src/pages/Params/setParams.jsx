@@ -16,17 +16,19 @@ function SetParams(){
         setDisabled(true);
         event.preventDefault();
         dispatch(paramActions.setParam(value));
-        console.log("value", value);
-        console.log("params", params);
+        setDisabled(false);
+        }
 
+    const handleRemove = async () => {
+        setDisabled(true);
+        dispatch(paramActions.removeParam());
         setDisabled(false);
     }
-    const handleRemove = async () => {
-
-    }
-
+    
     return (
         <div className="relative w-full">
+            <button className="h-10 w-20 mb-2 bg-red-200 rounded-md  hover:bg-red-400 cursor-pointer"
+        onClick={()=>handleRemove()}>Reset</button>
             <form className="relative border-2 pb-20 border-black bg-yellow-400"
             onSubmit={handleSubmit}>
                 {dataForInputs.map(param => {

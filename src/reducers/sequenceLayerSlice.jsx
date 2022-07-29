@@ -24,7 +24,7 @@ const sequenceLayersSlice = createSlice({
             })
         },
         initialize(state, action){
-            state.info = initialState;
+            state.info = [];
         }
     }
 })

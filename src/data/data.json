@@ -99,7 +99,7 @@
         },
         { 
           "title":"loss",
-          "iname":"huberLoss",
+          "name":"huberLoss",
           "description":"휴버 손실 함수"
         },
         { 

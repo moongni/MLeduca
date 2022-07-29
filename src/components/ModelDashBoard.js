@@ -5,8 +5,12 @@ import sidebars from '../data/sidebarData.json';
 
 export const ModelDashBoard = (props) => {
     const compile = useSelector((state) => state.compile.info);
+    const parameter = useSelector((state) => state.parameter.info);
+    console.log("p",parameter);
+    console.log("c",compile);
+
     const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
-    console.log(compile);
+
   return (
     <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
     max-w-[16.25rem] py-16 m-0 border-l-2 border-slate-200 ease-in-out duration-300 
@@ -41,7 +45,7 @@ export const ModelDashBoard = (props) => {
                     {
                         sidebars.ModelDashBoard.filter(title => title.name === "Parameters")[0].subLinkName.map(params => {
                             return (
-                                <li className='pl-2'><Link to={params.link}><p className='break-all'>{params.name}:&nbsp; &nbsp;{compile.map(v => {return v.title == params.name? v.name: ""})}</p></Link></li>
+                                <li className='pl-2'><Link to={params.link}><p className='break-all'>{params.name}:&nbsp; &nbsp;{parameter.map(v => {return v.title == params.name? v.name: ""})}</p></Link></li>
                             )
                         })
                     }

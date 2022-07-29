@@ -7,6 +7,7 @@ import { input } from "@tensorflow/tfjs";
 function TfTest() {
     const compile = useSelector((state) => state.compile.info);
     const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
+    const parameter = useSelector((state) => state.parameter.info);
 
     async function getData() {
     const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
@@ -107,8 +108,8 @@ function TfTest() {
     // const epochs = 50;
 
     return await model.fit(inputs, labels, {
-      batchSize:32,
-      epochs:50,
+      batchSize:parameter.filter(param => param.title == "batchSize")[0].name,
+      epochs:parameter.filter(param => param.title == "epochs")[0].name,
       shuffle: true,
       callbacks: tfvis.show.fitCallbacks(
         { name: 'Training Performance'},
