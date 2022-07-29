@@ -2,7 +2,7 @@
     "sidebarLinkName":
     [
         {
-            "name":"Model Create",
+            "name":"Layers",
             "subLinkName": 
             [
                 {
@@ -19,7 +19,7 @@
             "clsName":"isShowMenu1"
         },
         {
-            "name":"Model Selection",
+            "name":"Compile",
             "subLinkName": 
             [
                 {
@@ -40,7 +40,7 @@
             "clsName":"isShowMenu2"
         },
         {
-            "name":"Model Parameter",
+            "name":"Parameters",
             "subLinkName":[],
             "icon":"GoDiffModified",
             "link":"/setparams"
@@ -72,7 +72,7 @@
     ],
     "ModelDashBoard":[
         {
-            "name":"Model Create",
+            "name":"Layers",
             "subLinkName": 
             [
                 {
@@ -82,7 +82,7 @@
             ]
         },
         {
-            "name":"Model Selection",
+            "name":"Compile",
             "subLinkName": 
             [
                 {
@@ -96,6 +96,19 @@
                 {
                     "name":"loss",
                     "link":"/losses"
+                }
+            ]
+        },
+        {
+            "name":"Parameters",
+            "subLinkName":[
+                {
+                    "name":"batchSize",
+                    "link":"/setparams"
+                },
+                {
+                    "name":"epochs",
+                    "link":"/setparams"
                 }
             ]
         }

@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import Inputs from "../../components/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
-import { setCookie, getCookie } from "../../cookie/cookie"
+import { paramActions } from "../../reducers/paramSlice";
 
 function SetParams(){
+    const params = useSelector((state) => state.parameter.info);
     const dispatch = useDispatch();
 
-    const params = data.modelParams
+    const dataForInputs = data.modelParams
     const [value, setValue] = useState({});
     const [disabled, setDisabled] = useState(false);
 
     const handleSubmit = async (event) => {
         setDisabled(true);
         event.preventDefault();
-        setCookie('params', value);
+        dispatch(paramActions.setParam(value));
+        console.log("value", value);
+        console.log("params", params);
+
         setDisabled(false);
     }
     const handleRemove = async () => {
@@ -26,7 +29,7 @@ function SetParams(){
         <div className="relative w-full">
             <form className="relative border-2 pb-20 border-black bg-yellow-400"
             onSubmit={handleSubmit}>
-                {params.map(param => {
+                {dataForInputs.map(param => {
                     return (
                         <Inputs props={{
                             ...param,
@@ -45,7 +48,6 @@ function SetParams(){
             <div className="w-full">
                 <div className="w-full bg-blue-200">
                     <div className="flex justify-between">
-                        <p>{JSON.stringify(getCookie('params'))}</p>
                     </div>
 
                     {

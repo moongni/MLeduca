@@ -1,114 +1,130 @@
 {
-  "modelSelection" : [
-    {
-    "title": "gradient",
-    "info": "gred",
-    "description":"미분"
-    },
+  "Compile" : [
     {
       "title":"gradient",
-      "info":"grads",
-      "description":"편미분"
-    },
-    {
-      "title":"gradient",
-      "info":"customGrad",
-      "description":"사용자 미분"
-    },
-    {
-      "title":"gradient",
-      "info":"valueAndGrad",
-      "description":"가치미분"
-    }, 
-    {
-      "title":"gradient",
-      "info":"valueAndGrads",
-      "description":"가치 편미분"
-    }, 
-    {
-      "title":"gradient",
-      "info":"variableGrads",
-      "description":"변수 미분"
+      "info":[
+        {
+          "title": "gradient",
+          "name": "gred",
+          "description":"미분"
+        },
+        {
+          "title":"gradient",
+          "name":"grads",
+          "description":"편미분"
+        },
+        {
+          "title":"gradient",
+          "name":"customGrad",
+          "description":"사용자 미분"
+        },
+        {
+          "title":"gradient",
+          "name":"valueAndGrad",
+          "description":"가치미분"
+        }, 
+        {
+          "title":"gradient",
+          "name":"valueAndGrads",
+          "description":"가치 편미분"
+        }, 
+        {
+          "title":"gradient",
+          "name":"variableGrads",
+          "description":"변수 미분"
+        }
+      ]
     },
     {
       "title":"optimizer",
-      "info":"sgd",
-      "description":"확률적 경사 하강법"
-    }, 
-    {
-      "title":"optimizer",
-      "info":"momentum",
-      "description":"모멘텀"},
-    {
-      "title":"optimizer",
-      "info":"adagrad",
-      "description":"에이다 미분"
-    }, 
-    {
-      "title": "optimizer",
-      "info":"adadelta",
-      "description":"에이다 델타"
-    }, 
-    {
-      "title":"optimizer",
-      "info":"adam",
-      "description":"에이다 엠"
-    }, 
-    {
-      "title":"optimizer",
-      "info":"adamax",
-      "description":"에이다 맥스"
-    }, 
-    {
-      "title":"optimizer",
-      "info":"rmsprop",
-      "description":"rmsprop"
+      "info":[
+        {
+          "title":"optimizer",
+          "name":"sgd",
+          "description":"확률적 경사 하강법"
+        }, 
+        {
+          "title":"optimizer",
+          "name":"momentum",
+          "description":"모멘텀"},
+        {
+          "title":"optimizer",
+          "name":"adagrad",
+          "description":"에이다 미분"
+        }, 
+        {
+          "title": "optimizer",
+          "name":"adadelta",
+          "description":"에이다 델타"
+        }, 
+        {
+          "title":"optimizer",
+          "name":"adam",
+          "description":"에이다 엠"
+        }, 
+        {
+          "title":"optimizer",
+          "name":"adamax",
+          "description":"에이다 맥스"
+        }, 
+        {
+          "title":"optimizer",
+          "name":"rmsprop",
+          "description":"rmsprop"
+        }
+      ]
     },
     {
       "title":"loss",
-      "info":"absoluteDifference",
-      "description":"절대값오차"
-    }, 
-    {
-      "title":"loss",
-      "info":"computeWeightedLoss",
-      "description":"compute 가중치 손실함수"
-    }, 
-    {
-      "title":"loss",
-      "info":"cosineDistance",
-      "description":"코사인 거리"
-    }, 
-    {
-      "title":"loss",
-      "info":"hingeLoss",
-      "description":"힌지 손실 함수"
-    },
-    { 
-      "title":"loss",
-      "info":"huberLoss",
-      "description":"휴버 손실 함수"
-    },
-    { 
-      "title":"loss",
-      "info":"logLoss",
-      "description":"로그 손실 함수"
-    },
-    {
-      "title":"loss",
-      "info":"meanSquaredError",
-      "description":"제곱근오차"
-    },
-    {
-      "title":"loss",
-      "info":"sigmoidCrossEntropy",
-      "description":"시그모이드 엔트로피"
-    },
-    {
-      "title":"loss",
-      "info":"softmaxCrossEntropy",
-      "description":"소프트맥스 엔트로피"
+      "info":[
+        {
+          "title":"loss",
+          "name":"absoluteDifference",
+          "description":"절대값오차"
+        }, 
+        {
+          "title":"loss",
+          "name":"computeWeightedLoss",
+          "description":"compute 가중치 손실함수"
+        }, 
+        {
+          "title":"loss",
+          "name":"cosineDistance",
+          "description":"코사인 거리"
+        }, 
+        {
+          "title":"loss",
+          "name":"hingeLoss",
+          "description":"힌지 손실 함수"
+        },
+        { 
+          "title":"loss",
+          "iname":"huberLoss",
+          "description":"휴버 손실 함수"
+        },
+        { 
+          "title":"loss",
+          "name":"logLoss",
+          "description":"로그 손실 함수"
+        },
+        {
+          "title":"loss",
+          "name":"meanSquaredError",
+          "description":"제곱근오차"
+        },
+        {
+          "title":"loss",
+          "name":"sigmoidCrossEntropy",
+          "description":"시그모이드 엔트로피"
+        },
+        {
+          "title":"loss",
+          "name":"softmaxCrossEntropy",
+          "description":"소프트맥스 엔트로피"
+        }
+      ]
     }
+
 ],
   "modelCreate":[
     {

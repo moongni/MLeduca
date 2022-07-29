@@ -2,19 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
-import store from './reducers/store';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from './reducers/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <React.StrictMode>
   <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <CookiesProvider>
         <App />
     </CookiesProvider>
+    </PersistGate>
   </Provider>
 </React.StrictMode>
 );

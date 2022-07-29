@@ -13,6 +13,7 @@ import './MainSidebar.css';
 const MainSidebar = (props) => {
     const [isShowMenu1, setShowMenu1] = useState(false);
     const [isShowMenu2, setShowMenu2] = useState(false);
+
     const Icon = props => {
         switch (props.icon){
             case 'BsCollection': return <BsCollection/>
@@ -25,6 +26,7 @@ const MainSidebar = (props) => {
             default: return null
         }
     };
+
     const isShowMenu = props => {
         switch (props){
             case "isShowMenu1": return isShowMenu1
@@ -32,6 +34,7 @@ const MainSidebar = (props) => {
             default: return null
         }
     };
+    
     const setShowMenu = props => {
         switch (props) {
             case "isShowMenu1": return setShowMenu1(!isShowMenu1)

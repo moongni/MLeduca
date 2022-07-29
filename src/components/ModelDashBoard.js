@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import sidebars from '../data/sidebarData.json';
 
 export const ModelDashBoard = (props) => {
-    const modelInfo = useSelector((state) => state.modelInfo.info);
+    const compile = useSelector((state) => state.compile.info);
     const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
-
+    console.log(compile);
   return (
     <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
     max-w-[16.25rem] py-16 m-0 border-l-2 border-slate-200 ease-in-out duration-300 
@@ -16,7 +16,7 @@ export const ModelDashBoard = (props) => {
             <h1 className='mt-2 text-lg text-center font-semibold border-b-2 border-slate-400'>Model Info</h1>
             <div className='ml-4'>
                 <ul className='mb-2'>
-                    <li className='text-lg font-medium '><Link to='#'>Model Create</Link></li>
+                    <li className='text-lg font-medium '><Link to='#'>Layers</Link></li>
                     {
                         sequenceLayers.map(layer => {
                             return (
@@ -27,15 +27,26 @@ export const ModelDashBoard = (props) => {
                     }
                 </ul>
                 <ul className='mb-2'>
-                    <li className=' text-lg font-medium'><Link to='#'>Model Selection</Link></li>
+                    <li className=' text-lg font-medium'><Link to='#'>Compile</Link></li>
                     {
-                        sidebars.ModelDashBoard.filter(title => title.name === "Model Selection")[0].subLinkName.map(params => {
+                        sidebars.ModelDashBoard.filter(title => title.name === "Compile")[0].subLinkName.map(params => {
                             return (
-                                <li className='pl-2'><Link to={params.link}><p className='break-all'>{params.name}:&nbsp; &nbsp;{modelInfo.map(v => {return v.title == params.name? v.info: ""})}</p></Link></li>
+                                <li className='pl-2'><Link to={params.link}><p className='break-all'>{params.name}:&nbsp; &nbsp;{compile.map(v => {return v.title == params.name? v.name: ""})}</p></Link></li>
                             )
                         })
                     }
                 </ul>
+                <ul className='mb-2'>
+                    <li className=' text-lg font-medium'><Link to='#'>Parameters</Link></li>
+                    {
+                        sidebars.ModelDashBoard.filter(title => title.name === "Parameters")[0].subLinkName.map(params => {
+                            return (
+                                <li className='pl-2'><Link to={params.link}><p className='break-all'>{params.name}:&nbsp; &nbsp;{compile.map(v => {return v.title == params.name? v.name: ""})}</p></Link></li>
+                            )
+                        })
+                    }
+                </ul>
+
             </div>
         </div>
         <div className='table-row h-14'>

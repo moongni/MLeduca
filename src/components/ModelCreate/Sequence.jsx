@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
 import { SequenceLayersActions } from "../../reducers/sequenceLayerSlice";
 import Inputs from "../Inputs";
 
@@ -11,8 +10,6 @@ function Sequence(props) {
     const [isSubOpen, setSubOpen] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [value, setValue] = useState({});
-
-    const [cookies, setCookie] = useCookies(['layers'])
 
     const handleSubmit = async (event) =>{
         setDisabled(true);

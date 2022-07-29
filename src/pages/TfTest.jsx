@@ -5,7 +5,7 @@ import * as tfvis from "@tensorflow/tfjs-vis";
 import { input } from "@tensorflow/tfjs";
 
 function TfTest() {
-    const modelInfo = useSelector((state) => state.modelInfo.info);
+    const compile = useSelector((state) => state.compile.info);
     const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
 
     async function getData() {
@@ -99,16 +99,16 @@ function TfTest() {
   
   async function trainModel(model, inputs, labels) {
     model.compile({
-      optimizer: modelInfo.filter(info => info.title == 'optimizer')[0].info,
-      loss: modelInfo.filter(info => info.title == 'loss')[0].info,
+      optimizer: compile.filter(info => info.title == 'optimizer')[0].name,
+      loss: compile.filter(info => info.title == 'loss')[0].name,
     })
 
-    const batchSize = 32;
-    const epochs = 50;
+    // const batchSize = 32;
+    // const epochs = 50;
 
     return await model.fit(inputs, labels, {
-      batchSize,
-      epochs,
+      batchSize:32,
+      epochs:50,
       shuffle: true,
       callbacks: tfvis.show.fitCallbacks(
         { name: 'Training Performance'},

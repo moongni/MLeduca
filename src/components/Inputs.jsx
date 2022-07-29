@@ -6,7 +6,8 @@ const Inputs = ({props}) => {
 
     // state 디폴트 값으로 set
     useEffect(() => {
-        props.default &&
+        // 디폴트 값이 존재할 경우
+        !(typeof props.default == "undefined" || props.default == null || props.default == "") &&
         props.setValue((preValue) => {
             return {
                 ...preValue,
@@ -53,7 +54,6 @@ const Inputs = ({props}) => {
                         value={props.value[props.title]}
                         defaultValue={props.default}
                         onChange={(e) => {
-                            console.log(props.value);
                             const { value, name } = e.target;
                             props.setValue((preValue) => {
                                 return {
