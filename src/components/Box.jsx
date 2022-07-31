@@ -7,11 +7,12 @@ function Box(props){
     const dispatch = useDispatch();
 
     const selectInfoHandler = () => {
-        compile.length > 0 && dispatch(compileActions.removeCompile(props.info.title));
+        // dispatch(compileActions.initialize());
+        Object.keys(compile).length > 0 && dispatch(compileActions.removeCompile(props.title));
         dispatch(compileActions.addCompile({
-            "title":props.title,
-            "name":props.info.name}))
-    };
+            title: props.title,
+            value: props.info.name }))
+        };
     return (
         <button className="relative mb-4 w-full rounded-lg bg-blue-100 hover:bg-slate-300 cursor-pointer"
         style={props.style} onClick={selectInfoHandler}>

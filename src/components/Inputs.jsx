@@ -14,7 +14,6 @@ const Inputs = ({props}) => {
                 [props.title]: props.default
             }
         })
-        console.log(props.value)
     },[]);
     
     // int 배열 변환하여 set
@@ -23,7 +22,6 @@ const Inputs = ({props}) => {
         value = value.replace("[", "");
         value = value.replace("]", "");
         value = value.split(',').map((item) => {
-            console.log(item);
             if (item == "null"){
                 return null
             }

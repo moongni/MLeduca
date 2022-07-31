@@ -1,15 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import Tabs from "../../components/ModelCreate/Tabs"
+import Tabs from "../../components/Tabs"
 import data from "../../data/data.json"
-import Sequence from "../../components/ModelCreate/Sequence";
-import Model from "../../components/ModelCreate/model";
+import Sequence from "../../components/Layers/Sequence";
+import Model from "../../components/Layers/model";
 
-function MakeLayers() {
+function SetLayers() {
     const [currentTab, setCurrentTab] = useState('1');
     
     function tapContent(props) {
-        const curContent = data.modelCreate.filter(tab => `${tab.id}` == props)
+        const curContent = data.Layers.filter(tab => `${tab.id}` == props)
         switch (curContent[0].title) {
             case "Sequence":
                 return <Sequence info={curContent[0].info}></Sequence>                
@@ -21,7 +21,7 @@ function MakeLayers() {
     }
     return(
         <div className="relative w-full">
-            <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.modelCreate}/>
+            <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.Layers}/>
             <div className="w-full h-80 pt-10 ">
                 {tapContent(currentTab)}
             </div>
@@ -29,4 +29,4 @@ function MakeLayers() {
     )
 }
 
-export default MakeLayers
+export default SetLayers

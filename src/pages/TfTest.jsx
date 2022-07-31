@@ -6,7 +6,7 @@ import { input } from "@tensorflow/tfjs";
 
 function TfTest() {
     const compile = useSelector((state) => state.compile.info);
-    const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
+    const layers = useSelector((state) => state.layers.info);
     const parameter = useSelector((state) => state.parameter.info);
 
     async function getData() {
@@ -46,6 +46,7 @@ function TfTest() {
 
     await trainModel(model, inputs, labels);
     console.log('Done Training');
+    testModel(model, data, tensorData);
   }
 
 
@@ -54,7 +55,7 @@ function TfTest() {
     // model sequence 
     const model = tf.sequential();
 
-    sequenceLayers.map(layer => {
+    layers.map(layer => {
       console.log(layer.info);
       model.add(tf.layers.dense(layer.info));
     })
@@ -100,16 +101,13 @@ function TfTest() {
   
   async function trainModel(model, inputs, labels) {
     model.compile({
-      optimizer: compile.filter(info => info.title == 'optimizer')[0].name,
-      loss: compile.filter(info => info.title == 'loss')[0].name,
+      ...compile
     })
 
-    // const batchSize = 32;
-    // const epochs = 50;
-
     return await model.fit(inputs, labels, {
-      batchSize:parameter.filter(param => param.title == "batchSize")[0].name,
-      epochs:parameter.filter(param => param.title == "epochs")[0].name,
+      ...parameter,
+      // batchSize:parameter.filter(param => param.title == "batchSize")[0].name,
+      // epochs:parameter.filter(param => param.title == "epochs")[0].name,
       shuffle: true,
       callbacks: tfvis.show.fitCallbacks(
         { name: 'Training Performance'},
@@ -119,6 +117,47 @@ function TfTest() {
     })
   }
 
+  function testModel(model, inputData, normalizationData) {
+    const {inputMax, inputMin, labelMin, labelMax} = normalizationData;
+  
+    // Generate predictions for a uniform range of numbers between 0 and 1;
+    // We un-normalize the data by doing the inverse of the min-max scaling
+    // that we did earlier.
+    const [xs, preds] = tf.tidy(() => {
+  
+      const xs = tf.linspace(0, 1, 100);
+      const preds = model.predict(xs.reshape([100, 1]));
+  
+      const unNormXs = xs
+        .mul(inputMax.sub(inputMin))
+        .add(inputMin);
+  
+      const unNormPreds = preds
+        .mul(labelMax.sub(labelMin))
+        .add(labelMin);
+  
+      // Un-normalize the data
+      return [unNormXs.dataSync(), unNormPreds.dataSync()];
+    });
+  
+    const predictedPoints = Array.from(xs).map((val, i) => {
+      return {x: val, y: preds[i]}
+    });
+  
+    const originalPoints = inputData.map(d => ({
+      x: d.horsepower, y: d.mpg,
+    }));
+  
+    tfvis.render.scatterplot(
+      {name: 'Model Predictions vs Original Data'},
+      {values: [originalPoints, predictedPoints], series: ['original', 'predicted']},
+      {
+        xLabel: 'Horsepower',
+        yLabel: 'MPG',
+        height: 300
+      }
+    );
+  }
     return(
         <div className="relative w-full">
             {/* {createModel().toJSON()} */}

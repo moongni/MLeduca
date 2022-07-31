@@ -9,14 +9,14 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/session';
 import compileSlice from './compileSlice'
 import paramSlice from './paramSlice';
-import sequenceLayersSlice from './sequenceLayerSlice';
+import layerSlice from './layerSlice';
 
 const rootReducer = combineReducers({
   compile: compileSlice.reducer,
-  sequenceLayers: sequenceLayersSlice.reducer,
+  layers: layerSlice.reducer,
   parameter: paramSlice.reducer,
 })
 

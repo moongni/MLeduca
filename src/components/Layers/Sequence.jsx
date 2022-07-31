@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SequenceLayersActions } from "../../reducers/sequenceLayerSlice";
+import { layerActions } from "../../reducers/layerSlice";
 import Inputs from "../Inputs";
 
 function Sequence(props) {
     // const model = useSelector((state) => state.model.info)
-    const sequenceLayers = useSelector((state) => state.sequenceLayers.info);
+    const layers = useSelector((state) => state.layers.info);
     const dispatch = useDispatch();
     const [isSubOpen, setSubOpen] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -14,14 +14,14 @@ function Sequence(props) {
     const handleSubmit = async (event) =>{
         setDisabled(true);
         event.preventDefault();
-        dispatch(SequenceLayersActions.addLayer(value));
+        dispatch(layerActions.addLayer(value));
         setDisabled(false);
     }
 
     const handleRemove = async (idx) => {
         setDisabled(true);
-        dispatch(SequenceLayersActions.removeLayer(idx))
-        dispatch(SequenceLayersActions.reIndexing())
+        dispatch(layerActions.removeLayer(idx))
+        dispatch(layerActions.reIndexing())
         setDisabled(false);
     }
 
@@ -69,7 +69,7 @@ function Sequence(props) {
             <div className="w-full">
                 <div className="w-full bg-blue-200">
                     {
-                        sequenceLayers.map(layer => {
+                        layers.map(layer => {
                             return (
                                 <div className="flex justify-between">
                                     <p>{layer.idx} Layer {JSON.stringify(layer.info)}</p>

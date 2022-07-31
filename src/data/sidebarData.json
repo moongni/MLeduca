@@ -2,48 +2,42 @@
     "sidebarLinkName":
     [
         {
-            "name":"Layers",
-            "subLinkName": 
-            [
+            "name": "Load Data",
+            "subLinkName":[],
+            "icon":"FiDatabase",
+            "link":"#"
+        },
+        {
+            "name": "Preprocessing",
+            "subLinkName":[],
+            "icon":"MdOutlineToc",
+            "link":"#"
+        },
+        {
+            "name": "Setting",
+            "subLinkName":[
                 {
-                    "name":"Make Layers",
-                    "link":"/layers"
+                    "name":"Layers",
+                    "link":"/setlayers"
                 },
                 {
-                    "name":"Loading Layers File",
-                    "link":"/loading"
+                    "name":"Compile",
+                    "link":"/setcompile"
+                },
+                {
+                    "name":"Parameters",
+                    "link":"/setparams"
                 }
             ],
-            "icon":"BsCollection",
+            "icon":"AiOutlineControl",
             "link":"#",
             "clsName":"isShowMenu1"
         },
         {
-            "name":"Compile",
-            "subLinkName": 
-            [
-                {
-                    "name":"Gradients",
-                    "link":"/gradients"
-                },
-                {
-                    "name":"Optimizers",
-                    "link":"/optimizers"
-                },
-                {
-                    "name":"Losses",
-                    "link":"/losses"
-                }
-            ],
-            "icon":"FiGrid",
-            "link":"#",
-            "clsName":"isShowMenu2"
-        },
-        {
-            "name":"Parameters",
-            "subLinkName":[],
-            "icon":"GoDiffModified",
-            "link":"/setparams"
+            "name":"fit",
+            "subLinkName": [],
+            "icon":"GoTriangleRight",
+            "link":"/tfjs_test/"
         },
         {
             "name":"Analytic",
@@ -62,12 +56,6 @@
             "subLinkName": [],
             "icon":"FaFileExport",
             "link":"#"
-        },
-        {
-            "name":"fit",
-            "subLinkName": [],
-            "icon":"GoTriangleRight",
-            "link":"/tfjs_test/"
         }
     ],
     "ModelDashBoard":[

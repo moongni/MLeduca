@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
-import Box from "../../components/Box";
+import Box from "../Box";
 import data from "../../data/data.json"
-import ResetButton from "../../components/Compile/ResetButton";
+import ResetButton from "./ResetButton";
 
 function Gradients() {
 

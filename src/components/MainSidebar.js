@@ -1,11 +1,11 @@
 import React, { useState , useEffect } from 'react';
 import { IoMdAnalytics } from "react-icons/io";
-import { FiGrid } from "react-icons/fi"
-import { BsCollection } from "react-icons/bs"
-import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft } from "react-icons/ai"
+import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft, AiOutlineControl } from "react-icons/ai"
 import { FaFileExport } from "react-icons/fa"
 import { RiComputerLine } from "react-icons/ri"
-import { GoTriangleRight, GoDiffModified } from "react-icons/go"
+import { FiDatabase } from "react-icons/fi";
+import { GoTriangleRight } from "react-icons/go"
+import { MdOutlineToc } from "react-icons/md"
 import { Link } from 'react-router-dom';
 import sidebars from '../data/sidebarData.json';
 import './MainSidebar.css';
@@ -16,13 +16,13 @@ const MainSidebar = (props) => {
 
     const Icon = props => {
         switch (props.icon){
-            case 'BsCollection': return <BsCollection/>
-            case 'FiGrid': return <FiGrid/>
             case 'IoMdAnalytics': return <IoMdAnalytics/>
             case 'AiOutlineLineChart': return <AiOutlineLineChart/>
             case 'FaFileExport': return <FaFileExport/>
             case 'GoTriangleRight': return <GoTriangleRight/>
-            case 'GoDiffModified' : return <GoDiffModified/>
+            case 'AiOutlineControl': return <AiOutlineControl/>
+            case 'FiDatabase': return <FiDatabase/>
+            case 'MdOutlineToc': return <MdOutlineToc/>
             default: return null
         }
     };

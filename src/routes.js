@@ -1,11 +1,9 @@
 import Home from './pages/Home';
-import Gradients from './pages/Compile/Gradients';
-import Optimizers from './pages/Compile/Optimizers';
-import Losses from './pages/Compile/Losses';
 import { useRoutes } from 'react-router-dom';
-import MakeLayers from './pages/ModelCreate/MakeLayers';
+import SetLayers from './pages/Setting/SetLayers';
+import SetParams from './pages/Setting/SetParams';
 import TfTest from './pages/TfTest';
-import SetParams from './pages/Params/setParams';
+import SetCompile from './pages/Setting/SetCompile';
 
 function Routes() {
   let element = useRoutes([
@@ -13,12 +11,10 @@ function Routes() {
       path: '/',
       element: <Home/>,
     },
-    { path: '/gradients/', element: <Gradients /> },
-    { path: '/optimizers/', element: <Optimizers /> },
-    { path: '/losses/', element: <Losses /> },
-    { path: '/layers/', element: <MakeLayers /> },
+    { path: '/setlayers/', element: <SetLayers /> },
     { path: '/tfjs_test/', element: <TfTest /> },
-    { path: '/setparams', element: <SetParams/>}
+    { path: '/setparams', element: <SetParams/>},
+    { path: '/setcompile', element: <SetCompile/>}
   ]);
   return element;
 }

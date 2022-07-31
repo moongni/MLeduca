@@ -23,8 +23,8 @@ function App() {
       <MainSidebar isOpen={isOpen} setMenu={setMenu} 
       isDashboardOpen={isDashboardOpen} setDashboard={setDashboard}/>
         <div className='relative w-full'>
-          <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} mr-80 pt-20 px-4 pb-4
-      ease-in-out duration-500`}>
+          <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } pt-20 px-4 pb-4
+      ease-in-out duration-300`}>
             <Router/>
           </div>
         </div>

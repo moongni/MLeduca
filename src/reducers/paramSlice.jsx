@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { info: [] };
+const initialState = { info: {} };
 
 const paramSlice = createSlice({
     name: 'parameter',
@@ -9,15 +9,7 @@ const paramSlice = createSlice({
     // reducers -> 상태 업데이트 함수 모음
     reducers: {
         setParam(state, action) {
-            const newInfo = action.payload;
-            const newValue = [];
-            for (var title in newInfo){
-                newValue.push({
-                    title: title,
-                    name: newInfo[title]
-                });
-            }
-            state.info = newValue;
+            state.info = action.payload;
         },
         removeParam(state, action) {
             state.info = [];
