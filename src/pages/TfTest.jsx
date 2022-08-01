@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
-import { input } from "@tensorflow/tfjs";
 
 function TfTest() {
     const compile = useSelector((state) => state.compile.info);

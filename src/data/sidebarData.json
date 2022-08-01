@@ -5,7 +5,7 @@
             "name": "Load Data",
             "subLinkName":[],
             "icon":"FiDatabase",
-            "link":"#"
+            "link":"/loadData"
         },
         {
             "name": "Preprocessing",

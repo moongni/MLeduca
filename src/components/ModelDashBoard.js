@@ -33,7 +33,6 @@ export const ModelDashBoard = (props) => {
                                     <p className='break-all'>{layer.idx} Layer</p>
                                     {
                                         Object.entries(layer.info).map(item => {
-                                            console.log(item)
                                             return (
                                                 <p className='break-all'>{item[0]}&nbsp; &nbsp;{item[1]}</p>
                                             )

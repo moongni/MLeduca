@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState } from 'react';
 import { IoMdAnalytics } from "react-icons/io";
 import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft, AiOutlineControl } from "react-icons/ai"
 import { FaFileExport } from "react-icons/fa"

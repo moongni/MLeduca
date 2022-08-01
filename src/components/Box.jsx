@@ -6,13 +6,14 @@ function Box(props){
     const compile = useSelector((state) => state.compile.info);
     const dispatch = useDispatch();
 
-    const selectInfoHandler = () => {
+    const selectInfoHandler = async () => {
         // dispatch(compileActions.initialize());
         Object.keys(compile).length > 0 && dispatch(compileActions.removeCompile(props.title));
         dispatch(compileActions.addCompile({
             title: props.title,
             value: props.info.name }))
         };
+        
     return (
         <button className="relative mb-4 w-full rounded-lg bg-blue-100 hover:bg-slate-300 cursor-pointer"
         style={props.style} onClick={selectInfoHandler}>

@@ -18,7 +18,6 @@ const compileSlice = createSlice({
             };
         },
         removeCompile(state, action) {
-            const title = action.payload;
             delete state.info[action.payload];
         },
         initialize(state, action) {

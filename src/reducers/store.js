@@ -13,11 +13,13 @@ import storage from 'redux-persist/lib/storage/session';
 import compileSlice from './compileSlice'
 import paramSlice from './paramSlice';
 import layerSlice from './layerSlice';
+import dataSlice from './dataSlice';
 
 const rootReducer = combineReducers({
   compile: compileSlice.reducer,
   layers: layerSlice.reducer,
   parameter: paramSlice.reducer,
+  data: dataSlice.reducer,
 })
 
 const persistConfig = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Inputs from "../../components/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
