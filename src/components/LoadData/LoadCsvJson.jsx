@@ -3,7 +3,7 @@ import { dataActions } from "../../reducers/dataSlice";
 
 export const getData = async (url, dispatch, sep=',') => {
     dispatch(dataActions.initialize());
-    console.log('getData 호출');
+    console.log('getData 호출', url);
     var splitUrl = url.split("/")
     var splitFileName = splitUrl[splitUrl.length - 1].split('.');
     var fileExtension = splitFileName[1];

@@ -5,8 +5,8 @@ const initialState = {
     labels: [],
     info: [],
     data:{
-        xs: [],
-        ys: []
+        xs:[],
+        ys:[],
     }
 }
 

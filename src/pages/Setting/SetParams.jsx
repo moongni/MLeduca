@@ -27,7 +27,7 @@ function SetParams(){
     console.log(params);
     return (
         <div className="relative w-full">
-            <form className="relative border-2 pb-20 border-black bg-yellow-400"
+            <form className="relative pb-20 bg-yellow-400"
             onSubmit={handleSubmit}>
                 {dataForInputs.map(param => {
                     return (

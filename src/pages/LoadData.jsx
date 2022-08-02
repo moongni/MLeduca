@@ -22,7 +22,7 @@ export default function LoadData() {
                     value: url,
                     setValue: setUrl
                 }}/>
-                <button className="mr-10" type="button" onClick={()=>{getData(url,dispatch, '\t')}}>Fetch</button>
+                <button className="mr-10" type="button" onClick={()=>{getData(url, dispatch, '\t')}}>Fetch</button>
             </div>
             <DrogDropFile dispatch={dispatch}/>
             <div className="flex justify-between items-center h-14 w-full bg-yellow-400">

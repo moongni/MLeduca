@@ -4,7 +4,46 @@ import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
 import { dataActions } from "../reducers/dataSlice";
 
-function TfTest() {
+
+function convertToTensor(data) {
+  console.log('convertToTensor 호출');
+  console.log("data",data);
+  return tf.tidy(() => {
+    // 1. 데이터 셔플
+    // tf.util.shuffle();
+
+    // 2. 텐서로 데이터 변환
+    const inputs = data.xs;
+    const labels = data.ys;
+    const inputTensor = tf.tensor2d(inputs, [inputs.length, inputs[0].length]);
+    const labelTensor = tf.tensor2d(labels, [labels.length, labels[0].length]);
+    console.log("inputs",inputTensor);
+    console.log("labels",labelTensor);
+
+    // 3. 정규화
+    const inputMax = inputTensor.max(1);
+    const inputMin = inputTensor.min(1);
+    const labelMax = labelTensor.max(1);
+    const labelMin = labelTensor.min(1);
+
+    const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+    const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+    console.log("Ninput",normalizedInputs);
+    console.log("Nlabel",normalizedLabels);
+
+    return {
+      inputs: normalizedInputs,
+      labels: normalizedLabels,
+      // 최솟값 최댓값 반환
+      inputMax,
+      inputMin,
+      labelMax,
+      labelMin,
+    }
+  })
+}
+
+function TfTest2() {
     const dispatch = useDispatch();
     const compile = useSelector((state) => state.compile.info);
     const layers = useSelector((state) => state.layers.info);
@@ -19,36 +58,20 @@ function TfTest() {
       setYsample(data.ys);
     }, [data])
 
-    async function getData() {
-      dispatch(dataActions.getTensorData());
-      const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
-      const carsData = await carsDataResponse.json();
-      const cleaned = carsData.map(car => ({
-          mpg: car.Miles_per_Gallon,
-          horsepower: car.Horsepower,
-      }))
-      .filter(car => (car.mpg != null && car.horsepower != null));
-      console.log("c",cleaned);
-
-      return cleaned;
-    }
     console.log(data);
+
   async function run() {
-    const data = await getData();
-    const values = data.map(d => ({
-      x: d.horsepower,
-      y: d.mpg,
-    }));
-    console.log(values);
-    tfvis.render.scatterplot(
-      {name: 'Horsepower v MPG'},
-      {values},
-      {
-        xLabel: 'Horsepower',
-        yLabel: 'MPG',
-        height: 300
-      }
-    );
+    dispatch(dataActions.getTensorData());
+    
+    // tfvis.render.scatterplot(
+    //   {name: 'Horsepower v MPG'},
+    //   {values},
+    //   {
+    //     xLabel: '',
+    //     yLabel: 'MPG',
+    //     height: 300
+    //   }
+    // );
 
     const model = createModel();
     tfvis.show.modelSummary({name: 'Model Summary'}, model);
@@ -77,42 +100,6 @@ function TfTest() {
     return model;
   }
 
-  function convertToTensor(data) {
-    console.log('convertToTensor 호출');
-    return tf.tidy(() => {
-      // 1. 데이터 셔플
-      tf.util.shuffle(data);
-
-      // 2. 텐서로 데이터 변환
-      const inputs = data.map(d => d.horsepower);
-      const labels = data.map(d => d.mpg);
-
-      const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
-      const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
-
-      // 3. 정규화
-      const inputMax = inputTensor.max();
-      const inputMin = inputTensor.min();
-      const labelMax = labelTensor.max();
-      const labelMin = labelTensor.min();
-
-      const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-      const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
-      console.log("input",inputTensor);
-      console.log("label",labelTensor);
-
-      return {
-        inputs: normalizedInputs,
-        labels: normalizedLabels,
-        // 최솟값 최댓값 반환
-        inputMax,
-        inputMin,
-        labelMax,
-        labelMin,
-      }
-    })
-  }
-  
   async function trainModel(model, inputs, labels) {
     model.compile({
       ...compile
@@ -181,4 +168,4 @@ function TfTest() {
     )
 }
 
-export default React.memo(TfTest)
+export default React.memo(TfTest2)
