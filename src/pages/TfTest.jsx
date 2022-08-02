@@ -1,24 +1,28 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
+import { dataActions } from "../reducers/dataSlice";
 
 function TfTest() {
+    const dispatch = useDispatch();
     const compile = useSelector((state) => state.compile.info);
     const layers = useSelector((state) => state.layers.info);
     const parameter = useSelector((state) => state.parameter.info);
-
+    const data = useSelector((state) => state.data.data);
+    
     async function getData() {
-    const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
-    const carsData = await carsDataResponse.json();
-    const cleaned = carsData.map(car => ({
-      mpg: car.Miles_per_Gallon,
-      horsepower: car.Horsepower,
-    }))
-    .filter(car => (car.mpg != null && car.horsepower != null));
-  
-    return cleaned;
-  }
+      const data = dispatch(dataActions.getTensorData());
+      const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
+      const carsData = await carsDataResponse.json();
+        const cleaned = carsData.map(car => ({
+          mpg: car.Miles_per_Gallon,
+          horsepower: car.Horsepower,
+        }))
+        .filter(car => (car.mpg != null && car.horsepower != null));
+        
+        return cleaned;
+    }
 
   async function run() {
     const data = await getData();

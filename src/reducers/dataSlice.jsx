@@ -18,15 +18,21 @@ const dataSlice = createSlice({
         addSample(state, action) {
             state.info.push(action.payload);
         },
-        addLabels(state, action){
-            const labels = action.payload;
-            labels.map(label => {
-                if (state.columns.includes(label)) {
-                    state.labels = action.payload;
+        addLabel(state, action){
+            const label = action.payload;
+            console.log(label);
+            if (label){
+                if (!state.labels.includes(label)){
+                    state.labels.push(label);
                 } else {
-                    alert("해당 컬럼을 찾을 수 없습니다. : ", label);
+                    alert("이미 선택된 컬럼입니다. : ", label);
                 }
-            })
+            } else {
+                alert("해당 컬럼을 찾을 수 없습니다. : ", label);
+            }
+        },
+        removeLabel(state, action){
+            state.labels = state.labels.filter((l) => l !== action.payload);
         },
         addColumns(state, action){
             state.columns = action.payload;

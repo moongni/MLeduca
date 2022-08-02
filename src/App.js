@@ -6,8 +6,8 @@ import {BrowserRouter} from 'react-router-dom'
 import Router from "./routes"
 
 function App() {
-  const [isOpen, setMenu] = useState(true);
-  const [isDashboardOpen, setDashboard] = useState(true);
+  const [isOpen, setMenu] = useState(false);
+  const [isDashboardOpen, setDashboard] = useState(false);
 
   useEffect(() => {
     let vh = 0;

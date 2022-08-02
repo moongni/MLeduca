@@ -41,7 +41,7 @@ const Inputs = ({props}) => {
     switch(props.kind){
         case "input":
             return (
-                <div className="flex justify-between items-center h-14 w-fullbg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
                     <label className="ml-10" htmlFor={props.title}>
                         {props.title}
                     </label>
@@ -66,7 +66,7 @@ const Inputs = ({props}) => {
 
         case "array":
             return (
-                <div className="flex justify-between items-center h-14 w-fullbg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
                     <label className="ml-10" htmlFor={props.title}>
                         {props.title}
                     </label>
@@ -83,10 +83,28 @@ const Inputs = ({props}) => {
                         }}/> 
                 </div>
             )
+        case "text":
+            return (
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                    <label className="ml-10" htmlFor={props.title}>
+                        {props.title}
+                    </label>
+                    <input className="mr-10" 
+                        name={props.title}
+                        type={props.type}
+                        value={props.value}
+                        defaultValue={props.default}
+                        placeholder={props.placeholder}
+                        onChange={(e) => {
+                            let { value } = e.target;
+                            props.setValue(value)
+                        }}/> 
+                </div>
+            )
 
         case "select":
             return (
-                <div className="flex justify-between items-center h-14 w-fullbg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
                     <span className="ml-10">
                         {props.title}
                     </span>
@@ -103,12 +121,40 @@ const Inputs = ({props}) => {
                                 }
                             })
                         }}>
+                        {props.defaultName && 
+                            <option value={props.default}>{props.defaultName}</option>
+                        }
                         {props.list.map(l => {
                             return <option value={l}>{l}</option>
                         })}
                     </select>
                 </div>
             )
+        case "selectOne":
+            return (
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                    <span className="ml-10">
+                        {props.title}
+                    </span>
+                    <select className="mr-10"
+                        name={props.title}
+                        value={props.value}
+                        defaultValue={props.default}
+                        onChange={(e) => {
+                            const { value } = e.target;
+                            props.setValue(value)}
+                            }
+                        >
+                        {props.defaultName && 
+                            <option value={props.default}>{props.defaultName}</option>
+                        }
+                        {props.list.map(l => {
+                            return <option value={l}>{l}</option>
+                        })}
+                    </select>
+                </div>
+            )
+    
     }
 }
 

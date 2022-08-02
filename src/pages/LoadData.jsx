@@ -1,94 +1,92 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataActions } from "../reducers/dataSlice";
+import { getData, DrogDropFile } from "../components/LoadData/LoadCsvJson";
+import Inputs from "../components/Inputs";
 
-const getData = async ({url, dispatch}) => {
-    dispatch(dataActions.initialize());
-    console.log('getData 호출');
-    const dataResponse = await fetch(url);
-    var splitUrl = url.split("/")
-    var splitFileName = splitUrl[splitUrl.length - 1].split('.');
-    var fileExtension = splitFileName[1];
-    switch (fileExtension){
-        case "json":
-            const dataJson = await dataResponse.json();
-            dispatch(dataActions.addData({
-                columns:Object.keys(dataJson[0]),
-                samples:dataJson
-            }));
-            break;
-        case "csv":
-            const DATA_ARRAY = [];
-            const dataCsv = await dataResponse.text();
-            const rows = dataCsv.split((/\r?\n|\r/));
-            const features = rows.shift().split('\t');
-            dispatch(dataActions.addColumns(features));
-            console.log(features);
-            rows.forEach(row => {
-                const values = row.split('\t');
-                const curObject = new Object();
-                features.forEach((value, key) => {
-                    curObject[value] = values[key];
-                })
-                dispatch(dataActions.addSample(curObject));
-                DATA_ARRAY.push(curObject);
-            })            
-    }
-}
-
-export default function CSVReader() {
+export default function LoadData() {
     const dispatch = useDispatch();
 
     const dataInfo = useSelector(state => state.data.info);
     const dataColumns = useSelector(state => state.data.columns);
+    const dataLabel = useSelector(state => state.data.labels);
     const [url, setUrl] = useState("");
-
-    console.log('csv 리렌더링');
-
+    const [label, setLabel] = useState("");
     return (
         <>
-        <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
-            <label className="ml-10" htmlFor={'csv url'}>
-                {'Url'}
-            </label>
-            <input className="mx-10 w-full border-2 border-black" 
-                name={'Url'}
-                type={'text'}
-                value={url}
-                onChange={(e) => {
-                    let { value } = e.target;
-                    setUrl(value)
-                }}/> 
-            <button className="mr-10" type="button" onClick={()=>{getData({"url": url, "dispatch":dispatch})}}>Fetch</button>
-        </div>
-        { dataInfo.length > 0 && 
-            <table>
-                <thead>
-                <tr key={"column"}>
-                    {dataColumns.map((column) => (
-                    <th>{column}</th>
-                    ))}
-                </tr>
-                </thead>
-    
-                <tbody>
-                    {dataInfo.map((items, idx) => {
+            <div className="flex  bg-yellow-400 mb-10">
+                <Inputs props={{
+                    kind: "text",
+                    title: "Url",
+                    placeholder: "Url 입력",
+                    value: url,
+                    setValue: setUrl
+                }}/>
+                <button className="mr-10" type="button" onClick={()=>{getData(url,dispatch, '\t')}}>Fetch</button>
+            </div>
+            <DrogDropFile dispatch={dispatch}/>
+            <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <Inputs props={{
+                        kind: "selectOne",
+                        title: "Set Label",
+                        default:null,
+                        defaultName:"Label 선택",
+                        value: label,
+                        setValue: setLabel,
+                        list: dataColumns
+                    }}/>
+                <button className="mr-10" type="button" 
+                        onClick={()=>{
+                            dispatch(dataActions.addLabel(label));
+                        }}>Add</button>
+            </div>
+            <div className="mb-10">
+                {
+                    dataLabel.map(label => {
                         return (
-                            <tr key={idx}>
-                                {
-                                    dataColumns.map((column) => {
-                                        return (
-                                            <td >
-                                                {items[column]}
-                                            </td>
-                                        )
-                                    })
-                                }
-                            </tr>
-                    )})}
-                </tbody>
-            </table>
-    }
+                            <div className="flex justify-between">
+                                <p>{label}</p>
+                                <button className="text-center hover:bg-red-500" 
+                                type="button" 
+                                onClick={()=>dispatch(dataActions.removeLabel(label))}>
+                                    X
+                                </button>
+                        </div>
+                        )
+                    })
+                }
+            </div>
+            <div className="max-h-[28rem] overflow-scroll ">
+                { dataInfo.length > 0 && 
+                    <table className="">
+                        <thead>
+                        <tr key={"column"}
+                            className="">
+                            { dataColumns.map((column) => (
+                                <th className="">{column}</th>
+                            ))}
+                        </tr>
+                        </thead>
+                        <tbody className="">
+                            { dataInfo.map((items, idx) => {
+                                return (
+                                    <tr key={idx}>
+                                        {
+                                            dataColumns.map((column) => {
+                                                return (
+                                                    <td >
+                                                        {items[column]}
+                                                    </td>
+                                                )
+                                            })
+                                        }
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                }
+            </div>
         </>
     );
     }
