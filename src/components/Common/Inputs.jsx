@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { MultiSelect } from "react-multi-select-component";
 
 const Inputs = ({props}) => {
+    // text input을 위한 state
     const [string, setString] = useState("");
     const [name, setName] = useState("");
 
@@ -83,6 +85,7 @@ const Inputs = ({props}) => {
                         }}/> 
                 </div>
             )
+
         case "text":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -130,6 +133,7 @@ const Inputs = ({props}) => {
                     </select>
                 </div>
             )
+
         case "selectOne":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -154,7 +158,22 @@ const Inputs = ({props}) => {
                     </select>
                 </div>
             )
-    
+            
+        case "MultiSelect":
+            return (
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                    <span className="ml-10">
+                        {props.title}
+                    </span>
+                    <MultiSelect className="w-72"
+                        options={props.options}
+                        value={props.value}
+                        onChange={props.setValue}
+                        labelledBy="Select"
+                        >
+                    </MultiSelect>
+                </div>
+            )
     }
 }
 

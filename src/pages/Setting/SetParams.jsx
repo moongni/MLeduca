@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Inputs from "../../components/Inputs";
+import Inputs from "../../components/Common/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
 import { paramActions } from "../../reducers/paramSlice";

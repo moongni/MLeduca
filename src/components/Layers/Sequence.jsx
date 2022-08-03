@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { layerActions } from "../../reducers/layerSlice";
-import Inputs from "../Inputs";
+import Inputs from "../Common/Inputs";
 
 function Sequence(props) {
     // const model = useSelector((state) => state.model.info)

@@ -11,7 +11,7 @@
             "name": "Preprocessing",
             "subLinkName":[],
             "icon":"MdOutlineToc",
-            "link":"#"
+            "link":"/preprocessing"
         },
         {
             "name": "Setting",

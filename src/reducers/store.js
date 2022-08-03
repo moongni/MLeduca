@@ -14,12 +14,16 @@ import compileSlice from './compileSlice'
 import paramSlice from './paramSlice';
 import layerSlice from './layerSlice';
 import dataSlice from './dataSlice';
+import trainSlice from './trainSlice';
+import testSlice from './testSlice';
 
 const rootReducer = combineReducers({
   compile: compileSlice.reducer,
   layers: layerSlice.reducer,
   parameter: paramSlice.reducer,
   data: dataSlice.reducer,
+  train: trainSlice.reducer,
+  test: testSlice.reducer
 })
 
 const persistConfig = {

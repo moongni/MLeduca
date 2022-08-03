@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "../Box";
+import Box from "./Box";
 import data from "../../data/data.json"
 import ResetButton from "./ResetButton";
 

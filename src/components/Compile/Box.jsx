@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { compileActions } from '../reducers/compileSlice';
+import { compileActions } from '../../reducers/compileSlice';
 
 function Box(props){
     const compile = useSelector((state) => state.compile.info);
