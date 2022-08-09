@@ -2,57 +2,73 @@
   "Compile" : [
     {
       "id":1,
-      "title":"gradient",
-      "info":[
-        {
-          "title": "gradient",
-          "name": "gred",
-          "description":"미분"
-        },
-        {
-          "title":"gradient",
-          "name":"grads",
-          "description":"편미분"
-        },
-        {
-          "title":"gradient",
-          "name":"customGrad",
-          "description":"사용자 미분"
-        },
-        {
-          "title":"gradient",
-          "name":"valueAndGrad",
-          "description":"가치미분"
-        }, 
-        {
-          "title":"gradient",
-          "name":"valueAndGrads",
-          "description":"가치 편미분"
-        }, 
-        {
-          "title":"gradient",
-          "name":"variableGrads",
-          "description":"변수 미분"
-        }
-      ]
-    },
-    {
-      "id":2,
       "title":"optimizer",
       "info":[
         {
           "title":"optimizer",
           "name":"sgd",
-          "description":"확률적 경사 하강법"
+          "description":"확률적 경사 하강법",
+          "params": [
+            {
+              "kind":"input",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":1,
+              "step": 0.01
+            }
+          ]
         }, 
         {
           "title":"optimizer",
           "name":"momentum",
-          "description":"모멘텀"},
+          "description":"모멘텀",
+          "params": [
+            {
+              "kind":"input",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":1,
+              "step": 0.01
+            },            
+            {
+              "kind":"input",
+              "title":"mementum",
+              "type": "number",
+              "min":0,
+              "default":1,
+              "step": 0.01
+            },
+            {
+              "kind":"select",
+              "title":"useNesterov",
+              "list": ["true", "false"]
+            }
+          ]
+        },
         {
           "title":"optimizer",
           "name":"adagrad",
-          "description":"에이다 미분"
+          "description":"에이다 미분",
+          "params": [
+            {
+              "kind":"input",
+              "title":"learningRate",
+              "type": "number",
+              "min":1,
+              "default":1,
+              "step": 0.01
+            },
+            {
+              "kind":"input",
+              "title":"initialAccumulatorValue",
+              "type": "number",
+              "min":1,
+              "default":1,
+              "step": 1
+            }           
+          ]
         }, 
         {
           "title": "optimizer",
@@ -77,7 +93,7 @@
       ]
     },
     {
-      "id":3,
+      "id":2,
       "title":"loss",
       "info":[
         {
@@ -142,7 +158,8 @@
               "title":"units",
               "type": "number",
               "min":1,
-              "default":1
+              "default":1,
+              "step":1
             }, 
             {
               "kind":"array",

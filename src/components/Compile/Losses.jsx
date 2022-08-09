@@ -9,9 +9,19 @@ function Losses() {
     return (
         <div>
             <ResetButton title="loss"/>
-            <div>{losses.map((info) => {
-                return (<Box title="loss" info={info} style={{"minHeight": "200px"}}></Box>);
-            })}</div>
+            <div>
+                {losses.map((info) => {
+                    return (
+                        <>
+                            <Box 
+                                title="loss" 
+                                info={info} 
+                                style={{"minHeight": "200px"}}>
+                                </Box>
+                            
+                        </>);
+                })}
+            </div>
         </div>
     );
 }

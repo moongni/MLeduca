@@ -58,6 +58,7 @@
             "link":"#"
         }
     ],
+    
     "ModelDashBoard":[
         {
             "name":"Layers",
@@ -67,38 +68,17 @@
                     "name":"Layer",
                     "link":"/layers"
                 }
-            ]
+            ],
+            "link":"/setlayers"
+
         },
         {
             "name":"Compile",
-            "subLinkName": 
-            [
-                {
-                    "name":"gradient",
-                    "link":"/gradients"
-                },
-                {
-                    "name":"optimizer",
-                    "link":"/optimizers"
-                },
-                {
-                    "name":"loss",
-                    "link":"/losses"
-                }
-            ]
+            "link": "/setcompile"
         },
         {
             "name":"Parameters",
-            "subLinkName":[
-                {
-                    "name":"batchSize",
-                    "link":"/setparams"
-                },
-                {
-                    "name":"epochs",
-                    "link":"/setparams"
-                }
-            ]
+            "link": "setparams"
         }
     ]
 }

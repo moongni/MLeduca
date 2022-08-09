@@ -3,7 +3,6 @@ import { useState } from "react";
 import data from "../../data/data.json"
 import Losses from "../../components/Compile/Losses";
 import Optimizers from "../../components/Compile/Optimizers";
-import Gradients from "../../components/Compile/Gradients";
 import Tabs from "../../components/Tabs";
 
 function SetCompile() {
@@ -12,8 +11,6 @@ function SetCompile() {
     function tapContent(tabId) {
         const curContent = data.Compile.filter(tab => `${tab.id}` == tabId)
         switch (curContent[0].title){
-            case "gradient":
-                return <Gradients/>
             case "optimizer":
                 return <Optimizers/>
             case "loss":

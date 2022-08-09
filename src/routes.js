@@ -1,12 +1,11 @@
-import Home from './pages/Home';
 import { useRoutes } from 'react-router-dom';
+import Home from './pages/Home';
+import LoadData from './pages/LoadData';
+import Preprocessing from './pages/Preprocessing';
 import SetLayers from './pages/Setting/SetLayers';
 import SetParams from './pages/Setting/SetParams';
-import TfTest from './pages/TfTest';
 import SetCompile from './pages/Setting/SetCompile';
-import LoadData from './pages/LoadData';
-import TfTest2 from './pages/TfTest2';
-import Preprocessing from './pages/Preprocessing';
+import TfTest from './pages/TfTest';
 
 function Routes() {
   let element = useRoutes([
@@ -19,7 +18,6 @@ function Routes() {
     { path: '/setparams', element: <SetParams/>},
     { path: '/setcompile', element: <SetCompile/>},
     { path: '/loadData', element: <LoadData/>},
-    { path: '/tfjs_test2', element: <TfTest2/>},
     { path: '/preprocessing', element: <Preprocessing/>}
   ]);
   return element;

@@ -7,8 +7,8 @@ export const ModelDashBoard = (props) => {
     const compile = useSelector((state) => state.compile.info);
     const parameter = useSelector((state) => state.parameter.info);
     const layers = useSelector((state) => state.layers.info);
+    
     const Content = ({props}) => {
-
         const getData = (name) => {
             switch(name) {
                 case "Parameters":
@@ -20,16 +20,16 @@ export const ModelDashBoard = (props) => {
             }
         }
         
-        switch(props){
+        switch(props.name){
             case "Layers":
                 return(
                     <ul className='mb-2'>
-                        <li className='text-lg font-medium '><Link to='#'>Layers</Link></li>
+                        <Link to={props.link}>
+                        <li className='text-lg font-medium '>Layers</li>
                         {
-                            layers.map(layer => {
+                            layers.map((layer, index) => {
                                 return (
                                 <li className='pl-2'>
-                                    <Link to='/layers'>
                                     <p className='break-all'>{layer.idx} Layer</p>
                                     {
                                         Object.entries(layer.info).map(item => {
@@ -38,23 +38,26 @@ export const ModelDashBoard = (props) => {
                                             )
                                         })
                                     }
-                                    </Link>
                                 </li>)
                             })
                         }
+                        </Link>
                     </ul>
                 )
             default:
                 return (
                     <ul className='mb-2'>
-                        <li className=' text-lg font-medium'><Link to='#'>{props}</Link></li>
+                        <Link to={props.link}>
+                        <li className=' text-lg font-medium'>
+                            {props.name}</li>
                         {
-                            Object.entries(getData(props)).map(setting => {
+                            Object.entries(getData(props.name)).map(setting => {
                                 return (
-                                    <li className='pl-2'><Link to='/'><p className='break-all'>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p></Link></li>
+                                    <li className='pl-2'><p className='break-all'>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p></li>
                                 )
                             })
                         }
+                        </Link>
                     </ul>
                 )
         }
@@ -70,7 +73,7 @@ export const ModelDashBoard = (props) => {
             <div className='ml-4'>
                 {
                     sidebars.ModelDashBoard.map(items => {
-                        return <Content props={items.name}/>
+                        return <Content props={items}/>
                     })
                 }
             </div>

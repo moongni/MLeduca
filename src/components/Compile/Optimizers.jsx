@@ -9,9 +9,16 @@ function Optimizers() {
     return (
         <div>
             <ResetButton title="optimizer"/>
-            <div>{optimizers.map((info) => {
-                return (<Box title="optimizer" info={info} style={{"minHeight": "200px"}}></Box>);
-            })}</div>
+            <div>
+                {optimizers.map((info) => {
+                    return (
+                        <Box 
+                            title="optimizer" 
+                            info={info} 
+                            >
+                        </Box>);
+                })}
+            </div>
         </div>
     );
 }

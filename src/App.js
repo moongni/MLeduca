@@ -1,8 +1,8 @@
 import React, { useState , useEffect} from 'react';
-import './App.css';
 import MainSidebar from './components/MainSidebar'
+import "./App.css"
 import { ModelDashBoard } from './components/ModelDashBoard';
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import Router from "./routes"
 
 function App() {
@@ -20,15 +20,19 @@ function App() {
   <div className="App relative"
   style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
     <BrowserRouter>
-      <MainSidebar isOpen={isOpen} setMenu={setMenu} 
-      isDashboardOpen={isDashboardOpen} setDashboard={setDashboard}/>
+      <MainSidebar 
+        isOpen={isOpen} 
+        setMenu={setMenu} 
+        isDashboardOpen={isDashboardOpen} 
+        setDashboard={setDashboard}/>
         <div className='relative w-full'>
           <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } pt-20 px-4 pb-4
       ease-in-out duration-300`}>
             <Router/>
           </div>
         </div>
-      <ModelDashBoard isDashboardOpen={isDashboardOpen}/>
+      <ModelDashBoard 
+        isDashboardOpen={isDashboardOpen}/>
     </BrowserRouter>
     <div className='fixed bottom-0 left-0 w-full h-4 bg-blue-400 border-blue-200 z-40'/>
   </div>
