@@ -11,14 +11,6 @@ function TfTest() {
     const parameter = useSelector((state) => state.parameter.info);
     const data = useSelector((state) => state.data.data);
     
-    const [Xsample, setXsample] = useState([]);
-    const [Ysample, setYsample] = useState([]);
-
-    useEffect(() => {
-      setXsample(data.xs);
-      setYsample(data.ys);
-    }, [data])
-
     async function getData() {
       dispatch(dataActions.getTensorData());
       const carsDataResponse = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');

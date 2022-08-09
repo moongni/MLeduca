@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
-import SetColumn, { toArray, toOption } from "../components/Preprocessing/SetColum";
+import SetColumn, { toArray, toOption, setData } from "../components/Preprocessing/SetColum";
 import DataTable from "../components/Common/DataTable";
 
 
@@ -36,7 +36,6 @@ const Preprocessing = () => {
 
     // 옵션 초기화
     useEffect(() => {
-    //     console.log(2);
         const initOptions = toOption(dataColumns);
         setColumnOption(initOptions);
 
@@ -60,26 +59,26 @@ const Preprocessing = () => {
 
     }, []);
 
-    const makeArray = (data, columns)=>{
+    const setData = (data, columns) => {
         const newData = [];
         data.map(sample => {
             const curData = [];
-            labels.map(columns=> {
-                curData.push(sample[columns]); 
+            columns.map(column=> {
+                curData.push(sample[column]); 
             })
             newData.push(curData);
         })
-        return newData
+        return newData;
     }
     const handleLabelClick = () => {
-        dispatch(trainActions.setLabels(toArray(selectedLabels)));
-        const newData = makeArray(data, labels);
-        dispatch(trainActions.setLabelData(newData));
+        const labelArray = toArray(selectedLabels);
+        dispatch(trainActions.setLabelData(setData(data, labelArray)));
+        dispatch(trainActions.setLabels(labelArray));
     }
     const handleFeatureClick = () => {
+        const featureArray = toArray(selectedFeatures);
+        dispatch(trainActions.setFeatureData(setData(data, featureArray)));
         dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
-        const newData = makeArray(data, features);
-        dispatch(trainActions.setFeatureData(newData));
     }
 
     return (
@@ -110,50 +109,6 @@ const Preprocessing = () => {
                     columns: features
                 }}
             />
-            {/* <div className="flex justify-between items-center h-14 w-full bg-yellow-400 mb-2">
-                <Inputs props={{
-                        kind: "MultiSelect",
-                        title: "Labels",
-                        value: selectedLabels,
-                        setValue: setSelectedLabels,
-                        options: labelOptions,
-                    }}
-                    />
-                <button className="mx-10" type="button" 
-                        onClick={()=>{
-                            handleLabelClick();
-                        }}>Set</button>
-            </div>
-            <div className="flex justify-between items-center h-14 w-full bg-yellow-400 mb-2">
-                <Inputs props={{
-                        kind: "MultiSelect",
-                        title: "Features",
-                        value: selectedFeatures,
-                        setValue: setSelectedFeatures,
-                        options: featureOptions,
-                    }}
-                    />
-                <button className="mx-10" type="button" 
-                        onClick={()=>{
-                        }}>Set</button>
-            </div> */}
-            {/* <div className="mb-10 min-h-78px rounded-xl bg-slate-300">
-                {
-                    dataLabel.map(label => {
-                        return (
-                            <div className="flex justify-between">
-                                <p>{label}</p>
-                                <button className="text-center hover:bg-red-500" 
-                                type="button" 
-                                onClick={()=>dispatch(dataActions.removeLabel(label))}
-                                >
-                                    X
-                                </button>
-                        </div>
-                        )
-                    })
-                }
-            </div> */}
         </>
     )
 }
