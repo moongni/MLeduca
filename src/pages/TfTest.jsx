@@ -8,7 +8,7 @@ import { trainModel } from "../components/TF/TrainModel";
 import { testModel } from "../components/TF/TestModel";
 
 function TfTest() {
-    const compile = useSelector((state) => state.compile.info);
+    const compile = useSelector((state) => state.compile);
     const parameter = useSelector((state) => state.parameter.info);
     const layers = useSelector((state) => state.layers.info);
     const xs = useSelector((state) => state.train.x);

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import sidebars from '../data/sidebarData.json';
 
 export const ModelDashBoard = (props) => {
-    const compile = useSelector((state) => state.compile.info);
+    const compile = useSelector((state) => state.compile);
     const parameter = useSelector((state) => state.parameter.info);
     const layers = useSelector((state) => state.layers.info);
     
@@ -19,7 +19,6 @@ export const ModelDashBoard = (props) => {
                     return {};
             }
         }
-        
         switch(props.name){
             case "Layers":
                 return(
@@ -27,7 +26,7 @@ export const ModelDashBoard = (props) => {
                         <Link to={props.link}>
                         <li className='text-lg font-medium '>Layers</li>
                         {
-                            layers.map((layer, index) => {
+                            layers.map((layer) => {
                                 return (
                                 <li className='pl-2'>
                                     <p className='break-all'>{layer.idx} Layer</p>
@@ -38,7 +37,40 @@ export const ModelDashBoard = (props) => {
                                             )
                                         })
                                     }
-                                </li>)
+                                </li>
+                                )
+                            })
+                        }
+                        </Link>
+                    </ul>
+                )
+            case "Compile":
+                return (
+                    <ul className='mb-2'>
+                        <Link to={props.link}>
+                        <li className=' text-lg font-medium'>
+                            {props.name}</li>
+                        {
+                            Object.entries(compile).map(setting => {
+                                if (setting[0] === "optimizer" && Object.keys(setting[1]).length > 0){
+                                    return (
+                                        <li className='pl-2'>
+                                            <p className='break-all'>{setting[0]}:&nbsp; &nbsp;{setting[1].title}</p>
+                                            {
+                                                Object.entries(setting[1].value).map(item => {
+                                                    return (
+                                                        <p className='pl-8 break-all'>{item[0]}&nbsp; &nbsp;{item[1]}</p>
+                                                    )
+                                                })
+                                            }
+                                        </li>  
+                                    )
+                                }
+                                if (setting[0] === "loss" && setting[1] !== ''){
+                                    return (
+                                        <li className='pl-2'><p className='break-all'>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p></li>
+                                    )
+                                }
                             })
                         }
                         </Link>

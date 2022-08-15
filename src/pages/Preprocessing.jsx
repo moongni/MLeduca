@@ -3,9 +3,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
-import SetColumn, { toArray, toOption, setData } from "../components/Preprocessing/SetColum";
-import DataTable from "../components/Common/DataTable";
-
+import SetColumn, { toArray, toOption } from "../components/Preprocessing/SetColum";
+import ArrayTable from "../components/Common/ArrayTable";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -36,6 +35,7 @@ const Preprocessing = () => {
 
     // 옵션 초기화
     useEffect(() => {
+    //     console.log(2);
         const initOptions = toOption(dataColumns);
         setColumnOption(initOptions);
 
@@ -59,7 +59,7 @@ const Preprocessing = () => {
 
     }, []);
 
-    const setData = (data, columns) => {
+    const makeArray = (data, columns) => {
         const newData = [];
         data.map(sample => {
             const curData = [];
@@ -68,16 +68,17 @@ const Preprocessing = () => {
             })
             newData.push(curData);
         })
-        return newData;
+        return newData
     }
+
     const handleLabelClick = () => {
-        const labelArray = toArray(selectedLabels);
-        dispatch(trainActions.setLabelData(setData(data, labelArray)));
-        dispatch(trainActions.setLabels(labelArray));
+        const newData = makeArray(data, toArray(selectedLabels));
+        dispatch(trainActions.setLabelData(newData));
+        dispatch(trainActions.setLabels(toArray(selectedLabels)));
     }
     const handleFeatureClick = () => {
-        const featureArray = toArray(selectedFeatures);
-        dispatch(trainActions.setFeatureData(setData(data, featureArray)));
+        const newData = makeArray(data, toArray(selectedFeatures));
+        dispatch(trainActions.setFeatureData(newData));
         dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
     }
 
@@ -90,7 +91,7 @@ const Preprocessing = () => {
                 options: labelOptions,
                 handleClick: handleLabelClick,
             }}/>
-            <DataTable
+            <ArrayTable
                 props={{
                     data: labelData,
                     columns: labels
@@ -103,7 +104,7 @@ const Preprocessing = () => {
                 options: featureOptions,
                 handleClick: handleFeatureClick,                
             }}/>
-            <DataTable
+            <ArrayTable
                 props={{
                     data: featureData,
                     columns: features

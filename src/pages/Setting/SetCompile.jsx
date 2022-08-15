@@ -22,11 +22,11 @@ function SetCompile() {
 
     return (
         <div className="relative w-full">
-        <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.Compile}/>
-        <div className="w-full h-80 pt-12 ">
-            {tapContent(currentTab)}
+            <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.Compile}/>
+            <div className="w-full h-80 pt-12 ">
+                {tapContent(currentTab)}
+            </div>
         </div>
-    </div>
     )
 }
 

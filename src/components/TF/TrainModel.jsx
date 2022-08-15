@@ -1,10 +1,16 @@
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
+import { createOptimizer } from "./CreateModel"; 
 
 export async function trainModel(model, inputs, labels, compile, parameter) {
   console.log("set model compile...");
-  model.compile({
-      ...compile
+
+  const optimizer = createOptimizer(compile.optimizer);
+  console.log(optimizer);
+  model.compile(
+    {
+      optimizer: optimizer,
+      loss: compile.loss
     })
 
     console.log("getting train model")

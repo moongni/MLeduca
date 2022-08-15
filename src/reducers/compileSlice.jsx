@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { info: {} };
+const initialState = { 
+    optimizer: {},
+    loss: ""
+ };
 
 const compileSlice = createSlice({
     name: 'compile',
@@ -8,20 +11,23 @@ const compileSlice = createSlice({
     
     // reducers -> 상태 업데이트 함수 모음
     reducers: {
-        addCompile(state, action) {
-            const { title, value } = action.payload;
-            console.log("title", title);
-            console.log("value", value);
-            state.info = {
-                ...state.info,
-                [title]: value
-            };
+        setOptimizer(state, action){
+            state.optimizer = action.payload;
         },
-        removeCompile(state, action) {
-            delete state.info[action.payload];
+        setLoss(state, action){
+            state.loss = action.payload;
+        },
+        removeOptimizer(state, action) {
+            state.optimizer = {};
+        },
+        removeLoss(state, action){
+            state.loss = "";
         },
         initialize(state, action) {
-            state.info = {};
+            state = {
+                optimizer: {},
+                loss: ""
+            };
         }
     },
 });

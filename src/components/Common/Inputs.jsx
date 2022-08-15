@@ -66,7 +66,31 @@ const Inputs = ({props}) => {
                         /> 
                 </div>
                 )
-
+        case "float":
+            return(
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                    <label className="ml-10" htmlFor={props.title}>
+                        {props.title}
+                    </label>
+                    <input className="mr-10" 
+                        name={props.title}
+                        type={props.type}
+                        min={props.min}
+                        value={props.value[props.title]}
+                        defaultValue={props.default}
+                        step={props.step}
+                        onChange={(e) => {
+                            const { value, name } = e.target;
+                            props.setValue((preValue) => {
+                                return {
+                                    ...preValue,
+                                    [name]: parseFloat(value)
+                                }
+                            })
+                        }}
+                        /> 
+                </div>
+            );
         case "array":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -86,7 +110,6 @@ const Inputs = ({props}) => {
                         }}/> 
                 </div>
             )
-
         case "text":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -105,7 +128,6 @@ const Inputs = ({props}) => {
                         }}/> 
                 </div>
             )
-
         case "select":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -134,7 +156,6 @@ const Inputs = ({props}) => {
                     </select>
                 </div>
             )
-
         case "selectOne":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -159,7 +180,6 @@ const Inputs = ({props}) => {
                     </select>
                 </div>
             )
-            
         case "MultiSelect":
             return (
                 <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
@@ -174,6 +194,34 @@ const Inputs = ({props}) => {
                         >
                     </MultiSelect>
                 </div>
+            )
+        case "bool":
+            return (
+                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <span className="ml-10">
+                    {props.title}
+                </span>
+                <select className="mr-10"
+                    name={props.title}
+                    value={props.value[props.title]}
+                    defaultValue={props.default}
+                    onChange={(e) => {
+                        const { value, name } = e.target;
+                        props.setValue((preValue) => {
+                            return {
+                                ...preValue,
+                                [name]: JSON.parse(value)
+                            }
+                        })
+                    }}>
+                    {props.defaultName && 
+                        <option value={props.default}>{props.defaultName}</option>
+                    }
+                    {props.list.map(l => {
+                        return <option value={l}>{l}</option>
+                    })}
+                </select>
+            </div>
             )
     }
 }
