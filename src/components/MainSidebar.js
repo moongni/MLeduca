@@ -45,7 +45,7 @@ const MainSidebar = (props) => {
     return (
         <div className='p-0 m-0 box-border'>
             <div className={`${props.isOpen? "sidebar": "sidebar close"} fixed top-0 left-0 h-full 
-            bg-white border-solid border-r-2 border-slate-200 ease-in-out duration-300 z-30`}>
+            bg-white border-solid border-r-2 shadow-sm shadow-slate-200 ease-in-out duration-300 z-30`}>
                 <Link className="logo-details cursor-pointer" to='/'>
                     <i ><RiComputerLine/></i>
                     <span className='logo_name'>Deep learning</span>
@@ -79,7 +79,7 @@ const MainSidebar = (props) => {
                 </ul>
 
             </div>
-            <section className='home-section border-solid border-b-2 border-slate-200'>
+            <section className='home-section border-solid border-b-2 shadow-sm shadow-slate-200'>
                 <div className='home-content '>
                     <i className="cursor-pointer" onClick={()=> props.setMenu(!props.isOpen)}><AiOutlineMenu/></i>
                     <i className={`cursor-pointer ${props.isDashboardOpen? "":"rotate-180"} ease-in-out duration-300`} onClick={()=> props.setDashboard(!props.isDashboardOpen)}><AiOutlineArrowLeft/></i>

@@ -47,16 +47,14 @@ function Box(props){
             <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
                 {
                     props.info.params &&
-                    props.info.params.map(param => {
-                        return (
-                            <Inputs
-                                props={{
+                    props.info.params.map(param => (
+                            <Inputs props={{
                                     ...param,
                                     value: value,
                                     setValue: setValue
-                                }}></Inputs>
+                                    }}/>
                         )
-                    })
+                    )
                 }
             </div>
         </div>

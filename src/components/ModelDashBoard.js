@@ -97,7 +97,7 @@ export const ModelDashBoard = (props) => {
 
   return (
     <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
-    max-w-[16.25rem] py-16 m-0 border-l-2 border-slate-200 ease-in-out duration-300
+    max-w-[16.25rem] py-16 m-0 shadow-sm shadow-slate-200 ease-in-out duration-300
     bg-slate-200 border-soild table`}
     style={{'width':`}`}}>
         <div className='table-row w-full h-5/6'>

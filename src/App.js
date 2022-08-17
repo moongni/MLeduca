@@ -17,23 +17,24 @@ function App() {
 
 
   return (
-  <div className="App relative"
-  style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
     <BrowserRouter>
-      <MainSidebar 
-        isOpen={isOpen} 
-        setMenu={setMenu} 
-        isDashboardOpen={isDashboardOpen} 
-        setDashboard={setDashboard}/>
-        <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } 
-                           relative left-0 top-0 min-h-full pt-20 px-4 pd-4  overflow-y-auto ease-in-out duration-300`}>
-            <Router/>
-        </div>
-      <ModelDashBoard 
-        isDashboardOpen={isDashboardOpen}/>
+      <div className="App relative bg-slate-100"
+           style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
+          <MainSidebar 
+            isOpen={isOpen} 
+            setMenu={setMenu} 
+            isDashboardOpen={isDashboardOpen} 
+            setDashboard={setDashboard}/>
+          <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } 
+                              relative left-0 top-0 pt-20 px-4 pb-4 ease-in-out duration-300`}
+               >
+              <Router/>
+          </div>
+          <ModelDashBoard 
+            isDashboardOpen={isDashboardOpen}/>
+        <div className='fixed bottom-0 left-0 w-full h-4 bg-blue-400 border-blue-200 z-40'/>
+      </div>
     </BrowserRouter>
-    <div className='fixed bottom-0 left-0 w-full h-4 bg-blue-400 border-blue-200 z-40'/>
-  </div>
   );
 }
 

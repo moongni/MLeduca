@@ -20,9 +20,9 @@ function SetLayers() {
         }
     }
     return(
-        <div className="relative w-full">
+        <div className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
             <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.Layers}/>
-            <div className="w-full h-80 pt-10 ">
+            <div className="w-full pt-10 ">
                 {tapContent(currentTab)}
             </div>
         </div>

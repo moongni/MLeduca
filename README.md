@@ -1,30 +1,33 @@
 만들어야 될 것
 
-seq
+model 창희형
 
-model
+전처리 
 
-전처리
+정규화
+stardscaler
 
+범주형 데이터 처리
+onehotencoding
+labelencoding
 
+null 데이터 드랍
 
+<!-- /////////////////// -->
 
-모델 데이터 받기
-주소, csv image 등등
-
-model param 에포크 배치 사이즈 등등
-
-tf.model 사용하여 만들기
+train test split
 
 결과 디자인
 
 ui 디자인
 
-쿠키 - redux persist
+predict
 
+local file
 훈련완료된 모델 export
 import
 
+image 등등
 
 
 # Getting Started with Create React App

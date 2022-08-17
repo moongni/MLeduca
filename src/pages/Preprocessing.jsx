@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
 import SetColumn, { toArray, toOption } from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/ArrayTable";
+import * as tf from "@tensorflow/tfjs";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const Preprocessing = () => {
             })
             newData.push(curData);
         })
-        return newData
+        return tf.tensor(newData)
     }
 
     const handleLabelClick = () => {
@@ -84,32 +85,36 @@ const Preprocessing = () => {
 
     return (
         <>
-            <SetColumn props={{
-                title: "Labels",
-                selected: selectedLabels,
-                setSelected: setSelectedLabels,
-                options: labelOptions,
-                handleClick: handleLabelClick,
-            }}/>
-            <ArrayTable
-                props={{
-                    data: labelData,
-                    columns: labels
-                }}
-            />
-            <SetColumn props={{
-                title: "Features",
-                selected: selectedFeatures,
-                setSelected: setSelectedFeatures,
-                options: featureOptions,
-                handleClick: handleFeatureClick,                
-            }}/>
-            <ArrayTable
-                props={{
-                    data: featureData,
-                    columns: features
-                }}
-            />
+            <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+                <SetColumn props={{
+                    title: "Labels",
+                    selected: selectedLabels,
+                    setSelected: setSelectedLabels,
+                    options: labelOptions,
+                    handleClick: handleLabelClick,
+                }}/>
+                <ArrayTable
+                    props={{
+                        data: labelData,
+                        columns: labels
+                    }}
+                />
+            </div>
+            <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+                <SetColumn props={{
+                    title: "Features",
+                    selected: selectedFeatures,
+                    setSelected: setSelectedFeatures,
+                    options: featureOptions,
+                    handleClick: handleFeatureClick,                
+                }}/>
+                <ArrayTable
+                    props={{
+                        data: featureData,
+                        columns: features
+                    }}
+                />
+            </div >
         </>
     )
 }

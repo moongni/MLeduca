@@ -105,7 +105,7 @@ export const DrogDropFile = ({dispatch}) => {
     }
 
     return (
-        <form className="relative h-64 w-full mb-10 max-w-full text-center"
+        <form className="relative h-64 w-full mb-4 max-w-full text-center"
             onDragEnter={handleDrag}
             onChange={handleChange}>
             <input ref={inputRef} 

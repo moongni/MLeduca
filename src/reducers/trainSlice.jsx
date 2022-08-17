@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    labels: [],
     features: [],
     x: [],
+    labels: [],
     y: [],
 }
 

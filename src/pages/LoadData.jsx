@@ -11,8 +11,8 @@ export default function LoadData() {
     const dataColumns = useSelector(state => state.data.columns);
     const [url, setUrl] = useState("");
     return (
-        <>
-            <div className="flex  bg-yellow-400 mb-10">
+        <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+            <div className="flex  bg-yellow-400 mb-4">
                 <Inputs props={{
                     kind: "text",
                     title: "Url",
@@ -20,15 +20,18 @@ export default function LoadData() {
                     value: url,
                     setValue: setUrl
                 }}/>
-                <button className="mr-10" type="button" onClick={()=>{getData(url, dispatch, '\t')}}>Fetch</button>
+                <button className="mr-4" 
+                    type="button" 
+                    onClick={()=>{getData(url, dispatch, '\t')}}>
+                        Fetch
+                </button>
             </div>
             <DrogDropFile dispatch={dispatch}/>
-            <DictTable
-                props={{
+            <DictTable props={{
                     data: dataInfo,
                     columns: dataColumns
                 }}
             />
-        </>
+        </div>
     );
 }
