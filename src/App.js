@@ -18,7 +18,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App relative bg-slate-100"
+      <div className="App relative top-0 left-0 bg-slate-100"
            style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
           <MainSidebar 
             isOpen={isOpen} 

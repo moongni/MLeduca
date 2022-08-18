@@ -1,8 +1,25 @@
 import React from "react";
+import { useCallback } from "react";
+import { useState } from "react";
+import "./scrollStyle.css";
 
 const DictTable = ({props}) => {
+    const [hovering, setHovering] = useState(false);
+
+    const handleMouseOver = useCallback(() => {
+        !hovering &&
+        setHovering(true);
+    }, [hovering]);
+
+    const handleMouseOut = useCallback(() => {
+        !!hovering &&
+        setHovering(false);
+    }, [hovering]);
     return (
-        <div className="max-h-[28rem] overflow-scroll ">
+        <div className={`${hovering? "scrollhost":"disViable"} max-h-[28rem]`}
+             onMouseEnter={handleMouseOver}
+             onMouseLeave={handleMouseOut}
+        >
             { props.data.length > 0 && 
                 <table className="w-full p-4">
                     <thead>
