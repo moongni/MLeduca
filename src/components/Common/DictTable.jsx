@@ -12,9 +12,10 @@ const DictTable = ({props}) => {
     }, [hovering]);
 
     const handleMouseOut = useCallback(() => {
-        !!hovering &&
+        hovering &&
         setHovering(false);
     }, [hovering]);
+    
     return (
         <div className={`${hovering? "scrollhost":"disViable"} max-h-[28rem]`}
              onMouseEnter={handleMouseOver}

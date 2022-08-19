@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     labels: [],
     features: [],
-    x: [],
-    y: [],
+    x: {},
+    y: {},
 }
 
 const testSlice = createSlice({

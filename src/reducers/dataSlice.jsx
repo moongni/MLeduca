@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    columns: [],    
-    info: [],
+    columns: [],
+    info: {},
 }
 
 const dataSlice = createSlice({
@@ -10,17 +10,24 @@ const dataSlice = createSlice({
     initialState,
 
     reducers: {
-        addSample(state, action) {
-            state.info.push(action.payload);
+        addData(state, action) {
+            state.info = 
+            {
+                ...state.info,
+                ...action.payload
+                };
         },
-        addColumns(state, action){
+        setData(state, action) {
+            state.info = action.payload;
+        },
+        setColumns(state, action){
             state.columns = action.payload;
         },
-        addData(state,action) {
-            const { columns , samples } = action.payload;
-            state.columns = columns;
-            state.info = samples;
-        },
+        // addData(state,action) {
+        //     const { columns , samples } = action.payload;
+        //     state.columns = columns;
+        //     state.info = samples;
+        // },
         initialize(state, action){
             state.columns = []
             state.info = []

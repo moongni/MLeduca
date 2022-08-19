@@ -31,7 +31,6 @@ const Preprocessing = () => {
         const newFeatureOption = columnOption.filter(option => !selectedLabels.includes(option));
         setLabelOptions(newLabelOption);
         setFeatureOptions(newFeatureOption);
-
     }, [selectedLabels, selectedFeatures])
 
     // 옵션 초기화

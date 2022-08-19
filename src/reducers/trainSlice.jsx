@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     features: [],
-    x: [],
+    x: {},
     labels: [],
-    y: [],
+    y: {},
 }
 
 const trainSlice = createSlice({

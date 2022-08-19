@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getData, DrogDropFile } from "../components/LoadData/LoadCsvJson";
 import Inputs from "../components/Common/Inputs";
-import DictTable from "../components/Common/DictTable";
+import ArrayTable from "../components/Common/ArrayTable";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -10,7 +10,7 @@ export default function LoadData() {
     const dataInfo = useSelector(state => state.data.info);
     const dataColumns = useSelector(state => state.data.columns);
     const [url, setUrl] = useState("");
-    
+    console.log("di",dataInfo);
     return (
         <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
             <div className="flex  bg-yellow-400 mb-4">
@@ -28,10 +28,9 @@ export default function LoadData() {
                 </button>
             </div>
             <DrogDropFile dispatch={dispatch}/>
-            <DictTable props={{
-                    data: dataInfo,
-                    columns: dataColumns
-                }}
+            <ArrayTable 
+                data={dataInfo}
+                columns={dataColumns}
             />
         </div>
     );
