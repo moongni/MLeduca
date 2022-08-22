@@ -2,6 +2,38 @@ import React, { useState , useRef , useCallback}from "react";
 import { dataActions } from "../../reducers/dataSlice";
 import * as tf from "@tensorflow/tfjs";
 
+// export const getData = async (url, dispatch, sep=',') => {
+//     dispatch(dataActions.initialize());
+//     console.log('getData 호출', url);
+//     var splitUrl = url.split("/")
+//     var splitFileName = splitUrl[splitUrl.length - 1].split('.');
+//     var fileExtension = splitFileName[1];
+//     const dataResponse = await fetch(url);
+//     switch (fileExtension){
+//         case "json":
+//             const dataJson = await dataResponse.json();
+//             dispatch(dataActions.addData({
+//                 columns:Object.keys(dataJson[0]),
+//                 samples:dataJson
+//             }));
+//             break;
+//         case "csv":
+//             const dataCsv = await dataResponse.text();
+//             const rows = dataCsv.split((/\r?\n|\r/));
+//             const features = rows.shift().split(sep);
+//             dispatch(dataActions.addColumns(features));
+//             rows.forEach(row => {
+//                 const values = row.split(sep);
+//                 const curObject = new Object();
+//                 features.forEach((value, key) => {
+//                     curObject[value] = values[key];
+//                 })
+//                 dispatch(dataActions.addSample(curObject));
+//             })            
+//     }
+// }
+
+
 export const getData = async (url, dispatch, sep=',') => {
     console.log('getData 호출', url);
     dispatch(dataActions.initialize());
@@ -46,7 +78,6 @@ export const getData = async (url, dispatch, sep=',') => {
             features.map(feature => {
                 newData[feature] = tf.tensor(newData[feature]).reshape([-1, 1]);
             })
-            console.log(newData);
             dispatch(dataActions.setData(newData));
     }
 }

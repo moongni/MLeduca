@@ -1,11 +1,12 @@
 import React, { useState , useCallback } from "react";
-import { useEffect } from "react";
 import "./scrollStyle.css";
 import * as tf from "@tensorflow/tfjs";
+import TableBody from "./MakeTableBody";
+
+
 
 const ArrayTable = ({children, ...props}) => {
     const [hovering, setHovering] = useState(false);
-    const [arrayData, setArrayData] = useState([]);
 
     const handleMouseOver = useCallback(() => {
         !hovering &&
@@ -16,14 +17,6 @@ const ArrayTable = ({children, ...props}) => {
         !!hovering &&
         setHovering(false);
     }, [hovering]);
-    
-    useEffect(() => {
-        console.log(Object.values(props.data));
-        if (Object.values(props.data).length > 0){
-            const concatedData = tf.concat(Object.values(props.data), 1);
-            setArrayData(concatedData.arraySync());
-        }
-    }, [])
 
     return (
         <div>
@@ -45,21 +38,9 @@ const ArrayTable = ({children, ...props}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            { arrayData.map((items, idx) => {
-                                return (
-                                    <tr className="mx-1 py-2 border-b-2 border-slate-100"
-                                        key={idx}>
-                                        {
-                                            props.columns.map((column, index) => (
-                                                    <td className="w-5 p-3 mr-2 tracking-widest">
-                                                        {items[index]? items[index]: "null"}
-                                                    </td>
-                                                )
-                                            )
-                                        }
-                                    </tr>
-                                )
-                            })}
+                            <TableBody
+                                data={props.data}
+                                columns={props.columns}/>
                         </tbody>
                         <tbody>
                             <tr className=" sticky bottom-0 bg-slate-50">{children}</tr>
