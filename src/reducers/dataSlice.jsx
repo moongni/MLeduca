@@ -30,7 +30,7 @@ const dataSlice = createSlice({
         // },
         initialize(state, action){
             state.columns = []
-            state.info = []
+            state.info = {}
         }
     }
 })

@@ -1,15 +1,6 @@
 .disViable::-webkit-scrollbar {
-    display: none;
-}
-
-.disViable {
-    overflow: auto;
-    height: 100%;
-}
-
-.scrollhost {
-    overflow: auto;
-    height: 100%;
+    /* display: none; */
+    visibility: hidden;
 }
 .scrollhost::-webkit-scrollbar {
     width: 20px;

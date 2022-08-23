@@ -1,38 +1,5 @@
 import React, { useState , useRef , useCallback}from "react";
 import { dataActions } from "../../reducers/dataSlice";
-import * as tf from "@tensorflow/tfjs";
-
-// export const getData = async (url, dispatch, sep=',') => {
-//     dispatch(dataActions.initialize());
-//     console.log('getData 호출', url);
-//     var splitUrl = url.split("/")
-//     var splitFileName = splitUrl[splitUrl.length - 1].split('.');
-//     var fileExtension = splitFileName[1];
-//     const dataResponse = await fetch(url);
-//     switch (fileExtension){
-//         case "json":
-//             const dataJson = await dataResponse.json();
-//             dispatch(dataActions.addData({
-//                 columns:Object.keys(dataJson[0]),
-//                 samples:dataJson
-//             }));
-//             break;
-//         case "csv":
-//             const dataCsv = await dataResponse.text();
-//             const rows = dataCsv.split((/\r?\n|\r/));
-//             const features = rows.shift().split(sep);
-//             dispatch(dataActions.addColumns(features));
-//             rows.forEach(row => {
-//                 const values = row.split(sep);
-//                 const curObject = new Object();
-//                 features.forEach((value, key) => {
-//                     curObject[value] = values[key];
-//                 })
-//                 dispatch(dataActions.addSample(curObject));
-//             })            
-//     }
-// }
-
 
 export const getData = async (url, dispatch, sep=',') => {
     console.log('getData 호출', url);
@@ -47,14 +14,12 @@ export const getData = async (url, dispatch, sep=',') => {
     switch (fileExtension){
         case "json":
             const jsonData = await dataResponse.json();
-            var mpg = jsonData.map(sample => sample["Miles_per_Gallon"])
-            console.log(tf.tensor(mpg).dataSync());
             dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
             Object.keys(jsonData[0]).map(column => {
-                const newSample = {
-                    [column]: tf.tensor(jsonData.map(sample => sample[column])).reshape([-1, 1])
-                }
-                dispatch(dataActions.addData(newSample));
+                const newColumn = {
+                    [column]: jsonData.map(sample => sample[column])
+                };
+                dispatch(dataActions.addData(newColumn));
             })
 
             break;
@@ -73,9 +38,6 @@ export const getData = async (url, dispatch, sep=',') => {
                 features.forEach((value, key) => {
                     newData[value].push(values[key]);
                 })
-            })
-            features.map(feature => {
-                newData[feature] = tf.tensor(newData[feature]).reshape([-1, 1]);
             })
             dispatch(dataActions.setData(newData));
     }
@@ -104,9 +66,6 @@ export const DrogDropFile = ({dispatch}) => {
                           newData[value].push(values[key]);
                       })
                   })
-                  features.map(feature => {
-                    newData[feature] = tf.tensor(newData[feature]).reshape([-1, 1]);
-                  })
                   dispatch(dataActions.setData(newData));
                   break;            
                case "application/json":
@@ -114,7 +73,7 @@ export const DrogDropFile = ({dispatch}) => {
                   dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
                   Object.keys(jsonData[0]).map(column => {
                     const newSample = {
-                        [column]: tf.tensor(jsonData.map(sample => sample[column])).reshape([-1, 1])
+                        [column]: jsonData.map(sample => sample[column])
                     }
                     dispatch(dataActions.addData(newSample));
                   })

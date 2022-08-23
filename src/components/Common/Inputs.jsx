@@ -186,7 +186,7 @@ const Inputs = ({props}) => {
                     <span className="ml-10">
                         {props.title}
                     </span>
-                    <MultiSelect className="w-72"
+                    <MultiSelect className="w-96"
                         options={props.options}
                         value={props.value}
                         onChange={props.setValue}

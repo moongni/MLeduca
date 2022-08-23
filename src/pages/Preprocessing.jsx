@@ -5,14 +5,12 @@ import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
 import SetColumn, { toArray, toOption } from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/ArrayTable";
-import * as tf from "@tensorflow/tfjs";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
 
     const data = useSelector(state => state.data.info);
     const dataColumns = useSelector((state) => state.data.columns);
-
     const labels = useSelector((state) => state.train.labels);
     const labelData = useSelector(state => state.train.y);
     const features = useSelector((state) => state.train.features);
@@ -21,6 +19,7 @@ const Preprocessing = () => {
     // 선택된 특성
     const [selectedFeatures, setSelectedFeatures] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([]);
+    console.log(selectedLabels);
     
     // 멀티 셀렉트 옵션 구성
     const [columnOption, setColumnOption] = useState([]);
