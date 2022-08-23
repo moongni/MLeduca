@@ -12,6 +12,7 @@ const Preprocessing = () => {
 
     const data = useSelector(state => state.data.info);
     const dataColumns = useSelector((state) => state.data.columns);
+
     const labels = useSelector((state) => state.train.labels);
     const labelData = useSelector(state => state.train.y);
     const features = useSelector((state) => state.train.features);
@@ -35,7 +36,6 @@ const Preprocessing = () => {
 
     // 옵션 초기화
     useEffect(() => {
-    //     console.log(2);
         const initOptions = toOption(dataColumns);
         setColumnOption(initOptions);
 
@@ -59,25 +59,23 @@ const Preprocessing = () => {
 
     }, []);
 
-    const makeArray = (data, columns) => {
-        const newData = [];
-        data.map(sample => {
-            const curData = [];
-            columns.map(column=> {
-                curData.push(sample[column]); 
-            })
-            newData.push(curData);
+    const selectColumn = (data, columns) => {
+        const newData = new Object();
+        columns.map(column => {
+            newData[column] = data[column]; 
         })
-        return tf.tensor(newData)
+        return newData;
     }
 
     const handleLabelClick = () => {
-        const newData = makeArray(data, toArray(selectedLabels));
+        const labelNames = toArray(selectedLabels);
+        const newData = selectColumn(data, labelNames);
         dispatch(trainActions.setLabelData(newData));
-        dispatch(trainActions.setLabels(toArray(selectedLabels)));
+        dispatch(trainActions.setLabels(labelNames));
     }
     const handleFeatureClick = () => {
-        const newData = makeArray(data, toArray(selectedFeatures));
+        const featureNames = toArray(selectedFeatures);
+        const newData = selectColumn(data, featureNames);
         dispatch(trainActions.setFeatureData(newData));
         dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
     }
@@ -93,10 +91,8 @@ const Preprocessing = () => {
                     handleClick: handleLabelClick,
                 }}/>
                 <ArrayTable
-                    props={{
-                        data: labelData,
-                        columns: labels
-                    }}
+                        data={labelData}
+                        columns={labels}
                 />
             </div>
             <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
@@ -108,10 +104,8 @@ const Preprocessing = () => {
                     handleClick: handleFeatureClick,                
                 }}/>
                 <ArrayTable
-                    props={{
-                        data: featureData,
-                        columns: features
-                    }}
+                        data={featureData}
+                        columns={features}
                 />
             </div >
         </>

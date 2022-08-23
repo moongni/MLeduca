@@ -1,9 +1,29 @@
-import React, { useState , useCallback } from "react";
+import React, { useState , useCallback, useMemo } from "react";
 import "./scrollStyle.css";
 import * as tf from "@tensorflow/tfjs";
 import TableBody from "./MakeTableBody";
+import { useEffect } from "react";
 
+const convertToArray = (data) => {
+    const newData = new Object();
+    Object.entries(data).map(
+        (column) => {
+            newData[column[0]] = column[1].arraySync();
+        }
+    )
+    const rangeArray = [];
+    const len = Object.values(newData)[0].length;
+    var start = 0
+    for (var i = 0; i < len; i++) {
+        rangeArray[i] = start;
+        start++;
+    }
 
+    return {
+        length: rangeArray,
+        data: newData
+    }
+}
 
 const ArrayTable = ({children, ...props}) => {
     const [hovering, setHovering] = useState(false);
@@ -18,6 +38,9 @@ const ArrayTable = ({children, ...props}) => {
         setHovering(false);
     }, [hovering]);
 
+    const {rangeArray , data} = useMemo(() => convertToArray(props.data))
+    console.log(rangeArray, data);
+    
     return (
         <div>
             { (Array.isArray(props.columns) && props.columns.length > 0) && 
@@ -38,9 +61,22 @@ const ArrayTable = ({children, ...props}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <TableBody
-                                data={props.data}
-                                columns={props.columns}/>
+                            {
+                                rangeArray.map((idx) => {
+                                    return (
+                                        <tr className="mx-1 py-2 border-b-2 border-slate-100">
+                                            {props.columns.map(
+                                                column => {
+                                                    return (
+                                                        <td className="w-5 p-3 mr-2 tracking-widest">
+                                                            {data[column][idx]? data[column][idx]: "null"}
+                                                        </td>  
+                                                    ) 
+                                                }                    
+                                            )}                
+                                        </tr>
+                                )})
+                            }
                         </tbody>
                         <tbody>
                             <tr className=" sticky bottom-0 bg-slate-50">{children}</tr>

@@ -47,6 +47,8 @@ export const getData = async (url, dispatch, sep=',') => {
     switch (fileExtension){
         case "json":
             const jsonData = await dataResponse.json();
+            var mpg = jsonData.map(sample => sample["Miles_per_Gallon"])
+            console.log(tf.tensor(mpg).dataSync());
             dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
             Object.keys(jsonData[0]).map(column => {
                 const newSample = {
@@ -54,10 +56,7 @@ export const getData = async (url, dispatch, sep=',') => {
                 }
                 dispatch(dataActions.addData(newSample));
             })
-            // dispatch(dataActions.addData({
-            //     columns:Object.keys(jsonData[0]),
-            //     samples:jsonData
-            // }));
+
             break;
 
         case "csv":
@@ -94,24 +93,31 @@ export const DrogDropFile = ({dispatch}) => {
                 case "text/csv":
                   const rows = contents.split((/\r?\n|\r/));
                   const features = rows.shift().split(',');
-                  console.log(features);
-                  dispatch(dataActions.addColumns(features));
+                  dispatch(dataActions.setColumns(features));
+                  const newData = new Object();
+                  features.map(feature => {
+                    newData[feature] = [];
+                  })
                   rows.forEach(row => {
                       const values = row.split(',');
-                      const curObject = new Object();
                       features.forEach((value, key) => {
-                          curObject[value] = values[key];
+                          newData[value].push(values[key]);
                       })
-                      console.log(curObject);
-                      dispatch(dataActions.addSample(curObject));
                   })
+                  features.map(feature => {
+                    newData[feature] = tf.tensor(newData[feature]).reshape([-1, 1]);
+                  })
+                  dispatch(dataActions.setData(newData));
                   break;            
                case "application/json":
                   const jsonData = await JSON.parse(contents);
-                  dispatch(dataActions.addData({
-                      columns:Object.keys(jsonData[0]),
-                      samples:jsonData
-                  }))
+                  dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
+                  Object.keys(jsonData[0]).map(column => {
+                    const newSample = {
+                        [column]: tf.tensor(jsonData.map(sample => sample[column])).reshape([-1, 1])
+                    }
+                    dispatch(dataActions.addData(newSample));
+                  })
               }
           };
         reader.readAsText(file);

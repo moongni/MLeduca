@@ -10,7 +10,6 @@ export default function LoadData() {
     const dataInfo = useSelector(state => state.data.info);
     const dataColumns = useSelector(state => state.data.columns);
     const [url, setUrl] = useState("");
-    console.log("di", dataInfo);
 
     return (
         <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">

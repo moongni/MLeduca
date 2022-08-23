@@ -27,8 +27,8 @@ const trainSlice = createSlice({
         initialize(state, action){
             state.labels = [];
             state.features = [];
-            state.x = [];
-            state.y = [];
+            state.x = {};
+            state.y = {};
         }
     }
 })
