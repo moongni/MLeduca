@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
 import SetColumn, { toArray, toOption } from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/ArrayTable";
+import PreprocessingOptions from "../components/Preprocessing/PreprocessingOption";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -81,7 +82,7 @@ const Preprocessing = () => {
 
     return (
         <>
-            <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+            <div className="max-w-full max-h-fit rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
                 <SetColumn props={{
                     title: "Labels",
                     selected: selectedLabels,
@@ -92,7 +93,10 @@ const Preprocessing = () => {
                 <ArrayTable
                         data={labelData}
                         columns={labels}
-                />
+                >
+                    <PreprocessingOptions
+                        column={labels}/>
+                </ArrayTable>
             </div>
             <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
                 <SetColumn props={{
@@ -105,7 +109,8 @@ const Preprocessing = () => {
                 <ArrayTable
                         data={featureData}
                         columns={features}
-                />
+                >
+                </ArrayTable>
             </div >
         </>
     )
