@@ -1,47 +1,57 @@
-import React from "react";
-import { useState } from "react";
-import Select from "react-select";
+import React, { useCallback, useState } from "react";
+import { isEmptyArray } from "../Common/package";
+import PreprocessingSelect from "./PreprocessingSelect";
 
 const PreprocessingOptions = ({children, ...props}) => {
-    const [value, setValue] = useState([]);
-    const options = [
-      {value: "stardardScale", label: "Standard Scale"},
-      {value: "normalize", label: "Normalize"},
-      {value: "fillMean", label: "Fill Mean"},
-      {value: "fillMedian", label: "Fill Median"},
-      {value: "fillMostFrequnce", label: "Fill Most Frequnce"},
-      {value: "oneHotEncoding", label: "OneHot Encoding"}
-  ];
 
-    return (
-        <>
-            <Select
-                className="w-full h-full px-3"
-                styles={{
-                  menu: (provided, state) => ({
-                    ...provided,
-                    position: "absolute",
-                    width: "fit-content",
-                    marginTop: 0,
-                  }),
-                  menuList: (provided, state) => ({
-                    ...provided,
-                  }),
-                  multiValueRemove: (provided, state) => ({
-                    ...provided,
-                  }),
-                  noOptionsMessage: (provided, state) => ({
-                    display: "none"
-                  })
-                }}
-                closeMenuOnSelect={false}
-                isMulti
-                placeholder="Select..."
-                options={options}
-                />
-                
-        </>
-    )
+  const [hovering, setHovering] = useState(false);
+
+  const handleMouseOver = useCallback(() => {
+    !hovering &&
+    setHovering(true);
+  }, [hovering]);
+
+  const handleMouseOut = useCallback(() => {
+    !!hovering &&
+    setHovering(false);
+  }, [hovering]);
+
+  return (
+    <>
+      { !isEmptyArray(props.columns) &&
+        <div className={`${hovering? "scrollhost":"disViable"} w-full max-h-fit overflow-auto`}
+            onMouseLeave={handleMouseOut}
+            onMouseEnter={handleMouseOver}>
+          <span className="text-left p-3">Preprocessing</span>
+          <table className="w-full">
+            <thead>
+              <tr key={"preprocessing"}>
+                { props.columns.map((column) => (
+                    <th className="text-left p-3 border-b-2 border-slate-100">
+                        {column}
+                    </th>
+                ))}
+              </tr>
+            </thead>
+          <tbody>
+            <tr>
+              {
+                props.columns.map((column) => (
+                  <th className="mx-1 py-2 border-b-2 border-slate-100">
+                    <PreprocessingSelect
+                      column={column}
+                      width={props.width}/>
+                  </th>
+                ))
+              }
+            </tr>
+          </tbody>
+          </table>
+                      
+        </div>
+      }
+    </>
+  )
 }
 
 export default  PreprocessingOptions

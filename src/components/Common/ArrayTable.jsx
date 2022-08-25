@@ -1,12 +1,20 @@
-import React, { useState , useCallback } from "react";
+import React, { useState , useCallback, useRef } from "react";
+import { useEffect } from "react";
+import PreprocessingOptions from "../Preprocessing/PreprocessingOption";
 import { isEmptyArray } from "./package";
 import "./scrollStyle.css";
 import TableBody from "./TableBody";
 
 const ArrayTable = ({children, ...props}) => {
     const [hovering, setHovering] = useState(false);
-    const [tbodyHover, setTbodyHover] = useState(false);
 
+    const ref = useRef(null);
+
+    useEffect(
+        () => {
+
+        }
+    , [ref.current])
     const handleMouseOver = useCallback(() => {
         !hovering &&
         setHovering(true);
@@ -20,7 +28,7 @@ const ArrayTable = ({children, ...props}) => {
     return (
         <>
             { !isEmptyArray(props.columns) && 
-                <div className={`${hovering? "scrollhost":"disViable"} max-w-full max-h-fit overflow-auto`}
+                <div className={`${hovering? "scrollhost":"disViable"} w-full h-96 overflow-auto`}
                     onMouseLeave={handleMouseOut}
                     onMouseEnter={handleMouseOver}>
                     <table className="w-full">
@@ -29,28 +37,28 @@ const ArrayTable = ({children, ...props}) => {
                                 className="border-b-2 border-yellow-300">
                                 { props.columns
                                     .map((column) => (
-                                    <th className="sticky top-0 text-left p-3 border-r-8 border-slate-50 bg-slate-50">
+                                    <th className="sticky top-0 text-left p-3 border-r-8 border-slate-50 bg-slate-50"
+                                        ref={ref}
+                                        on>
                                         {column}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody 
-                            className={`${hovering? "scrollhost":"disViable"} max-w-full max-h-96 overflow-auto`}
-                            onMouseLeave={handleMouseOut}
-                            onMouseEnter={handleMouseOver}>
+                        <tbody>
                             <TableBody
                                 data={props.data}
                                 columns={props.columns}
                             />
                         </tbody>
-                        <tbody className="relative">
-                            <tr className="sticky bottom-0 left-0 text-left p-3 bg-slate-50">
+                        <tbody>
+                            <tr className="">
                                 {
+                                    props.hasChild &&
                                     props.columns.map((_) => (
-                                        <td className="text-center">
+                                        <th className="sticky bottom-0 text-left p-3 bg-slate-50">
                                             {children}
-                                        </td>
+                                        </th>
                                     ))
                                 }
                             </tr>

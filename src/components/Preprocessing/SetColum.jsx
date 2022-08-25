@@ -1,22 +1,7 @@
 import React from "react";
 import Inputs from "../Common/Inputs";
 
-export const toOption = (items) => {
-    const newOptions = [];
-    items.map(item => newOptions.push({
-        label: item,
-        value: item
-    }))
-    return newOptions
-}
-
-export const toArray = (options) => {
-    const newArray = [];
-    options.map(option => newArray.push(option.value));
-    return newArray;
-}
-
-const SetColumn = ({props}) => {
+const SetColumn = ({...props}) => {
     return (
         <>
             <div className="flex justify-between items-center h-14 w-full bg-yellow-400 mb-2">
@@ -31,7 +16,7 @@ const SetColumn = ({props}) => {
                 <button className="mx-10" type="button" 
                         onClick={()=>{
                             props.handleClick();
-                        }}>Set</button>
+                        }}>Save</button>
             </div>
         </>
     )
