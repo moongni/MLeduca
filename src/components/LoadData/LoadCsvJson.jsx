@@ -1,8 +1,10 @@
-import React, { useState , useRef , useCallback}from "react";
+import React, {
+    useState,
+    useRef,
+    useCallback } from "react";
 import { dataActions } from "../../reducers/dataSlice";
 
 export const getData = async (url, dispatch, sep=',') => {
-    console.log('getData 호출', url);
     dispatch(dataActions.initialize());
     
     var splitUrl = url.split("/")
@@ -21,9 +23,7 @@ export const getData = async (url, dispatch, sep=',') => {
                 };
                 dispatch(dataActions.addData(newColumn));
             })
-
             break;
-
         case "csv":
             const csvData = await dataResponse.text();
             const rows = csvData.split((/\r?\n|\r/));
@@ -89,8 +89,8 @@ export const DrogDropFile = ({dispatch}) => {
             setDragActive(true);
         } else if (e.type === "dragleave") {
             setDragActive(false);
-        }
-    },[]);
+        }}
+    , []);
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -120,29 +120,41 @@ export const DrogDropFile = ({dispatch}) => {
     }
 
     return (
-        <form className="relative h-64 w-full mb-4 max-w-full text-center"
+        <form 
+            className="relative h-64 w-full mb-4 max-w-full text-center"
             onDragEnter={handleDrag}
-            onChange={handleChange}>
-            <input ref={inputRef} 
+            onChange={handleChange}
+        >
+            <input 
+                ref={inputRef} 
                 type="file" 
                 className="hidden"
-                multiple={false} />
-            <label className={`h-full flex items-center justify-center border-2 rounded-2xl border-dashed ${dragActive? "bg-white": " bg-slate-100"}`}
+                multiple={false} 
+            />
+            <label 
+                className={`h-full flex items-center justify-center border-2 rounded-2xl border-dashed ${dragActive? "bg-white": " bg-slate-100"}`}
                 style={{"borderColor":"#cbd5e1"}}
-                htmlFor="input-file-upload">
+                htmlFor="input-file-upload"
+            >
                 <div>
                     <p>Drag and drop your file here or</p>
-                    <button className="upload-button cursor-pointer p-1 text-base border-none bg-transparent hover:underline"
-                    onClick={onButtonClick}>Upload a file</button>
+                    <button 
+                        className="upload-button cursor-pointer p-1 text-base border-none bg-transparent hover:underline"
+                        onClick={onButtonClick}
+                    >
+                        Upload a file
+                    </button>
                 </div> 
             </label>
             { dragActive && 
-            <div className="absolute w-full h-full rounded-2xl top-0 right-0 bottom-0 left-0"
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-                ></div>}
+                <div 
+                    className="absolute w-full h-full rounded-2xl top-0 right-0 bottom-0 left-0"
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                    />
+            }
       </form>
     );
 }

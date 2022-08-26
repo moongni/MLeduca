@@ -14,20 +14,26 @@ export default function LoadData() {
     return (
         <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
             <div className="flex  bg-yellow-400 mb-4">
-                <Inputs props={{
-                    kind: "text",
-                    title: "Url",
-                    placeholder: "Url 입력",
-                    value: url,
-                    setValue: setUrl
-                }}/>
-                <button className="mr-4" 
+                <Inputs 
+                    props={{
+                        kind: "text",
+                        title: "Url",
+                        placeholder: "Url 입력",
+                        value: url,
+                        setValue: setUrl
+                    }}
+                />
+                <button 
+                    className="mr-4" 
                     type="button" 
-                    onClick={()=>{getData(url, dispatch, '\t')}}>
-                        Fetch
+                    onClick={()=>{getData(url, dispatch, '\t')}}
+                >
+                    Fetch
                 </button>
             </div>
-            <DrogDropFile dispatch={dispatch}/>
+            <DrogDropFile 
+                dispatch={dispatch}
+            />
             <ArrayTable 
                 data={dataInfo}
                 columns={dataColumns}

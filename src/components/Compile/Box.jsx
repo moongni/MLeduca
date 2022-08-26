@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { compileActions } from '../../reducers/compileSlice';
 import Inputs from "../Common/Inputs";
 
@@ -26,9 +26,11 @@ function Box(props){
 
     return (
         <div className="mb-4 bg-blue-100 hover:bg-slate-300 rounded-lg">
-            <button className="relative w-full min-h-78px cursor-pointer"
+            <button 
+                className="relative w-full min-h-78px cursor-pointer"
                 style={props.style} 
-                onClick={selectInfoHandler}>
+                onClick={selectInfoHandler}
+            >
                 <div className="absolute top-0 left-0 my-4 w-full text-lg font-medium border-b-2">
                     <h2 className="relative left-4 text-left">{props.info.title}</h2>
                 </div>
@@ -36,25 +38,26 @@ function Box(props){
                     <p>{props.info.description}</p>
                 </div>
             </button>
-            {
-                props.info.params &&
-                <button className="cursor-pointer" 
-                        type="button" 
-                        onClick={()=>setSubOpen(!isSubOpen)}>
-                        Advanced setting
+            {props.info.params &&
+                <button 
+                    className="cursor-pointer" 
+                    type="button" 
+                    onClick={()=>setSubOpen(!isSubOpen)}
+                >
+                    Advanced setting
                 </button>
             }
             <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
-                {
-                    props.info.params &&
+                {props.info.params &&
                     props.info.params.map(param => (
-                            <Inputs props={{
+                            <Inputs 
+                                props={{
                                     ...param,
                                     value: value,
                                     setValue: setValue
-                                    }}/>
-                        )
-                    )
+                                }}
+                            />
+                    ))
                 }
             </div>
         </div>

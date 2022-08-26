@@ -45,39 +45,39 @@ const MainSidebar = (props) => {
     return (
         <div className='p-0 m-0 box-border'>
             <div className={`${props.isOpen? "sidebar": "sidebar close"} fixed top-0 left-0 h-full 
-            bg-white border-solid border-r-2 shadow-sm shadow-slate-200 ease-in-out duration-300 z-30`}>
+            bg-white border-solid border-r-2 shadow-sm shadow-slate-200 ease-in-out duration-300 z-30`}
+            >
                 <Link className="logo-details cursor-pointer" to='/'>
                     <i ><RiComputerLine/></i>
                     <span className='logo_name'>Deep learning</span>
                 </Link>
                 <ul className='nav-links'>
-                    {sidebars.sidebarLinkName.map(sidebar => {
-                        const clsName = sidebar.subLinkName.length > 0? isShowMenu(sidebar.clsName): true;
-                        return (
-                            <li className={clsName? "showMenu" : ""}>
-                                <div className='icon-link'>
-                                    <Link to={sidebar.link}
-                                    onClick={()=> setShowMenu(sidebar.clsName)}>
-                                        <i><Icon icon={sidebar.icon}></Icon></i>
-                                        <span className='link-name'>{sidebar.name}</span>
-                                        {sidebar.subLinkName.length > 0 && <i className='down ml-auto'><AiFillCaretDown /></i>}
-                                    </Link>
-                                </div>
-                                <ui className='sub-menu'>
-                                    <li>
-                                        <Link className='submenu-name' to={sidebar.link}>{sidebar.name}</Link>
-                                    </li>
-                                    {sidebar.subLinkName.map(sub => {
-                                        return (
-                                            <li><Link to={sub.link}>{sub.name}</Link></li>
-                                        )
-                                    })}
-                                </ui>
-                            </li>
-                        )
-                    })}
+                    {sidebars.sidebarLinkName
+                        .map(sidebar => {
+                            const clsName = sidebar.subLinkName.length > 0? isShowMenu(sidebar.clsName): true;
+                            return (
+                                <li className={clsName? "showMenu" : ""}>
+                                    <div className='icon-link'>
+                                        <Link to={sidebar.link}
+                                        onClick={()=> setShowMenu(sidebar.clsName)}>
+                                            <i><Icon icon={sidebar.icon}></Icon></i>
+                                            <span className='link-name'>{sidebar.name}</span>
+                                            {sidebar.subLinkName.length > 0 && <i className='down ml-auto'><AiFillCaretDown /></i>}
+                                        </Link>
+                                    </div>
+                                    <ui className='sub-menu'>
+                                        <li>
+                                            <Link className='submenu-name' to={sidebar.link}>{sidebar.name}</Link>
+                                        </li>
+                                        {sidebar.subLinkName.map(sub => {
+                                            return (
+                                                <li><Link to={sub.link}>{sub.name}</Link></li>
+                                            )
+                                        })}
+                                    </ui>
+                                </li>
+                    )})}
                 </ul>
-
             </div>
             <section className='home-section border-solid border-b-2 shadow-sm shadow-slate-200'>
                 <div className='home-content '>

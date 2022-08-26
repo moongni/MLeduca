@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import Tabs from "../../components/Tabs"
 import data from "../../data/data.json"
 import Sequence from "../../components/Layers/Sequence";
@@ -21,8 +20,12 @@ function SetLayers() {
     }
     return(
         <div className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
-            <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} tabData={data.Layers}/>
-            <div className="w-full pt-10 ">
+            <Tabs 
+                currentTab={currentTab} 
+                setCurrentTab={setCurrentTab} 
+                tabData={data.Layers}
+            />
+            <div className="w-full pt-10">
                 {tapContent(currentTab)}
             </div>
         </div>

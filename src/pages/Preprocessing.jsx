@@ -1,13 +1,15 @@
-import React from "react";
-import { useState } from "react";
+import React, 
+{ useState,
+  useEffect,
+  useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { trainActions } from "../reducers/trainSlice";
+import { toArray, toOption } from "../components/Common/package"
 import SetColumn  from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/ArrayTable";
 import PreprocessingOptions from "../components/Preprocessing/PreprocessingOption";
-import { toArray, toOption } from "../components/Common/package"
-import { useCallback } from "react";
+import * as tf from "@tensorflow/tfjs";
+
 const Preprocessing = () => {
     const dispatch = useDispatch();
 
@@ -19,7 +21,6 @@ const Preprocessing = () => {
     const features = useSelector((state) => state.train.features);
     const featureData = useSelector((state) => state.train.x);
     const preprocess = useSelector((state) => state.preprocess.info);
-
     // 멀티 셀렉트 선택된 value state
     const [selectedFeatures, setSelectedFeatures] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([]);
@@ -28,9 +29,6 @@ const Preprocessing = () => {
     const [columnOption, setColumnOption] = useState([]);
     const [labelOptions, setLabelOptions] = useState([]);
     const [featureOptions, setFeatureOptions] = useState([]);
-
-    // width state
-    const [width, setWidth] = useState({});
 
     // 옵션 초기화
     useEffect(() => {
@@ -98,11 +96,10 @@ const Preprocessing = () => {
                 <ArrayTable
                         data={labelData}
                         columns={labels}
-                        setWidth={setWidth}
                 />
                 <PreprocessingOptions
                     columns={labels}
-                    width={width}/>
+                />
             </div>
             <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
                 <SetColumn
@@ -113,12 +110,12 @@ const Preprocessing = () => {
                     handleClick={handleFeatureClick}                
                 />
                 <ArrayTable
-                        data={featureData}
-                        columns={features}
-                        setWidth={setWidth}/>
+                    data={featureData}
+                    columns={features}
+                />
                 <PreprocessingOptions
                     columns={features}
-                    width={width}/>
+                />
             </div >
         </>
     )

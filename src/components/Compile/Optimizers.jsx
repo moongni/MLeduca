@@ -6,18 +6,20 @@ import { compileActions } from "../../reducers/compileSlice";
 
 function Optimizers() {
     const optimizers = data.Compile.filter(v => v.title === "optimizer")[0].info;
+
     return (
         <div>
-            <ResetButton onClick={compileActions.removeOptimizer}/>
+            <ResetButton 
+                onClick={compileActions.removeOptimizer}
+            />
             <div>
-                {optimizers.map((info) => {
-                    return (
+                {optimizers.map((info) => (
                         <Box 
                             title="optimizer" 
                             info={info} 
                             >
-                        </Box>);
-                })}
+                        </Box>
+                ))}
             </div>
         </div>
     );

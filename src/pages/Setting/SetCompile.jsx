@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React,{ useState } from "react";
 import data from "../../data/data.json"
 import Losses from "../../components/Compile/Losses";
 import Optimizers from "../../components/Compile/Optimizers";
@@ -22,8 +21,9 @@ function SetCompile() {
         <div className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
             <Tabs currentTab={currentTab} 
                 setCurrentTab={setCurrentTab} 
-                tabData={data.Compile}/>
-            <div className="w-full pt-12 ">
+                tabData={data.Compile}
+            />
+            <div className="w-full pt-12">
                 {tapContent(currentTab)}
             </div>
         </div>

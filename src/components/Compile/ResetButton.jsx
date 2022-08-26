@@ -8,7 +8,8 @@ function ResetButton(props) {
     return (
         <button 
             className="h-10 w-20 mb-2 bg-red-200 rounded-md  hover:bg-red-400 cursor-pointer"
-            onClick={()=> dispatch(props.onClick())}>
+            onClick={() => dispatch(props.onClick())}
+        >
             Reset
         </button>
     )

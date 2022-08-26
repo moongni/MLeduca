@@ -1,7 +1,6 @@
 import React from "react";
 import { useMemo } from "react";
 
-
 const range = (start, end) => {
     const rangeArray = [];
     var num = end - start
@@ -30,9 +29,7 @@ const TableBody = ({children, ...props}) => {
                                         <td className="w-5 p-3 mr-2 tracking-widest">
                                             {props.data[column][idx]? props.data[column][idx]: "null"}
                                         </td>  
-                                    ) 
-                                }                    
-                            )}                
+                            )})}                
                         </tr>
                 )})
             }

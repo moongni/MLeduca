@@ -9,10 +9,11 @@ function Losses() {
     
     return (
         <div>
-            <ResetButton onClick={compileActions.removeLoss}/>
+            <ResetButton 
+                onClick={compileActions.removeLoss}
+            />
             <div>
-                {losses.map((info) => {
-                    return (
+                {losses.map((info) => (
                         <>
                             <Box 
                                 title="loss" 
@@ -20,8 +21,8 @@ function Losses() {
                                 style={{"minHeight": "200px"}}>
                                 </Box>
                             
-                        </>);
-                })}
+                        </>
+                ))}
             </div>
         </div>
     );
