@@ -79,8 +79,8 @@ const MainSidebar = (props) => {
                     )})}
                 </ul>
             </div>
-            <section className='home-section border-solid border-b-2 shadow-sm shadow-slate-200'>
-                <div className='home-content '>
+            <section className='home-section border-solid border-b-2 shadow-sm shadow-slate-200 ease-in-out duration-300'>
+                <div className='home-content'>
                     <i className="cursor-pointer" onClick={()=> props.setMenu(!props.isOpen)}><AiOutlineMenu/></i>
                     <i className={`cursor-pointer ${props.isDashboardOpen? "":"rotate-180"} ease-in-out duration-300`} onClick={()=> props.setDashboard(!props.isDashboardOpen)}><AiOutlineArrowLeft/></i>
                 </div>    

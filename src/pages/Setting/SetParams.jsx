@@ -3,6 +3,7 @@ import Inputs from "../../components/Common/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
 import { paramActions } from "../../reducers/paramSlice";
+import { useNav } from "../../components/Common/singlePageNav/useNav"
 
 function SetParams(){
     const params = useSelector((state) => state.parameter.info);
@@ -25,8 +26,14 @@ function SetParams(){
         setDisabled(false);
     }
 
+    const paramRef = useNav('Param');
+
     return (
-        <div className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+        <div 
+            className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400"
+            ref={paramRef}
+            id="paramContainer"
+        >
             <form 
                 className="relative pb-20 bg-yellow-400"
                 onSubmit={handleSubmit}

@@ -41,7 +41,7 @@ const PreprocessingOptions = ({children, ...props}) => {
                     <th className="mx-1 py-2 border-b-2 border-slate-100">
                       <PreprocessingSelect
                         column={column}
-                        width={props.width}/>
+                      />
                     </th>
                   ))
                 }

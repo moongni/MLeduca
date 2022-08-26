@@ -26,7 +26,7 @@ export default function LoadData() {
                 <button 
                     className="mr-4" 
                     type="button" 
-                    onClick={()=>{getData(url, dispatch, '\t')}}
+                    onClick={() => {getData(url, dispatch, '\t')}}
                 >
                     Fetch
                 </button>

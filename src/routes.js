@@ -6,6 +6,7 @@ import SetLayers from './pages/Setting/SetLayers';
 import SetParams from './pages/Setting/SetParams';
 import SetCompile from './pages/Setting/SetCompile';
 import TfTest from './pages/TfTest';
+import Setting from './pages/Setting/Setting';
 
 function Routes() {
   let element = useRoutes([
@@ -18,7 +19,8 @@ function Routes() {
     { path: '/setparams', element: <SetParams/>},
     { path: '/setcompile', element: <SetCompile/>},
     { path: '/loadData', element: <LoadData/>},
-    { path: '/preprocessing', element: <Preprocessing/>}
+    { path: '/preprocessing', element: <Preprocessing/>},
+    { path: '/setting', element: <Setting/>}
   ]);
   return element;
 }
