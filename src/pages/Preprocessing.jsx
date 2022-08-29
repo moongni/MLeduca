@@ -85,7 +85,7 @@ const Preprocessing = () => {
 
     return (
         <>
-            <div className="max-w-full max-h-fit rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+            <div className="max-w-full max-h-fit  p-5 mb-4 bg-slate-50 rounded-2xl shadow-lg shadow-slate-400">
                 <SetColumn 
                     title={"Labels"}
                     selected={selectedLabels}
@@ -94,10 +94,11 @@ const Preprocessing = () => {
                     handleClick={handleLabelClick}
                 />
                 <ArrayTable
-                        data={labelData}
-                        columns={labels}
+                    data={labelData}
+                    columns={labels}
                 />
                 <PreprocessingOptions
+                    className="mt-4"
                     columns={labels}
                 />
             </div>
@@ -114,6 +115,7 @@ const Preprocessing = () => {
                     columns={features}
                 />
                 <PreprocessingOptions
+                    className="mt-4"
                     columns={features}
                 />
             </div >

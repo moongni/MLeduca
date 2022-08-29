@@ -10,13 +10,16 @@ const NavLink = ({ navLinkId, scrollToId }) => {
 	};
 
 	return (
-		<span
+		<div 
 			id={navLinkId}
-			className={`${activeNavLinkId === navLinkId ? 'border-b-2 border-slate-300' : ''} p-2`}
-			onClick={handleClick}
-		>
-			{navLinkId}
-		</span>
+			className={`p-2 w-56 mr-auto inline-block`}
+			onClick={handleClick}>
+			<span
+				className={`${activeNavLinkId === navLinkId ? 'border-b-2 border-slate-300' : ''} opacity-80 cursor-pointer`}
+			>
+				{navLinkId}
+			</span>
+		</div>
 	);
 };
 

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Tabs from "../../components/Tabs"
-import data from "../../data/data.json"
-import Sequence from "../../components/Layers/Sequence";
-import Model from "../../components/Layers/model";
-import { useNav } from "../../components/Common/singlePageNav/useNav";
+import Tabs from "../../Tabs"
+import data from "../../../data/data.json"
+import Sequence from "./Sequence";
+import Model from "./model";
+import { useNav } from "../../Common/singlePageNav/useNav";
 
 function SetLayers() {
     const [currentTab, setCurrentTab] = useState('1');

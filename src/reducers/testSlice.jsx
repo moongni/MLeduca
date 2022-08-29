@@ -12,11 +12,30 @@ const testSlice = createSlice({
     initialState,
 
     reducers: {
+        addData(state, action) {
+            state.x = 
+            {
+                ...state.x,
+                ...action.payload
+                };
+        },
         setData(state, action) {
-            const { columns , samples } = action.payload;
-            state.columns = columns;
-            state.info = samples;
-        },  
+            state.x = action.payload;
+        },
+        setColumns(state, action){
+            state.features = action.payload;
+        },
+        // addData(state,action) {
+        //     const { columns , samples } = action.payload;
+        //     state.columns = columns;
+        //     state.info = samples;
+        // },
+        initialize(state, action){
+            state.labels = [];
+            state.features = [];
+            state.x = {};
+            state.y = {};
+        },
         setLabels(state, action){
             state.labels = action.payload
         },

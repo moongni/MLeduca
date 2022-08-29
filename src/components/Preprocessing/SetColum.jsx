@@ -4,7 +4,7 @@ import Inputs from "../Common/Inputs";
 const SetColumn = ({...props}) => {
     return (
         <>
-            <div className="flex justify-between items-center h-14 w-full bg-yellow-400 mb-2">
+            <div className="flex justify-between items-center h-14 w-full mb-2">
                 <Inputs 
                     props={{
                     kind: "MultiSelect",

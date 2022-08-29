@@ -2,10 +2,9 @@ import React, {
     useState,
     useRef,
     useCallback } from "react";
-import { dataActions } from "../../reducers/dataSlice";
 
-export const getData = async (url, dispatch, sep=',') => {
-    dispatch(dataActions.initialize());
+export const getData = async (url, dispatch, actions, sep=',') => {
+    dispatch(actions.initialize());
     
     var splitUrl = url.split("/")
     var splitFileName = splitUrl[splitUrl.length - 1].split('.');
@@ -16,19 +15,19 @@ export const getData = async (url, dispatch, sep=',') => {
     switch (fileExtension){
         case "json":
             const jsonData = await dataResponse.json();
-            dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
+            dispatch(actions.setColumns(Object.keys(jsonData[0])));
             Object.keys(jsonData[0]).map(column => {
                 const newColumn = {
                     [column]: jsonData.map(sample => sample[column])
                 };
-                dispatch(dataActions.addData(newColumn));
+                dispatch(actions.addData(newColumn));
             })
             break;
         case "csv":
             const csvData = await dataResponse.text();
             const rows = csvData.split((/\r?\n|\r/));
             const features = rows.shift().split(sep);
-            dispatch(dataActions.setColumns(features));
+            dispatch(actions.setColumns(features));
             const newData = new Object();
             features.map(feature => {
                 newData[feature] = [];
@@ -39,11 +38,11 @@ export const getData = async (url, dispatch, sep=',') => {
                     newData[value].push(values[key]);
                 })
             })
-            dispatch(dataActions.setData(newData));
+            dispatch(actions.setData(newData));
     }
 }
 
-export const DrogDropFile = ({dispatch}) => {
+export const DrogDropFile = ({dispatch, actions}) => {
     const [dragActive, setDragActive] = useState(false);
     const inputRef = useRef(null);
 
@@ -55,7 +54,7 @@ export const DrogDropFile = ({dispatch}) => {
                 case "text/csv":
                   const rows = contents.split((/\r?\n|\r/));
                   const features = rows.shift().split(',');
-                  dispatch(dataActions.setColumns(features));
+                  dispatch(actions.setColumns(features));
                   const newData = new Object();
                   features.map(feature => {
                     newData[feature] = [];
@@ -66,16 +65,16 @@ export const DrogDropFile = ({dispatch}) => {
                           newData[value].push(values[key]);
                       })
                   })
-                  dispatch(dataActions.setData(newData));
+                  dispatch(actions.setData(newData));
                   break;            
                case "application/json":
                   const jsonData = await JSON.parse(contents);
-                  dispatch(dataActions.setColumns(Object.keys(jsonData[0])));
+                  dispatch(actions.setColumns(Object.keys(jsonData[0])));
                   Object.keys(jsonData[0]).map(column => {
                     const newSample = {
                         [column]: jsonData.map(sample => sample[column])
                     }
-                    dispatch(dataActions.addData(newSample));
+                    dispatch(actions.addData(newSample));
                   })
               }
           };

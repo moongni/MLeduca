@@ -42,7 +42,7 @@ const Inputs = ({props}) => {
     switch(props.kind){
         case "input":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full">
                     <label 
                         className="ml-10" 
                         htmlFor={props.title}
@@ -69,7 +69,7 @@ const Inputs = ({props}) => {
                 )
         case "float":
             return(
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <label 
                         className="ml-10" 
                         htmlFor={props.title}
@@ -96,7 +96,7 @@ const Inputs = ({props}) => {
             );
         case "array":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <label 
                         className="ml-10" 
                         htmlFor={props.title}
@@ -120,7 +120,7 @@ const Inputs = ({props}) => {
             )
         case "text":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <label 
                         className="ml-10" 
                         htmlFor={props.title}
@@ -143,7 +143,7 @@ const Inputs = ({props}) => {
             )
         case "select":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <span className="ml-10">
                         {props.title}
                     </span>
@@ -170,7 +170,7 @@ const Inputs = ({props}) => {
             )
         case "selectOne":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <span className="ml-10">
                         {props.title}
                     </span>
@@ -195,7 +195,7 @@ const Inputs = ({props}) => {
             )
         case "MultiSelect":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                     <span 
                         className="ml-10"
                     >
@@ -213,7 +213,7 @@ const Inputs = ({props}) => {
             )
         case "bool":
             return (
-                <div className="flex justify-between items-center h-14 w-full bg-yellow-400">
+                <div className="flex justify-between items-center h-14 w-full ">
                 <span className="ml-10">
                     {props.title}
                 </span>

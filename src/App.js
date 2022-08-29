@@ -17,7 +17,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App relative top-0 left-0 bg-slate-100"
+      <div className="App relative bg-slate-100"
            style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
           <MainSidebar 
             isOpen={isOpen} 
@@ -25,7 +25,7 @@ function App() {
             isDashboardOpen={isDashboardOpen} 
             setDashboard={setDashboard}
           />
-          <div className={`relative ${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } left-0 top-0 pt-20 px-4 pb-4 ease-in-out duration-300`}
+          <div className={`relative ${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } pt-20 px-4 pb-4 ease-in-out duration-300`}
           >
               <Router/>
           </div>

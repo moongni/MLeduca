@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { isEmptyArray } from "../Common/package";
 import PreprocessingSelect from "./PreprocessingSelect";
 
-const PreprocessingOptions = ({children, ...props}) => {
+const PreprocessingOptions = ({children, className, ...props}) => {
 
   const [hovering, setHovering] = useState(false);
 
@@ -20,7 +20,7 @@ const PreprocessingOptions = ({children, ...props}) => {
     <>
       { !isEmptyArray(props.columns) &&
         <div 
-          className={`${hovering? "scrollhost":"disViable"} w-full max-h-fit overflow-auto`}
+          className={`${hovering? "scrollhost":"disViable"} w-full max-h-fit overflow-auto ${className}`}
           onMouseLeave={handleMouseOut}
           onMouseEnter={handleMouseOver}
         >

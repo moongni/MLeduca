@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { compileActions } from '../../reducers/compileSlice';
-import Inputs from "../Common/Inputs";
+import { compileActions } from '../../../reducers/compileSlice';
+import Inputs from "../../Common/Inputs";
 
 function Box(props){
     const dispatch = useDispatch();
@@ -25,7 +25,7 @@ function Box(props){
     };
 
     return (
-        <div className="mb-4 bg-blue-100 hover:bg-slate-300 rounded-lg">
+        <div className="mb-4 hover:bg-slate-300 rounded-lg">
             <button 
                 className="relative w-full min-h-78px cursor-pointer"
                 style={props.style} 
