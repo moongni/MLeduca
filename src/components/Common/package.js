@@ -8,10 +8,11 @@ export const isEmptyArray = (param) => {
 }
 
 export const isEmpty = (param) => {
-
-    return typeof param == "undefined" || param == null
+    return typeof param == "undefined" || param == null || param === "";
 }
-
+export const isEmptyStr = (param) => {
+    return isEmpty(param) || param === "";
+}
 export const toOption = (items) => {
     const newOptions = [];
 

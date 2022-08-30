@@ -43,28 +43,5 @@
             "icon":"FaFileExport",
             "link":"#"
         }
-    ],
-    
-    "ModelDashBoard":[
-        {
-            "name":"Layers",
-            "subLinkName": 
-            [
-                {
-                    "name":"Layer",
-                    "link":"/layers"
-                }
-            ],
-            "link":"/setlayers"
-
-        },
-        {
-            "name":"Compile",
-            "link": "/setcompile"
-        },
-        {
-            "name":"Parameters",
-            "link": "setparams"
-        }
     ]
 }

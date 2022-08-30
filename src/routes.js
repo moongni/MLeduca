@@ -8,18 +8,15 @@ import Predict from './pages/Predict';
 
 function Routes() {
   let element = useRoutes([
-    {
-      path: '/',
-      element: <Home/>,
-    },
+    { path: '/', element: <Home/>,},
     { path: '/predict', element: <Predict/>},
-    { path: '/tfjs_test/', element: <TfTest /> },
+    { path: '/tfjs_test', element: <TfTest /> },
     { path: '/loadData', element: <LoadData/>},
     { path: '/preprocessing', element: <Preprocessing/>},
     { path: '/setting', element: <Setting/>}
   ]);
+
   return element;
 }
   
-  export default Routes;
-  
+export default Routes;
