@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import Inputs from "../../components/Common/Inputs";
+import Inputs from "../Common/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
 import { paramActions } from "../../reducers/paramSlice";
+import { useNav } from "../Common/singlePageNav/useNav"
 
-function SetParams(){
+function Params(){
     const params = useSelector((state) => state.parameter.info);
     const dispatch = useDispatch();
 
@@ -25,10 +26,16 @@ function SetParams(){
         setDisabled(false);
     }
 
+    const paramRef = useNav('Param');
+
     return (
-        <div className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+        <div 
+            className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400"
+            ref={paramRef}
+            id="paramContainer"
+        >
             <form 
-                className="relative pb-20 bg-yellow-400"
+                className="relative pb-20"
                 onSubmit={handleSubmit}
             >
                 {
@@ -64,4 +71,4 @@ function SetParams(){
     )
 }
 
-export default SetParams;
+export default Params;

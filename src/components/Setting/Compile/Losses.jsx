@@ -1,14 +1,19 @@
 import React from "react";
 import Box from "./Box";
-import data from "../../data/data.json"
+import data from "../../../data/data.json"
 import ResetButton from "./ResetButton";
-import { compileActions } from "../../reducers/compileSlice";
+import { compileActions } from "../../../reducers/compileSlice";
+import { useNav } from "../../Common/singlePageNav/useNav"
 
 function Losses() {
     const losses = data.Compile.filter(v => v.title === "loss")[0].info;
-    
+    const lossRef = useNav("Loss");
+
     return (
-        <div>
+        <div
+            className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400"
+            ref={lossRef}
+            id="lossContainer">
             <ResetButton 
                 onClick={compileActions.removeLoss}
             />

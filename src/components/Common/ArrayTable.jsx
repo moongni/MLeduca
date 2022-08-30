@@ -3,7 +3,7 @@ import { isEmptyArray } from "./package";
 import "./scrollStyle.css";
 import TableBody from "./TableBody";
 
-const ArrayTable = ({children, ...props}) => {
+const ArrayTable = ({children, className, ...props}) => {
     const [hovering, setHovering] = useState(false);
     const handleMouseOver = useCallback(() => {
         !hovering &&
@@ -19,7 +19,7 @@ const ArrayTable = ({children, ...props}) => {
         <>
             { !isEmptyArray(props.columns) && 
                 <div 
-                    className={`${hovering? "scrollhost":"disViable"} w-full h-96 overflow-auto`}
+                    className={`${hovering? "scrollhost":"disViable"} w-full h-96 overflow-auto ${className} rounded-2xl bg-slate-50 shadow-sm shadow-slate-400`}
                     onMouseLeave={handleMouseOut}
                     onMouseEnter={handleMouseOver}
                 >

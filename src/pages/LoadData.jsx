@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getData, DrogDropFile } from "../components/LoadData/LoadCsvJson";
 import Inputs from "../components/Common/Inputs";
 import ArrayTable from "../components/Common/ArrayTable";
+import { dataActions } from "../reducers/dataSlice";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -12,12 +13,13 @@ export default function LoadData() {
     const [url, setUrl] = useState("");
 
     return (
-        <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
-            <div className="flex  bg-yellow-400 mb-4">
+        <div className="min-h-full rounded-2xl p-5 bg-slate-50 shadow-lg shadow-slate-400">
+            <span className="text-lg">Load Data</span>
+            <div className="flex mb-4">
                 <Inputs 
                     props={{
                         kind: "text",
-                        title: "Url",
+                        title: "Load For Url",
                         placeholder: "Url 입력",
                         value: url,
                         setValue: setUrl
@@ -26,7 +28,7 @@ export default function LoadData() {
                 <button 
                     className="mr-4" 
                     type="button" 
-                    onClick={()=>{getData(url, dispatch, '\t')}}
+                    onClick={() => {getData(url, dispatch, dataActions, '\t')}}
                 >
                     Fetch
                 </button>

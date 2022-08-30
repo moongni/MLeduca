@@ -15,23 +15,9 @@
         },
         {
             "name": "Setting",
-            "subLinkName":[
-                {
-                    "name":"Layers",
-                    "link":"/setlayers"
-                },
-                {
-                    "name":"Compile",
-                    "link":"/setcompile"
-                },
-                {
-                    "name":"Parameters",
-                    "link":"/setparams"
-                }
-            ],
+            "subLinkName":[],
             "icon":"AiOutlineControl",
-            "link":"#",
-            "clsName":"isShowMenu1"
+            "link":"/setting"
         },
         {
             "name":"fit",
@@ -40,15 +26,15 @@
             "link":"/tfjs_test/"
         },
         {
-            "name":"Analytic",
-            "subLinkName": [],
-            "icon":"IoMdAnalytics",
-            "link":"#"
-        },
-        {
             "name":"Predict",
             "subLinkName": [],
             "icon":"AiOutlineLineChart",
+            "link":"/predict"
+        },
+        {
+            "name":"Analytic",
+            "subLinkName": [],
+            "icon":"IoMdAnalytics",
             "link":"#"
         },
         {

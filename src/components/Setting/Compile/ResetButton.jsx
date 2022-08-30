@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux"
-import { compileActions } from "../../reducers/compileSlice";
+import { compileActions } from "../../../reducers/compileSlice";
 
 function ResetButton(props) {
     const dispatch = useDispatch();

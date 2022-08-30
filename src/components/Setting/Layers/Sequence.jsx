@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { layerActions } from "../../reducers/layerSlice";
-import Inputs from "../Common/Inputs";
+import { layerActions } from "../../../reducers/layerSlice";
+import Inputs from "../../Common/Inputs";
 
 function Sequence(props) {
     // const model = useSelector((state) => state.model.info)
@@ -26,10 +26,10 @@ function Sequence(props) {
     }
 
     return(
-        <div className="w-full bg-yellow-200">
-            <span className="ml-6 mt-2">sequence 설명</span>
+        <div className="w-full">
+            <span className="ml-6 mt-2 text-lg">sequence</span>
             <form 
-                className="relative pb-20 bg-yellow-400"
+                className="relative pb-20"
                 onSubmit={handleSubmit}
             >
                 <div>

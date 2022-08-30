@@ -16,6 +16,10 @@ module.exports = {
       right: {
         '-260px':"-16.25rem"
       },
+      left: {
+        '260px':"16.25rem",
+        "78px" :"4.875rem"
+      },
       maxWidth: {
       '260px':"16.25rem",
       },
