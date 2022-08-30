@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Tabs from "../../Tabs"
+import Tabs from "../../Common/Tabs"
 import data from "../../../data/data.json"
 import Sequence from "./Sequence";
 import Model from "./model";

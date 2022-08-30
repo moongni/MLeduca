@@ -7,10 +7,10 @@ import { FiDatabase } from "react-icons/fi";
 import { GoTriangleRight } from "react-icons/go"
 import { MdOutlineToc } from "react-icons/md"
 import { Link } from 'react-router-dom';
-import sidebars from '../data/sidebarData.json';
+import sidebars from '../../data/sidebarData.json';
 import './MainSidebar.css';
 
-const MainSidebar = (props) => {
+export const MainSidebar = (props) => {
     const [isShowMenu1, setShowMenu1] = useState(false);
     const [isShowMenu2, setShowMenu2] = useState(false);
 
@@ -88,5 +88,3 @@ const MainSidebar = (props) => {
         </div>
     )
 }
-
-export default MainSidebar

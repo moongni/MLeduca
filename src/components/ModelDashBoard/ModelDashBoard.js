@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import ParamBoard from './ModelDashBoard/LayerBoard';
-import CompileBoard from './ModelDashBoard/CompileBoard';
-import LayerBoard from './ModelDashBoard/LayerBoard';
+import ParamBoard from './LayerBoard';
+import CompileBoard from './CompileBoard';
+import LayerBoard from './LayerBoard';
 
 export const ModelDashBoard = (props) => {
-    
 
   return (
     <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
