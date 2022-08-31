@@ -1,22 +1,37 @@
-*{
+  .container{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
   }
-  .sidebar{
+  .open{
     width: 260px;
     /* transition: all 0.5s ease; */
   }
-  .sidebar.close{
+  .close{
     width: 78px;
+    
   }
-  .sidebar .logo-details{
+  .sidebarContainer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color:white;
+    border-style: solid;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+  .open .logoDetails{
     height: 60px;
     width: 100%;
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
-  .sidebar .logo-details i{
+  .open .logoDetailsIcon{
     font-size: 30px;
     color: black;
     height: 50px;
@@ -26,22 +41,24 @@
     justify-content: center;
     line-height: 57px;
   }
-  .sidebar .logo-details .logo_name {
+  .open .logoName {
     font-size: 20px;
     color: black;
     font-weight: 700;
   }
-  .sidebar.close .logo-details .logo_name,
-  .sidebar.close .nav-links .link-name,
-  .sidebar.close .nav-links .down
+  .open .navLinks {
+    height: 100%;
+    padding-top: 30px;
+  }
+
+  .close .logoDetails .logoName,
+  .close .navLinks .linkName,
+  .close .navLinks .down
   {
     opacity: 0;
     pointer-events: none;
   }
-  .sidebar .nav-links{
-    height: 100%;
-    padding-top: 30px;
-  }
+
   .sidebar .nav-links li{
     position: relative;
     list-style: none;

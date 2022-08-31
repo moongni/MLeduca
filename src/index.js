@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { CookiesProvider } from 'react-cookie';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -13,9 +13,9 @@ root.render(
 <React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-    <CookiesProvider>
+      <BrowserRouter> 
         <App />
-    </CookiesProvider>
+      </BrowserRouter>
     </PersistGate>
   </Provider>
 </React.StrictMode>

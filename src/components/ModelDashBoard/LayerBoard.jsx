@@ -5,7 +5,6 @@ import { isEmptyObject } from "../Common/package";
 
 const LayerBoard = ({children, className, style, ...props}) => {
     const layers = useSelector((state) => state.layers.info);
-    console.log("l",props);
     return (
         <ul className='mb-2'>
             <Link to={props.link}>

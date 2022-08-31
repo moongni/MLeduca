@@ -6,7 +6,8 @@ import Losses from "../components/Setting/Compile/Losses";
 import Nav from "../components/Common/singlePageNav/Nav";
 import NavProvider from "../components/Common/singlePageNav/NavContext";
 
-const Setting = ({chiled, ...props}) => {
+const Setting = ({children, ...props}) => {
+    console.log(1);
     return (
         <div className="relative flex w-full h-full">
             <NavProvider>

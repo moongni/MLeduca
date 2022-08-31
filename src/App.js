@@ -1,8 +1,10 @@
 import React, { useState , useEffect} from 'react';
 import "./App.css"
-import { BrowserRouter } from 'react-router-dom'
-import Router from "./routes"
 import MainLayout from './pages/MainLayout';
+import Setting from './pages/Setting';
+import LoadData from './pages/LoadData';
+import Home from './pages/Home';
+import Router from "./routes"
 
 function App() {
 
@@ -13,16 +15,11 @@ function App() {
   }, [window.innerHeight]);
 
   return (
-    <BrowserRouter>
       <div className="App relative bg-slate-100"
-           style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
-        <MainLayout/>
-          <Router/>
-        {/* <div className={`relative ${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' } pt-20 px-4 pb-4 ease-in-out duration-300`}>
-        </div> */}
+        style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
+        <Router/>
         <div className='fixed bottom-0 left-0 w-full h-4 bg-blue-400 border-blue-200 z-40'/>
       </div>
-    </BrowserRouter>
   );
 }
 

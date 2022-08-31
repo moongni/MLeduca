@@ -8,7 +8,7 @@ import { GoTriangleRight } from "react-icons/go"
 import { MdOutlineToc } from "react-icons/md"
 import { Link } from 'react-router-dom';
 import sidebars from '../../data/sidebarData.json';
-import './MainSidebar.css';
+import style from './MainSidebar.module.css';
 
 export const MainSidebar = (props) => {
     const [isShowMenu1, setShowMenu1] = useState(false);
@@ -43,15 +43,18 @@ export const MainSidebar = (props) => {
         }
     }
     return (
-        <div className='p-0 m-0 box-border'>
-            <div className={`${props.isOpen? "sidebar": "sidebar close"} fixed top-0 left-0 h-full 
-            bg-white border-solid border-r-2 shadow-sm shadow-slate-200 ease-in-out duration-300 z-30`}
-            >
-                <Link className="logo-details cursor-pointer" to='/'>
-                    <i ><RiComputerLine/></i>
-                    <span className='logo_name'>Deep learning</span>
+        <div className={style.container}>
+            <div className={[`${props.isOpen? style.open: style.close}`, style.sidebarContainer].join(' ')}>
+                <Link className={style.logoDetails} to='/'>
+                    <i className={style.logoDetailsIcon}>
+                        <RiComputerLine/>
+                    </i>
+                    <span className={style.logoName}>
+                        Deep learning
+                    </span>
                 </Link>
-                <ul className='nav-links'>
+
+                <ul className={style.navLinks}>
                     {sidebars.sidebarLinkName
                         .map(sidebar => {
                             const clsName = sidebar.subLinkName.length > 0? isShowMenu(sidebar.clsName): true;
@@ -59,7 +62,7 @@ export const MainSidebar = (props) => {
                                 <li className={clsName? "showMenu" : ""}>
                                     <div className='icon-link'>
                                         <Link to={sidebar.link}
-                                        onClick={()=> setShowMenu(sidebar.clsName)}>
+                                           onClick={()=> setShowMenu(sidebar.clsName)}>
                                             <i><Icon icon={sidebar.icon}></Icon></i>
                                             <span className='link-name'>{sidebar.name}</span>
                                             {sidebar.subLinkName.length > 0 && <i className='down ml-auto'><AiFillCaretDown /></i>}
