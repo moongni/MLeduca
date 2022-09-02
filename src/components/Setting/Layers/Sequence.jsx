@@ -35,12 +35,11 @@ function Sequence(props) {
                 <div>
                     {props.info.filter((n)=> n.name === "mainParams")[0].params
                         .map(v => (
-                        <Inputs 
-                            props={{
-                            ...v,
-                            value: value,
-                            setValue: setValue
-                        }}/>
+                            <Inputs 
+                                {...v}
+                                value={value}
+                                setValue={setValue}
+                            />
                     ))}
                 </div>
                 <button 
@@ -55,11 +54,10 @@ function Sequence(props) {
                     {props.info.filter((n)=>n.name === "subParams")[0].params
                         .map(v => (
                             <Inputs 
-                                props={{
-                                ...v,
-                                value: value,
-                                setValue: setValue
-                            }}/>
+                                {...v}
+                                value={value}
+                                setValue={setValue}
+                            />
                     ))}
                 </div>
                 <button 

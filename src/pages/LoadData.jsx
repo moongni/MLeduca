@@ -17,13 +17,11 @@ export default function LoadData() {
             <span className="text-lg">Load Data</span>
             <div className="flex mb-4">
                 <Inputs 
-                    props={{
-                        kind: "text",
-                        title: "Load For Url",
-                        placeholder: "Url 입력",
-                        value: url,
-                        setValue: setUrl
-                    }}
+                    kind="text"
+                    title="Load For Url"
+                    placeholder="Url 입력"
+                    value={url}
+                    setValue={setUrl}
                 />
                 <button 
                     className="mr-4" 

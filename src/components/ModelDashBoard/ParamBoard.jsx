@@ -7,13 +7,13 @@ const ParamBoard = ({children, className, style, ...props}) => {
     const parameter = useSelector((state) => state.parameter.info);
     
     return (
-        <ul className='mb-2'>
+        <ul style={{"marginBottom":"0.5rem"}}>
             <Link to={props.link}>
-                <li className=' text-lg font-medium'>Parameters</li>
-                {
-                    !isEmptyObject(parameter) &&
+                <li style={style}>Parameters</li>
+                {!isEmptyObject(parameter) &&
                     Object.entries(parameter).map(setting => (
-                            <li className='pl-2'><p className='break-all'>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p></li>
+                            <li style={{"paddingLeft":"0.5rem"}}>
+                                <p style={{"wordBreak":"break-all"}}>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p></li>
                         ))
                 }
             </Link>

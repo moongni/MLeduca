@@ -51,11 +51,9 @@ function Box(props){
                 {props.info.params &&
                     props.info.params.map(param => (
                             <Inputs 
-                                props={{
-                                    ...param,
-                                    value: value,
-                                    setValue: setValue
-                                }}
+                                {...param}
+                                value={value}
+                                setValue={setValue}
                             />
                     ))
                 }

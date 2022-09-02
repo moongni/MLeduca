@@ -41,11 +41,11 @@ function Params(){
                 {
                     dataForInputs.map(
                         param => (
-                            <Inputs props={{
-                                ...param,
-                                value:value,
-                                setValue:setValue
-                            }}/>
+                            <Inputs 
+                                {...param}
+                                value={value}
+                                setValue={setValue}
+                            />
                         )
                     )
                 }

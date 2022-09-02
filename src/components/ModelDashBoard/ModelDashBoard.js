@@ -1,35 +1,41 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import ParamBoard from './LayerBoard';
+import ParamBoard from './ParamBoard';
 import CompileBoard from './CompileBoard';
 import LayerBoard from './LayerBoard';
+import style from './ModelDashBoard.module.css';
 
 export const ModelDashBoard = (props) => {
+    const listStyle = {
+        "fontSize":"1.125rem",
+        "lineHeight":"1.75rem",
+        "fontWeight":"500"
+    }
 
-  return (
-    <div className={`fixed top-0 right-0 h-full ${props.isDashboardOpen? 'w-[16.25rem]':'right-[-16.25rem] opacity-0 pointer-events-none'}
-    max-w-[16.25rem] py-16 m-0 shadow-sm shadow-slate-200 ease-in-out duration-300
-    bg-slate-200 border-soild table`}
-    >
-        <div className='table-row w-full h-5/6'>
-            <h1 className='mt-2 text-lg text-center font-semibold border-b-2 border-slate-400'>Model Info</h1>
-            <div className='ml-4'>
-                <LayerBoard
-                    link="/setting"/>
-                <CompileBoard
-                    link="/setting"/>
-                <ParamBoard
-                    link="/setting"/>
+    return (
+        <div className={[`${props.isDashboardOpen? style.open:style.close}`, style.container].join(' ')}
+        >
+            <div className={style.modelInfo}>
+                <h1 className={style.h1}>Model Info</h1>
+                <div style={{"marginLeft": "1rem"}}>
+                    <LayerBoard
+                        style={listStyle}
+                        link="/setting"/>
+                    <CompileBoard
+                        style={listStyle}
+                        link="/setting"/>
+                    <ParamBoard
+                        style={listStyle}
+                        link="/setting"/>
+                </div>
+            </div>
+            <div className={style.modelTrain}>
+                <div className={style.div}>
+                    <Link to='/tfjs_test/'>
+                    <button className={style.button}>fit</button>
+                    </Link>
+                </div>
             </div>
         </div>
-        <div className='table-row h-14'>
-            <div className='flex mt-2 items-center justify-center'>
-                <Link to='/tfjs_test/'>
-                <button className="w-24 h-10 text-center text-lg font-medium 
-                cursor-pointer bg-green-300 rounded-lg hover:bg-green-400 ">fit</button>
-                </Link>
-            </div>
-        </div>
-    </div>
   )
 }

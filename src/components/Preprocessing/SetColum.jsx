@@ -6,12 +6,11 @@ const SetColumn = ({...props}) => {
         <>
             <div className="flex justify-between items-center h-14 w-full mb-2">
                 <Inputs 
-                    props={{
-                    kind: "MultiSelect",
-                    title: props.title,
-                    value: props.selected,
-                    setValue: props.setSelected,
-                    options: props.options,}}
+                    kind="MultiSelect"
+                    title={props.title}
+                    value={props.selected}
+                    setValue={props.setSelected}
+                    options={props.options}
                 />
                 <button 
                     className="mx-10" type="button" 

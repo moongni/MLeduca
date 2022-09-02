@@ -6,19 +6,19 @@ import { isEmptyObject } from "../Common/package";
 const LayerBoard = ({children, className, style, ...props}) => {
     const layers = useSelector((state) => state.layers.info);
     return (
-        <ul className='mb-2'>
+        <ul style={{"marginBottom":"0.5rem"}}>
             <Link to={props.link}>
-                <li className='text-lg font-medium '>Layers</li>
-                {
-                    !isEmptyObject(layers) &&
+                <li style={style}>Layers</li>
+                {!isEmptyObject(layers) &&
                     layers.map((layer) => {
                         return (
-                            <li className='pl-2'>
-                                <p className='break-all'>{layer.idx} Layer</p>
-                                {
-                                    Object.entries(layer.info).map(item => {
+                            <li style={{"paddingLeft":"0.5rem"}}>
+                                <p style={{"wordBreak":"break-all"}}>
+                                    {layer.idx} Layer
+                                </p>
+                                {Object.entries(layer.info).map(item => {
                                         return (
-                                            <p className='break-all'>{item[0]}&nbsp; &nbsp;{item[1]}</p>
+                                            <p style={{"wordBreak":"break-all"}}>{item[0]}&nbsp; &nbsp;{item[1]}</p>
                                         )
                                     })
                                 }
