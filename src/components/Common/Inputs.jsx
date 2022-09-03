@@ -52,9 +52,7 @@ const Inputs = ({...props}) => {
 
     return (
         <div style={inputStyle}>
-            <span style={{"marginLeft":"2.5rem"}}>
-                {props.title}
-            </span>
+            <span>{props.title}</span>
             <Contents {...props}/>
         </div>
     )    

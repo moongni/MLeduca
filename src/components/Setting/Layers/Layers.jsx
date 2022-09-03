@@ -4,10 +4,10 @@ import data from "../../../data/data.json"
 import Sequence from "./Sequence";
 import Model from "./model";
 import { useNav } from "../../Common/singlePageNav/useNav";
+import style from "../../Common/component.module.css";
 
 function SetLayers() {
     const [currentTab, setCurrentTab] = useState('1');
-    
     function tapContent(props) {
         const curContent = data.Layers.filter(tab => `${tab.id}` == props)
         switch (curContent[0].title) {
@@ -19,11 +19,11 @@ function SetLayers() {
                 return (<div className=" h-24 w-full bg-blue-200">default</div>);
         }
     }
-
     const layerRef = useNav("Layer");
+
     return(
         <div 
-            className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400"
+            className={style.container}
             ref={layerRef}
             id="layerContainer"
         >
@@ -32,7 +32,7 @@ function SetLayers() {
                 setCurrentTab={setCurrentTab} 
                 tabData={data.Layers}
             />
-            <div className="w-full pt-10">
+            <div style={{"paddingTop":"2.5rem"}}>
                 {tapContent(currentTab)}
             </div>
         </div>

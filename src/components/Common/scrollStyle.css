@@ -1,5 +1,13 @@
+.scrollhost {
+    width: 100%;
+    overflow: auto;
+}
+.disViable {
+    width: 100%;
+    overflow: auto;
+}
 .disViable::-webkit-scrollbar {
-    /* display: none; */
+    display: none;
     visibility: hidden;
 }
 .scrollhost::-webkit-scrollbar {

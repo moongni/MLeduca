@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getData, DrogDropFile } from "../components/LoadData/LoadCsvJson";
+import { DrogDropFile } from "../components/LoadData/DrogDropFile";
+import { getData } from "../components/LoadData/getData";
 import Inputs from "../components/Common/Inputs";
 import ArrayTable from "../components/Common/ArrayTable";
 import { dataActions } from "../reducers/dataSlice";
+import style from "../components/Common/component.module.css";
+import { FiDatabase } from "react-icons/fi";
+import { isEmptyArray } from "../components/Common/package";
+import { Title } from "../components/Common/title";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -13,31 +18,42 @@ export default function LoadData() {
     const [url, setUrl] = useState("");
 
     return (
-        <div className="min-h-full rounded-2xl p-5 bg-slate-50 shadow-lg shadow-slate-400">
-            <span className="text-lg">Load Data</span>
-            <div className="flex mb-4">
-                <Inputs 
-                    kind="text"
-                    title="Load For Url"
-                    placeholder="Url 입력"
-                    value={url}
-                    setValue={setUrl}
+        <div className={style.container}>
+            <Title title="Load Data" icon={<FiDatabase/>}/>
+            <div className={style.subContainer}>
+                <div style={{"display":"flex",
+                            "marginRight":"2.5rem",
+                            "marginLeft":"2.5rem"}}>
+                    <Inputs 
+                        kind="text"
+                        title="Load For Url"
+                        placeholder="Url 입력"
+                        value={url}
+                        setValue={setUrl}
+                    />
+                    <button 
+                        style={{"marginRight":"1rem"}}
+                        type="button" 
+                        onClick={() => {getData(url, dispatch, dataActions, '\t')}}
+                    >
+                        Fetch
+                    </button>
+                </div>
+                <DrogDropFile 
+                    title="Load For File"
+                    dispatch={dispatch}
                 />
-                <button 
-                    className="mr-4" 
-                    type="button" 
-                    onClick={() => {getData(url, dispatch, dataActions, '\t')}}
-                >
-                    Fetch
-                </button>
             </div>
-            <DrogDropFile 
-                dispatch={dispatch}
-            />
-            <ArrayTable 
-                data={dataInfo}
-                columns={dataColumns}
-            />
+            {!isEmptyArray(dataColumns) &&
+                <>
+                    <Title title="Data Table" icon={<FiDatabase/>}/>
+                    <ArrayTable 
+                        style={{"height":"24rem",
+                                "marginTop":"1.25rem"}}
+                        data={dataInfo}
+                        columns={dataColumns}/>
+                </>
+            }
         </div>
     );
 }

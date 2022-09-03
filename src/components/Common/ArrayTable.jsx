@@ -1,9 +1,10 @@
 import React, { useState , useCallback } from "react";
 import { isEmptyArray } from "./package";
 import "./scrollStyle.css";
-import TableBody from "./TableBody";
+import tableStyle from "./table/table.module.css";
+import TableBody from "./table/TableBody";
 
-const ArrayTable = ({children, className, ...props}) => {
+const ArrayTable = ({children, style,...props}) => {
     const [hovering, setHovering] = useState(false);
     const handleMouseOver = useCallback(() => {
         !hovering &&
@@ -19,26 +20,26 @@ const ArrayTable = ({children, className, ...props}) => {
         <>
             { !isEmptyArray(props.columns) && 
                 <div 
-                    className={`${hovering? "scrollhost":"disViable"} w-full h-96 overflow-auto ${className} rounded-2xl bg-slate-50 shadow-sm shadow-slate-400`}
+                    className={`${hovering? "scrollhost":"disViable"} ${tableStyle.container}`}
+                    style={style}
                     onMouseLeave={handleMouseOut}
                     onMouseEnter={handleMouseOver}
                 >
-                    <table className="w-full">
+                    <table style={{"width":"100%"}}>
                         <thead>
                             <tr 
                                 key={"column"}
-                                className="border-b-2 border-yellow-300"
+                                className={tableStyle.theadTr}
                             >
                                 { props.columns.map((column) => (
-                                        <th className="sticky top-0 text-left p-3 border-r-8 border-slate-50 bg-slate-50">
-                                            {column}
-                                        </th>
+                                        <th className={tableStyle.th}>{column}</th>
                                         )
                                 )}
                             </tr>
                         </thead>
                         <tbody>
                             <TableBody
+                                style={tableStyle}
                                 data={props.data}
                                 columns={props.columns}
                             />
@@ -47,7 +48,7 @@ const ArrayTable = ({children, className, ...props}) => {
                             <tr>
                                 {props.hasChild &&
                                     props.columns.map((_) => (
-                                        <th className="sticky bottom-0 text-left p-3 bg-slate-50">
+                                        <th className={tableStyle.children}>
                                             {children}
                                         </th>
                                     ))

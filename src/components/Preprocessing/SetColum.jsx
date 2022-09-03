@@ -1,19 +1,29 @@
 import React from "react";
 import Inputs from "../Common/Inputs";
+import { toOption } from "../Common/package";
 
 const SetColumn = ({...props}) => {
+    const divStyle = {
+        "display":"flex",
+        "width":"100%",
+        "height":"3.5rem",
+        "marginBottom":"0.5rem",
+        "justifyContent":"space-between",
+        "alignItems":"center"
+    }
+    
     return (
         <>
-            <div className="flex justify-between items-center h-14 w-full mb-2">
+            <div style={divStyle}>
                 <Inputs 
                     kind="MultiSelect"
                     title={props.title}
                     value={props.selected}
                     setValue={props.setSelected}
-                    options={props.options}
+                    options={toOption(props.columns)}
                 />
                 <button 
-                    className="mx-10" type="button" 
+                    style={{"margin":"0 40px"}} type="button" 
                     onClick={()=>{props.handleClick();}}
                 >
                     Save

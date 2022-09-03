@@ -40,7 +40,6 @@ const PreprocessingSelect = ({children, ...props}) => {
     return (
         <div>
             <Select
-                className="w-full h-full px-3"
                 styles={{
                     menu: (provided, state) => ({
                     ...provided,

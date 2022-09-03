@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import style from './input.module.css';
 
 export const IntArrayInput = ({...props}) => {
     const [string, setString] = useState("");
@@ -24,10 +25,9 @@ export const IntArrayInput = ({...props}) => {
                     [name]: value
             }))
     }, [string]);
-    
     return (
         <input 
-            style={{"marginRight":"2.5rem"}}
+            className={style.input}
             name={props.title}
             type={props.type}
             value={string}

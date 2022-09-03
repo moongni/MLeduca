@@ -1,14 +1,15 @@
 import React, 
 { useState,
-  useEffect,
   useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { trainActions } from "../reducers/trainSlice";
-import { toArray, toOption } from "../components/Common/package"
+import { isEmptyArray, toArray } from "../components/Common/package"
 import SetColumn  from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/ArrayTable";
 import PreprocessingOptions from "../components/Preprocessing/PreprocessingOption";
-import * as tf from "@tensorflow/tfjs";
+import style from '../components/Common/component.module.css';
+import { MdOutlineToc } from "react-icons/md"
+import { Title } from "../components/Common/title";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -20,47 +21,10 @@ const Preprocessing = () => {
     const labelData = useSelector(state => state.train.y);
     const features = useSelector((state) => state.train.features);
     const featureData = useSelector((state) => state.train.x);
-    const preprocess = useSelector((state) => state.preprocess.info);
+
     // 멀티 셀렉트 선택된 value state
     const [selectedFeatures, setSelectedFeatures] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([]);
-    
-    // 멀티 셀렉트 옵션 state
-    const [columnOption, setColumnOption] = useState([]);
-    const [labelOptions, setLabelOptions] = useState([]);
-    const [featureOptions, setFeatureOptions] = useState([]);
-
-    // 옵션 초기화
-    useEffect(() => {
-        const initOptions = toOption(dataColumns);
-        setColumnOption(initOptions);
-        
-        let initLabels = [];
-        if (Array.isArray(labels) && labels.length !== 0) {
-            initLabels = toOption(labels);
-            setFeatureOptions(initOptions.filter(option => !initLabels.includes(option)));
-        } else {
-            setFeatureOptions(initOptions);
-        }
-        setSelectedLabels(initLabels);
-        
-        let initFeatures = [];
-        if (Array.isArray(features) && features.length !== 0){
-            initFeatures = toOption(features);
-            setLabelOptions(initOptions.filter(option => !initFeatures.includes(option)));
-        } else {
-            setLabelOptions(initOptions);
-        }
-        setSelectedFeatures(initFeatures);
-    }, []);
-    
-    // 멀티셀렉트 동기화
-    useEffect(() => {
-        const newLabelOption = columnOption.filter(option => !selectedFeatures.includes(option));
-        const newFeatureOption = columnOption.filter(option => !selectedLabels.includes(option));
-        setLabelOptions(newLabelOption);
-        setFeatureOptions(newFeatureOption);
-    }, [selectedLabels, selectedFeatures])
 
     const selectColumn = (data, columns) => {
         const newData = new Object();
@@ -76,6 +40,7 @@ const Preprocessing = () => {
         dispatch(trainActions.setLabelData(newData));
         dispatch(trainActions.setLabels(labelNames));
     })
+
     const handleFeatureClick = useCallback(() => {
         const featureNames = toArray(selectedFeatures);
         const newData = selectColumn(data, featureNames);
@@ -84,42 +49,66 @@ const Preprocessing = () => {
     })
 
     return (
-        <>
-            <div className="max-w-full max-h-fit  p-5 mb-4 bg-slate-50 rounded-2xl shadow-lg shadow-slate-400">
+        <div className={style.container}>
+            <Title
+                title="Preprocessing"
+                icon={<MdOutlineToc/>}
+            />
+            <div className={style.subContainer}>
                 <SetColumn 
                     title={"Labels"}
                     selected={selectedLabels}
                     setSelected={setSelectedLabels}
-                    options={labelOptions}
+                    columns={dataColumns}
                     handleClick={handleLabelClick}
                 />
-                <ArrayTable
-                    data={labelData}
-                    columns={labels}
-                />
-                <PreprocessingOptions
-                    className="mt-4"
-                    columns={labels}
-                />
+                {!isEmptyArray(labels) &&
+                    <>
+                        <Title 
+                            title="Label Data Table" 
+                            icon={<MdOutlineToc/>}
+                        />
+                        <ArrayTable
+                            style={{"height":"24rem"}}
+                            data={labelData}
+                            columns={labels}
+                        />
+                        <PreprocessingOptions
+                            title="Label"
+                            icon={<MdOutlineToc/>}
+                            columns={labels}
+                        />
+                    </>
+                }
             </div>
-            <div className="rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400">
+            <div className={style.subContainer}>
                 <SetColumn
                     title={"Features"}
                     selected={selectedFeatures}
                     setSelected={setSelectedFeatures}
-                    options={featureOptions}
+                    columns={dataColumns}
                     handleClick={handleFeatureClick}                
                 />
-                <ArrayTable
-                    data={featureData}
-                    columns={features}
-                />
-                <PreprocessingOptions
-                    className="mt-4"
-                    columns={features}
-                />
+                {!isEmptyArray(features) &&
+                    <>
+                        <Title 
+                            title="Feature Data Table" 
+                            icon={<MdOutlineToc/>}
+                        />
+                        <ArrayTable
+                            style={{"height":"24rem"}}
+                            data={featureData}
+                            columns={features}
+                        />
+                        <PreprocessingOptions
+                            title="Feature"
+                            icon={<MdOutlineToc/>}
+                            columns={features}
+                        />
+                    </>
+                }
             </div >
-        </>
+        </div>
     )
 }
 

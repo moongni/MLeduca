@@ -7,14 +7,33 @@ import Nav from "../components/Common/singlePageNav/Nav";
 import NavProvider from "../components/Common/singlePageNav/NavContext";
 
 const Setting = ({children, ...props}) => {
-    console.log(1);
+    const style = {
+        main:{
+            position:"relative",
+            display:"flex",
+            width:"100%",
+            height:"100%"
+        },
+        nav:{
+            position:"fixed",
+            width:"13rem",
+            height:"100%"
+        },
+        setting:{
+            position:"relative",
+            marginLeft:"14rem",
+            width:"100%",
+            height:"100%"
+        }
+    }
+
     return (
-        <div className="relative flex w-full h-full">
+        <div style={style.main}>
             <NavProvider>
-                <div className="fixed w-56 h-full">
+                <div style={style.nav}>
                     <Nav/>
                 </div>
-                <div className="relative ml-56 w-full h-full">
+                <div style={style.setting}>
                     <Layers />
                     <Optimizers />
                     <Losses />

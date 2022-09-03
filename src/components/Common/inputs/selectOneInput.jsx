@@ -1,9 +1,10 @@
 import React from "react";
+import style from './input.module.css';
 
 export const SelectOneInput = ({...props}) => {
     return (
         <select 
-            style={{"marginRight":"2.5rem"}}
+            className={[style.input, style.select].join(' ')}
             name={props.title}
             value={props.value}
             defaultValue={props.default}

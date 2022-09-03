@@ -1,9 +1,10 @@
 import React from "react";
+import style from './input.module.css';
 
 export const FloatInput = ({...props}) => {
     return (
         <input 
-            style={{"marginRight":"2.5rem"}}
+            className={style.input}
             name={props.title}
             type={props.type}
             min={props.min}

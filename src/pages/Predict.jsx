@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DrogDropFile, getData } from "../components/LoadData/LoadCsvJson";
+import { DrogDropFile } from "../components/LoadData/DrogDropFile";
+import { getData } from "../components/LoadData/getData";
 import Inputs from "../components/Common/Inputs";
 import ArrayTable from "../components/Common/ArrayTable"
 import { useEffect } from "react";

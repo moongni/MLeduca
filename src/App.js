@@ -1,9 +1,5 @@
-import React, { useState , useEffect} from 'react';
+import React, { useEffect } from 'react';
 import "./App.css"
-import MainLayout from './pages/MainLayout';
-import Setting from './pages/Setting';
-import LoadData from './pages/LoadData';
-import Home from './pages/Home';
 import Router from "./routes"
 
 function App() {

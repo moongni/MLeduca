@@ -1,0 +1,89 @@
+2022-09-03 11:34:09,165 main INFO Log4j appears to be running in a Servlet environment, but there's no log4j-web module available. If you want better web container support, please add the log4j-web JAR to your web archive or server lib directory.
+
+11:34:09 [main] INFO  mercury.heaven.HeavenApplication - [] Starting HeavenApplication on Inspiron with PID 47914 (/opt/COYOTE/freddie/heaven.jar started by mooooongni in /opt/COYOTE/freddie)
+
+11:34:09 [main] INFO  mercury.heaven.HeavenApplication - [] The following profiles are active: https
+
+11:34:10 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - [] Tomcat initialized with port(s): 8091 (https)
+
+11:34:10 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - [] Initializing ProtocolHandler ["https-jsse-nio-8091"]
+
+11:34:10 [main] INFO  org.apache.catalina.core.StandardService - [] Starting service [Tomcat]
+
+11:34:10 [main] INFO  org.apache.catalina.core.StandardEngine - [] Starting Servlet engine: [Apache Tomcat/9.0.46]
+
+11:34:10 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - [] Initializing Spring embedded WebApplicationContext
+
+11:34:10 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - [] Root WebApplicationContext: initialization completed in 1132 ms
+
+11:34:10 [main] INFO  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration - [] 
+
+Using generated security password: 73b74344-e647-4b8b-8ca8-3c80a43dde1c
+
+
+11:34:10 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - [] Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7afbf2a0, org.springframework.security.web.context.SecurityContextPersistenceFilter@9d99851, org.springframework.security.web.header.HeaderWriterFilter@17b6ad97, org.springframework.security.web.csrf.CsrfFilter@5cc3e49b, org.springframework.security.web.authentication.logout.LogoutFilter@4300e240, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1552da16, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2a6fb62f, org.springframework.security.web.session.SessionManagementFilter@113eed88, org.springframework.security.web.access.ExceptionTranslationFilter@64dfb31d]
+
+11:34:10 [main] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor - [] Initializing ExecutorService 'applicationTaskExecutor'
+
+11:34:10 [main] WARN  org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - [] Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+
+11:34:10 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - [] Starting ProtocolHandler ["https-jsse-nio-8091"]
+
+11:34:11 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - [] Tomcat started on port(s): 8091 (https) with context path ''
+
+11:34:11 [main] INFO  mercury.heaven.HeavenApplication - [] Started HeavenApplication in 2.248 seconds (JVM running for 3.107)
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Properties directory: /opt/COYOTE/freddie/coyote.properties
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Current OS: LINUX
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Packaging: STANDALONE
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Custom header location: /opt/COYOTE/freddie/custom.h
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Mercury directory location: /opt/COYOTE/freddie/product
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Preconverter directory location: /opt/COYOTE/freddie/scripts
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] License directory location: /opt/COYOTE/freddie//
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Library directory location: /opt/COYOTE/freddie/libs
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] driver filter location: /opt/COYOTE/freddie/driver_filter.list
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Is verbose: false
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Is inmemory: false
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Is parallel: false
+
+11:34:11 [main] INFO  mercury.heaven.b - [CONFIGURATION] Converter param: /opt/COYOTE/freddie/conv_param.json
+
+11:34:11 [main] INFO  mercury.heaven.HeavenApplication - [] COYOTE server version: 4.3.1-136-g2a1026b5
+
+11:34:11 [https-jsse-nio-8091-exec-6] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - [] Initializing Spring DispatcherServlet 'dispatcherServlet'
+
+11:34:11 [https-jsse-nio-8091-exec-6] INFO  org.springframework.web.servlet.DispatcherServlet - [] Initializing Servlet 'dispatcherServlet'
+
+11:34:11 [https-jsse-nio-8091-exec-6] INFO  org.springframework.web.servlet.DispatcherServlet - [] Completed initialization in 6 ms
+
+REQUEST: /api/mac
+
+new type
+
+IS VERSION MASTER LICENSE.
+
+IS MAC MASTER LICENSE.
+
+001
+
+IS VERSION MASTER LICENSE.
+
+IS MAC MASTER LICENSE.
+
+REQUEST: /api/preconv/list
+
+REQUEST: /api/status
+
+REQUEST: /api/status
+

@@ -1,5 +1,6 @@
 import React from "react";
 import { useMemo } from "react";
+import { isEmptyArray } from "../package";
 
 const range = (start, end) => {
     const rangeArray = [];
@@ -11,22 +12,21 @@ const range = (start, end) => {
     return rangeArray;
 }
 
-const TableBody = ({children, ...props}) => {
+const TableBody = ({children, style, ...props}) => {
     const rangeArray = useMemo(
         () => (range(0, Object.values(props.data)[0].length))
     , [])
     
     return (
         <>
-            {
-                (Array.isArray(rangeArray) && rangeArray.length > 0) &&
+            {!isEmptyArray(rangeArray) &&
                 rangeArray.map((idx) => {
                     return (
-                        <tr className="mx-1 py-2 border-b-2 border-slate-100 hover:bg-slate-100">
+                        <tr className={style.tbodyTr}>
                             {props.columns.map(
                                 column => {
                                     return (
-                                        <td className="w-5 p-3 mr-2 tracking-widest">
+                                        <td className={style.td}>
                                             {props.data[column][idx]? props.data[column][idx]: "null"}
                                         </td>  
                             )})}                
