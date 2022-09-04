@@ -1,8 +1,7 @@
 import React, { useState , useCallback } from "react";
-import { isEmptyArray } from "./package";
+import { isEmptyArray } from "../package";
 import "./scrollStyle.css";
-import tableStyle from "./table/table.module.css";
-import TableBody from "./table/TableBody";
+import tableStyle from "./table.module.css";
 
 const ArrayTable = ({children, style,...props}) => {
     const [hovering, setHovering] = useState(false);
@@ -38,21 +37,26 @@ const ArrayTable = ({children, style,...props}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <TableBody
-                                style={tableStyle}
-                                data={props.data}
-                                columns={props.columns}
-                            />
+                            { Object.values(props.data)[0].map((_, idx) => (
+                                <tr className={tableStyle.tbodyTr}>
+                                    {props.columns.map(
+                                        column => {
+                                            return (
+                                                <td className={tableStyle.td}>
+                                                    {props.data[column][idx]? props.data[column][idx]: "null"}
+                                                </td>  
+                                    )})}                
+                                </tr>
+                            ))}
                         </tbody>
                         <tbody>
                             <tr>
-                                {props.hasChild &&
+                                { props.hasChild &&
                                     props.columns.map((_) => (
                                         <th className={tableStyle.children}>
                                             {children}
                                         </th>
-                                    ))
-                                }
+                                ))}
                             </tr>
                         </tbody>
                     </table>

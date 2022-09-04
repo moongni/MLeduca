@@ -1,12 +1,12 @@
 import React from 'react';
 import NavLink from './NavLink';
-import { navLinks } from './navLinks';
-// import './Nav.css';
+import style from "./Nav.module.css";
 
-const Nav = () => {
+const Nav = ({...props}) => {
+
 	return (
-		<nav className='relative text-left'>
-			{navLinks.map(({ navLinkId, scrollToId }, idx) => (
+		<nav className={style.navContainer}>
+			{props.links.map(({ navLinkId, scrollToId }, idx) => (
 				<NavLink 
 					key={idx} 
 					navLinkId={navLinkId} 

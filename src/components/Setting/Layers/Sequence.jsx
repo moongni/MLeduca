@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { layerActions } from "../../../reducers/layerSlice";
-import Inputs from "../../Common/Inputs";
+import Inputs from "../../Common/inputs/Inputs";
+import { AdvancedSettingButton, Button} from "../../Common/button/Button";
+import Title from "../../Common/title/title";
+import style from "../../Common/component.module.css";
+import { isEmptyArray } from "../../Common/package";
+import { LayerList } from "./LayerList";
 
-function Sequence(props) {
-    // const model = useSelector((state) => state.model.info)
-    const layers = useSelector((state) => state.layers.info);
+function Sequence({icon, ...props}) {
     const dispatch = useDispatch();
+
+    const layers = useSelector((state) => state.layers.info);
+
     const [isSubOpen, setSubOpen] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [value, setValue] = useState({});
@@ -19,6 +25,7 @@ function Sequence(props) {
     }
 
     const handleRemove = async (idx) => {
+        console.log("call remove");
         setDisabled(true);
         dispatch(layerActions.removeLayer(idx))
         dispatch(layerActions.reIndexing())
@@ -26,10 +33,10 @@ function Sequence(props) {
     }
 
     return(
-        <div className="w-full">
-            <span className="ml-6 mt-2 text-lg">sequence</span>
-            <form 
-                className="relative pb-20"
+        <div >
+            <Title title="Sequence" icon={icon}/>
+            <form
+                className={style.subContainer} 
                 onSubmit={handleSubmit}
             >
                 <div>
@@ -38,53 +45,46 @@ function Sequence(props) {
                             <Inputs 
                                 {...v}
                                 value={value}
-                                setValue={setValue}
-                            />
+                                setValue={setValue}/>
                     ))}
                 </div>
-                <button 
-                    className="cursor-pointer" 
-                    type="button" 
-                    onClick={()=>setSubOpen(!isSubOpen)}
-                >
-                    Advanced setting
-                </button>
-                
-                <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
-                    {props.info.filter((n)=>n.name === "subParams")[0].params
-                        .map(v => (
-                            <Inputs 
-                                {...v}
-                                value={value}
-                                setValue={setValue}
-                            />
-                    ))}
-                </div>
-                <button 
-                    className="absolute w-fit h-10 bottom-3 left-1/2
-                    bg-green-200 hover:bg-green-400 cursor-pointer disabled:bg-slate-400" 
+                <AdvancedSettingButton
+                    value={isSubOpen}
+                    setValue={setSubOpen}
+                />
+                {isSubOpen &&
+                    <>
+                        {props.info.filter((n)=>n.name === "subParams")[0].params
+                            .map(v => (
+                                <Inputs 
+                                    {...v}
+                                    value={value}
+                                    setValue={setValue}
+                                />
+                        ))}
+                    </>
+                }
+                <Button
+                    className="green center"
+                    style={{"width":"100%"}}
                     type="submit"
-                    disabled={disabled}
-                >
+                    disabled={disabled}>
                     Add Layer
-                </button>
+                </Button>
             </form>
-
-            <div className="w-full">
-                <div className="w-full bg-blue-200">
-                    {layers.map(layer => (
-                                <div className="flex justify-between">
-                                    <p>{layer.idx} Layer {JSON.stringify(layer.info)}</p>
-                                    <button className="text-center hover:bg-red-500" 
-                                    type="button" 
-                                    onClick={()=>handleRemove(layer.idx)}>
-                                        X
-                                    </button>
-                                </div>
-                    ))}
-                </div>
-            </div>
+            {!isEmptyArray(layers) &&
+                <>
+                    <Title title="Layers"/>
+                    <div className={style.subContainer}>
+                        <LayerList 
+                            style={{"maxHeight":"24rem"}}
+                            data={layers}
+                            handleRemove={handleRemove}/>
+                    </div>
+                </>
+            }
         </div>
+
     )
 }
 

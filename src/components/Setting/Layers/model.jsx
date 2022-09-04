@@ -1,24 +1,34 @@
 import React from "react";
+import Title from "../../Common/title/title";
+import style from "../../Common/component.module.css";
+import { useState } from "react";
+import Inputs from "../../Common/inputs/Inputs";
 
-function Model(props) {
+function Model({icon, ...props}) {
+    const [disabled, setDisabled] = useState(false);
+    const [value, setValue] = useState([]);
+
+    const handleSubmit = async (event) => {
+        setDisabled(true);
+        event.preventDefault();
+        setDisabled(false);        
+    }
+
     return (
-        <div className="w-full">
-            <span className="ml-6 mt-2">Model</span>
-            {props.info.filter(i => i !== "activation")
-                .map(v => (
-                    <div className="flex justify-between items-center h-14 w-full ">
-                        <span 
-                            className="ml-10"
-                        >
-                            {v}
-                        </span>
-                        <form 
-                            className="mr-10 border-2 border-black "
-                        >
-                            <input className=""></input>
-                        </form>
-                    </div>
-            ))}
+        <div>
+            <Title title="Model" icon={icon}/>
+            <form
+                className={style.subContainer}
+                onSubmit={handleSubmit}
+            >
+                { props.info.filter(n => n.name === "mainParams")[0].params
+                    .map(v => (
+                        <Inputs
+                            {...v}
+                            value={value}
+                            setValue={setValue}/>
+                    ))}
+            </form>
         </div>
     )
 }

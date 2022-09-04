@@ -13,7 +13,7 @@
     --tw-border-opacity: 1;
     border-color: rgb(253 224 71 / var(--tw-border-opacity));
 }
-.theadTr .th {
+.th {
     position: sticky;
     top: 0;
     text-align: left;
@@ -32,13 +32,13 @@
     border-bottom-width: 2px;
     --tw-border-opacity: 1;
     border-color: rgb(241 245 249 / var(--tw-border-opacity));
-
+    --background-hover-color: rgb(241 245 249 / var(--tw-bg-opacity))
 }
-:hover.tbodyTr{
+.tbodyTr:hover{
     --tw-bg-opacity: 1;
-    background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+    background-color: var(--background-hover-color);
 }
-.tbodyTr .td {
+.td {
     width: 1.25rem;
     padding: 0.75rem;
     margin-right: 0.5rem;
@@ -51,4 +51,13 @@
     padding: 0.75rem;
     --tw-bg-opacity: 1;
     background-color: rgb(248 250 252 / var(--tw-bg-opacity));
+}
+.removeTd{
+    float: right;
+    align-items: center;
+    font-size: large;
+}
+.tbodyTr .removeTd:hover {
+    --background-hover-color : red;
+    color: var(--background-hover-color);
 }

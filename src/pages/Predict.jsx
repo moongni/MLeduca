@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DrogDropFile } from "../components/LoadData/DrogDropFile";
 import { getData } from "../components/LoadData/getData";
-import Inputs from "../components/Common/Inputs";
-import ArrayTable from "../components/Common/ArrayTable"
+import Inputs from "../components/Common/inputs/Inputs";
+import ArrayTable from "../components/Common/table/ArrayTable"
 import { useEffect } from "react";
 import { isEmpty, isEmptyObject } from "../components/Common/package";
 import { testActions } from "../reducers/testSlice";

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import Inputs from "../Common/Inputs";
+import Inputs from "../Common/inputs/Inputs";
 import data from "../../data/data.json"
 import { useDispatch, useSelector } from "react-redux";
 import { paramActions } from "../../reducers/paramSlice";
 import { useNav } from "../Common/singlePageNav/useNav"
-
+import style from "../Common/component.module.css";
+import Title from "../Common/title/title";
+import { AiOutlineControl } from "react-icons/ai";
+import { Button } from "../Common/button/Button";
 function Params(){
-    const params = useSelector((state) => state.parameter.info);
     const dispatch = useDispatch();
 
     const dataForInputs = data.Parameters
@@ -30,12 +32,13 @@ function Params(){
 
     return (
         <div 
-            className="relative w-full rounded-2xl p-5 mb-4 bg-slate-50 shadow-lg shadow-slate-400"
+            className={style.container}
             ref={paramRef}
             id="paramContainer"
         >
+            <Title title="Parameter" icon={<AiOutlineControl/>}/>
             <form 
-                className="relative pb-20"
+                className={style.subContainer}
                 onSubmit={handleSubmit}
             >
                 {
@@ -49,22 +52,29 @@ function Params(){
                         )
                     )
                 }
-                <div className="absolute w-full bottom-3 text-center items-center">
-                    <button 
-                        className="h-10 w-20 mb-2 mr-2 bg-red-200 rounded-md  hover:bg-red-400 cursor-pointer"
+                <div style={{"position":"relative",
+                            "left":"50%",
+                            "display":"flex",
+                            "transform":"translateX(-50%)",
+                            "justifyContent":"center"}}>
+                    <Button
+                        className="center red"
+                        style={{"width":"8rem",
+                                "margin":"0.5rem"
+                                }}
                         type="button"
-                        onClick={() => handleRemove()}
-                    >
+                        onClick={() => handleRemove()}>
                         Reset
-                    </button>
-                    <button 
-                        className="w-20 h-10 bottom-3 rounded-md
-                        bg-green-200 hover:bg-green-400 cursor-pointer disabled:bg-slate-400" 
+                    </Button>
+                    <Button
+                        className="center green"
+                        style={{"width":"8rem",
+                                "margin":"0.5rem"
+                                }}
                         type="submit"
-                        disabled={disabled}
-                        >
-                            Set Param
-                    </button>
+                        disabled={disabled}>
+                        set Param
+                    </Button>
                 </div>
             </form>
         </div>

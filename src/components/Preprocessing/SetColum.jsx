@@ -1,5 +1,5 @@
 import React from "react";
-import Inputs from "../Common/Inputs";
+import Inputs from "../Common/inputs/Inputs";
 import { toOption } from "../Common/package";
 
 const SetColumn = ({...props}) => {

@@ -1,15 +1,13 @@
-import React, 
-{ useState,
-  useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { trainActions } from "../reducers/trainSlice";
 import { isEmptyArray, toArray } from "../components/Common/package"
 import SetColumn  from "../components/Preprocessing/SetColum";
-import ArrayTable from "../components/Common/ArrayTable";
+import ArrayTable from "../components/Common/table/ArrayTable";
 import PreprocessingOptions from "../components/Preprocessing/PreprocessingOption";
 import style from '../components/Common/component.module.css';
 import { MdOutlineToc } from "react-icons/md"
-import { Title } from "../components/Common/title";
+import Title from "../components/Common/title/title";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();

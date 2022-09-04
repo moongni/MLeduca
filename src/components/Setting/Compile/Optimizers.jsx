@@ -20,11 +20,10 @@ function Optimizers() {
             />
             <div>
                 {optimizers.map((info) => (
-                        <Box 
-                            title="optimizer" 
-                            info={info} 
-                            >
-                        </Box>
+                    <Box 
+                        title="optimizer" 
+                        info={info} 
+                        />
                 ))}
             </div>
         </div>

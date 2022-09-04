@@ -5,6 +5,7 @@ import Optimizers from "../components/Setting/Compile/Optimizers";
 import Losses from "../components/Setting/Compile/Losses";
 import Nav from "../components/Common/singlePageNav/Nav";
 import NavProvider from "../components/Common/singlePageNav/NavContext";
+import { settingLinks } from "../components/Setting/settingLinks";
 
 const Setting = ({children, ...props}) => {
     const style = {
@@ -31,7 +32,7 @@ const Setting = ({children, ...props}) => {
         <div style={style.main}>
             <NavProvider>
                 <div style={style.nav}>
-                    <Nav/>
+                    <Nav links={settingLinks}/>
                 </div>
                 <div style={style.setting}>
                     <Layers />

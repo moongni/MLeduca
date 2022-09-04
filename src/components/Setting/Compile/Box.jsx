@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { compileActions } from '../../../reducers/compileSlice';
-import Inputs from "../../Common/Inputs";
+import Inputs from "../../Common/inputs/Inputs";
 
 function Box(props){
     const dispatch = useDispatch();

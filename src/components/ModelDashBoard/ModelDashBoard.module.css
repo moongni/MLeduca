@@ -23,7 +23,7 @@
     width: 16.25rem;
 }
 .close {
-    right: -16.25rem;
+    width: 0;
     opacity: 0;
     pointer-events: none;
 }

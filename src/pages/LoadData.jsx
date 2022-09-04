@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DrogDropFile } from "../components/LoadData/DrogDropFile";
 import { getData } from "../components/LoadData/getData";
-import Inputs from "../components/Common/Inputs";
-import ArrayTable from "../components/Common/ArrayTable";
+import Inputs from "../components/Common/inputs/Inputs";
+import ArrayTable from "../components/Common/table/ArrayTable";
 import { dataActions } from "../reducers/dataSlice";
 import style from "../components/Common/component.module.css";
 import { FiDatabase } from "react-icons/fi";
 import { isEmptyArray } from "../components/Common/package";
-import { Title } from "../components/Common/title";
+import Title from "../components/Common/title/title";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -49,7 +49,7 @@ export default function LoadData() {
                     <Title title="Data Table" icon={<FiDatabase/>}/>
                     <ArrayTable 
                         style={{"height":"24rem",
-                                "marginTop":"1.25rem"}}
+                                "marginTop":"1rem"}}
                         data={dataInfo}
                         columns={dataColumns}/>
                 </>

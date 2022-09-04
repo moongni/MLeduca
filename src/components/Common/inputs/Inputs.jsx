@@ -1,16 +1,15 @@
 import React, { useEffect } from "react";
-import { isEmpty } from "./package";
-import { IntInput } from "./inputs/intInput";
-import { FloatInput } from "./inputs/floatInput";
-import { IntArrayInput } from "./inputs/intArrayInput";
-import { TextInput } from "./inputs/textInput";
-import { SelectInput } from "./inputs/selectInput";
-import { SelectOneInput } from "./inputs/selectOneInput";
-import { MultiSelectInput } from "./inputs/multiSelectInput";
-import { BoolInput } from "./inputs/boolInput";
+import { isEmpty } from "../package";
+import { IntInput } from "./intInput";
+import { FloatInput } from "./floatInput";
+import { IntArrayInput } from "./intArrayInput";
+import { TextInput } from "./textInput";
+import { SelectInput } from "./selectInput";
+import { SelectOneInput } from "./selectOneInput";
+import { MultiSelectInput } from "./multiSelectInput";
+import { BoolInput } from "./boolInput";
 
 const Contents = ({...props}) => {
-    console.log("contents",props)
     switch(props.kind){
         case "input":
             return <IntInput {...props}/>

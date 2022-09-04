@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Title = ({icon, ...props}) => {
+const Title = ({icon, ...props}) => {
     const titleStyle = {
         display: "flex",
         fontSize: "1.5rem",
@@ -15,3 +15,5 @@ export const Title = ({icon, ...props}) => {
         </div>
     )
 }
+
+export default Title;

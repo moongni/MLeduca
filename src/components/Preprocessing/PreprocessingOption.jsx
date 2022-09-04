@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { isEmptyArray } from "../Common/package";
 import PreprocessingSelect from "./PreprocessingSelect";
-import "../Common/scrollStyle.css";
-import { Title } from "../Common/title";
-
+import "../Common/table/scrollStyle.css";
+import Title from "../Common/title/title";
+import style from "../Common/table/table.module.css"
 const PreprocessingOptions = ({children,  ...props}) => {
   const [hovering, setHovering] = useState(false);
 
@@ -31,8 +31,7 @@ const PreprocessingOptions = ({children,  ...props}) => {
             <thead>
               <tr key={"preprocessing"}>
                 { props.columns.map((column) => (
-                    <th style={{"textAlign":"left",
-                                "padding":"0.75rem"}}>
+                    <th className={style.th}>
                         {column}
                     </th>
                 ))}
@@ -41,13 +40,11 @@ const PreprocessingOptions = ({children,  ...props}) => {
             <tbody>
               <tr>
                 { props.columns.map((column) => (
-                    <th style={{"margin":"0 4px",
-                                "padding":"8px 0"}}>
+                    <th className={style.td}>
                       <PreprocessingSelect
                         column={column}/>
                     </th>
-                  ))
-                }
+                ))}
               </tr>
             </tbody>
           </table>

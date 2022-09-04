@@ -353,7 +353,18 @@
     {
       "id":2,
       "title": "Model",
-      "info": ["units", "shape", "activation"]
+      "info": [
+        {
+          "name": "mainParams",
+          "params": [
+            {
+              "kind":"input",
+              "title":"shape",
+              "type":"number"
+            }
+          ]
+        }
+      ]
     }  
   ],
   "Parameters":[

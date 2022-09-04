@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { NavContext } from './NavContext';
+import style from './Nav.module.css';
 
 const NavLink = ({ navLinkId, scrollToId }) => {
 	const { activeNavLinkId, setActiveNavLinkId } = useContext(NavContext);
@@ -12,10 +13,10 @@ const NavLink = ({ navLinkId, scrollToId }) => {
 	return (
 		<div 
 			id={navLinkId}
-			className={`p-2 w-56 mr-auto inline-block`}
+			className={style.navLinkContainer}
 			onClick={handleClick}>
 			<span
-				className={`${activeNavLinkId === navLinkId ? 'border-b-2 border-slate-300' : ''} opacity-80 cursor-pointer`}
+				className={[`${activeNavLinkId === navLinkId ? style.navSpanActive : style.navSpanDisabled}`, style.navSpan].join(' ')}
 			>
 				{navLinkId}
 			</span>
