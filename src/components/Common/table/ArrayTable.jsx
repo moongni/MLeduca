@@ -66,4 +66,8 @@ const ArrayTable = ({children, style,...props}) => {
     )
 }
 
+ArrayTable.defaultProps = {
+    
+}
+
 export default React.memo(ArrayTable);

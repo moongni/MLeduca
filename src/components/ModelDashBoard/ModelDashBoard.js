@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import ParamBoard from './ParamBoard';
-import CompileBoard from './CompileBoard';
-import LayerBoard from './LayerBoard';
+import { SideParamBoard } from './ParamBoard';
+import { SideCompileBoard } from './CompileBoard';
+import { SideLayerBoard } from './LayerBoard';
 import style from './ModelDashBoard.module.css';
 
 export const ModelDashBoard = (props) => {
@@ -18,13 +18,13 @@ export const ModelDashBoard = (props) => {
             <div className={style.modelInfo}>
                 <h1 className={style.h1}>Model Info</h1>
                 <div style={{"marginLeft": "1rem"}}>
-                    <LayerBoard
+                    <SideLayerBoard
                         style={listStyle}
                         link="/setting"/>
-                    <CompileBoard
+                    <SideCompileBoard
                         style={listStyle}
                         link="/setting"/>
-                    <ParamBoard
+                    <SideParamBoard
                         style={listStyle}
                         link="/setting"/>
                 </div>

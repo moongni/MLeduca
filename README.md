@@ -4,15 +4,6 @@ model 창희형
 
 전처리 
 
-정규화
-stardscaler
-
-범주형 데이터 처리
-onehotencoding
-labelencoding
-
-null 데이터 드랍
-
 <!-- /////////////////// -->
 
 train test split

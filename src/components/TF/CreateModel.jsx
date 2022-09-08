@@ -1,10 +1,10 @@
 import * as tf from "@tensorflow/tfjs";
 
 export const createModel = (layers) => {
-    console.log('Create layers...');
+    console.log('Create layers');
     // model sequence 
     const model = tf.sequential();
-    console.log("layers",layers);
+    console.log("layers", layers);
     layers.map(layer => {
       model.add(tf.layers.dense(layer.info));
     })

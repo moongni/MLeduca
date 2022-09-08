@@ -10,8 +10,8 @@ import { AiOutlineControl } from "react-icons/ai";
 function Layers({...props}) {
     const [currentTab, setCurrentTab] = useState('1');
 
-    function tapContent(props) {
-        const curContent = data.Layers.filter(tab => `${tab.id}` == props)
+    function tapContent(currentTab) {
+        const curContent = data.Layers.filter(tab => `${tab.id}` == currentTab)
         switch (curContent[0].title) {
             case "Sequence":
                 return <Sequence info={curContent[0].info} icon={<AiOutlineControl/>}/>                

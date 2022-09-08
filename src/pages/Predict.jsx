@@ -8,10 +8,17 @@ import { useEffect } from "react";
 import { isEmpty, isEmptyObject } from "../components/Common/package";
 import { testActions } from "../reducers/testSlice";
 import * as tf from "@tensorflow/tfjs";
-
+import style from "../components/Common/component.module.css";
+import Title from "../components/Common/title/title";
+import { AiOutlineLineChart } from "react-icons/ai";
+import { Modal } from "../components/Common/modal/modal";
+import { Button } from "../components/Common/button/Button";
+import { PredictData } from "../components/Predict/PredictData";
 const Predict = () => {
     const dispatch = useDispatch();
-    const [url, setUrl] = useState("");
+
+    const [modalShow, setModalShow] = useState(false);
+
     const testData = useSelector(state => state.test.x);
     const testColumn = useSelector(state => state.test.features);
     const trainFeatures = useSelector(state => state.train.features);
@@ -24,15 +31,15 @@ const Predict = () => {
         console.log("modelList ", modelList);
         return modelList
     }
+
     const loadModel = async () => {
-        const model = await tf.loadLayersModel("localstorage://model/recently-model");
+        const model = await tf.loadLayersModel("localstorage://model/my-model-1");
         return model
     }
 
     useEffect(
         () => {
             const modelList = getModelList();
-            console.log(modelList);
             if (isEmpty(modelList) || isEmptyObject(modelList)){
                 alert("please, train model first");
                 window.location = "/home"
@@ -41,60 +48,38 @@ const Predict = () => {
     , [])
 
     const onClickHandler = async (e) => {
-        e.preventDefault();
-
         const loadedModel = await loadModel();
+        const predicted = loadedModel.predict(tf.tensor([18]));
 
-        console.log(loadedModel.predict(tf.tensor([18])));
+        console.log("predict", predicted);
     }
+
     return (
         <div 
-            className="w-full min-h-full rounded-2xl p-5 bg-slate-50 shadow-lg shadow-slate-400"
-        >
-            <span className="text-lg">Predict</span>
-            <div>
-                <span className="text-lg">Model Select</span>
-                
+            className={style.container}>
+            <Title title="Predict Data" icon={<AiOutlineLineChart/>}/>
+            <div className={style.subContainer}>
+                <PredictData/>
             </div>
-            <div>
-                <span className="text-lg">Model Load</span>
-                
+            <Title title="Model For Predict" icon={<AiOutlineLineChart/>}/>
+            <div className={style.subContainer}>
+                <Title title="Model Select"/>
+                <Modal
+                isShow={modalShow}
+                label="Model Select"
+                >
+                    <p>Model Select</p>
+                    <button onClick={() => setModalShow(false)}>close</button>
+                </Modal>
             </div>
-            <div>
-                <div className="flex mb-4">
-                    <Inputs 
-                        kind="text"
-                        title="Load For Url"
-                        placeholder="Url 입력"
-                        value={url}
-                        setValue={setUrl}
-                    />
-                    <button 
-                        className="mr-4" 
-                        type="button" 
-                        onClick={() => {getData(url, dispatch, testActions, '\t')}}
-                    >
-                        Fetch
-                    </button>
-                </div>
-                <DrogDropFile 
-                    dispatch={dispatch}
-                    actions={testActions}
-                />
-                <ArrayTable 
-                    data={testData}
-                    columns={testColumn}
-                />
-            </div>
-            <div
-                className="w-full text-center mt-4">
-                <button
-                    className="mr-4 w-16 h-10 justify-center rounded-md bg-slate-300 hover:bg-green-300"
+            <div className="w-full text-center mt-4">
+                <Button
+                    className="center green"
                     type="button"
                     onClick={() => onClickHandler()}
                 >
                     predict
-                </button>
+                </Button>
             </div>
         </div>
     )

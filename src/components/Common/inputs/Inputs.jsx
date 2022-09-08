@@ -30,7 +30,7 @@ const Contents = ({...props}) => {
     }
 }
 
-const Inputs = ({...props}) => {
+const Inputs = ({style, ...props}) => {
     // 디폴트 값이 존재할 경우
     useEffect(() => {
         !(isEmpty(props.default) || props.default == "") &&
@@ -50,7 +50,7 @@ const Inputs = ({...props}) => {
     }
 
     return (
-        <div style={inputStyle}>
+        <div style={{...inputStyle, ...style}}>
             <span>{props.title}</span>
             <Contents {...props}/>
         </div>

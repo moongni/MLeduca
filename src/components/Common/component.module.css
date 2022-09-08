@@ -11,6 +11,7 @@
     --tw-shadow-color: #94a3b8;
     --tw-shadow: var(--tw-shadow-colored);
 }
+
 .title {
     display: flex;
     font-size: 1.5rem;
@@ -22,15 +23,13 @@
 }
 
 .subContainer {
-    width: 100%;
     min-height: 100%;
     padding: 1.25rem;
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-    border-radius: 1rem;
+    margin: 1.25rem 0;
     --tw-bg-opacity: 1;
     background-color: rgb(248 250 252 / var(--tw-bg-opacity));
     --tw-shadow-color: rgb(203 213 225 / var(--tw-bg-opacity));
+    border-radius: 1rem;
     border-width: 1px;
     border-color: var(--tw-shadow-color);
 }

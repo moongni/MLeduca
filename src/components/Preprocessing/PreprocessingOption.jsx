@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { isEmptyArray } from "../Common/package";
-import PreprocessingSelect from "./PreprocessingSelect";
+import { PreprocessingSelect } from "./PreprocessingSelect";
 import "../Common/table/scrollStyle.css";
 import Title from "../Common/title/title";
 import style from "../Common/table/table.module.css"
-const PreprocessingOptions = ({children,  ...props}) => {
+
+export const PreprocessingOptions = ({children,  ...props}) => {
   const [hovering, setHovering] = useState(false);
 
   const handleMouseOver = useCallback(() => {
@@ -22,12 +23,13 @@ const PreprocessingOptions = ({children,  ...props}) => {
       { !isEmptyArray(props.columns) &&
         <div 
           className={`${hovering? "scrollhost":"disViable"}`}
-          style={{"marginTop":"1rem"}}
+          style={{"marginTop":"1.25rem"}}
           onMouseLeave={handleMouseOut}
           onMouseEnter={handleMouseOver}
         >
-          <Title title={`${props.title} Preprocessing`} icon={props.icon}/>
-          <table style={{"width":"100%"}}>
+          <Title title={`${props.title} Preprocessing`}/>
+          <table style={{"width":"100%",
+                         "marginTop":"1.25rem"}}>
             <thead>
               <tr key={"preprocessing"}>
                 { props.columns.map((column) => (
@@ -53,5 +55,3 @@ const PreprocessingOptions = ({children,  ...props}) => {
     </>
   )
 }
-
-export default  PreprocessingOptions

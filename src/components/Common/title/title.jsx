@@ -1,6 +1,6 @@
 import React from "react";
 
-const Title = ({icon, ...props}) => {
+const Title = ({icon, style, ...props}) => {
     const titleStyle = {
         display: "flex",
         fontSize: "1.5rem",
@@ -9,8 +9,10 @@ const Title = ({icon, ...props}) => {
     }
 
     return (
-        <div style={titleStyle}>
-            <i style={{"marginRight":"1rem"}}>{icon}</i>
+        <div style={{...titleStyle, ...style}}>
+            {icon &&
+                <i style={{"marginRight":"1rem"}}>{icon}</i>
+            }
             <span>{props.title}</span>
         </div>
     )

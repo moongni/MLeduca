@@ -49,6 +49,8 @@ function Sequence({icon, ...props}) {
                     ))}
                 </div>
                 <AdvancedSettingButton
+                    style={{"marginTop":"1rem",
+                            "marginBottom":"1rem"}}
                     value={isSubOpen}
                     setValue={setSubOpen}
                 />
@@ -79,6 +81,7 @@ function Sequence({icon, ...props}) {
                         <LayerList 
                             style={{"maxHeight":"24rem"}}
                             data={layers}
+                            isHandleRemove={true}
                             handleRemove={handleRemove}/>
                     </div>
                 </>

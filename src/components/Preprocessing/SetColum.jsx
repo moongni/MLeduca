@@ -1,6 +1,7 @@
 import React from "react";
 import Inputs from "../Common/inputs/Inputs";
 import { toOption } from "../Common/package";
+import { Button } from "../Common/button/Button";
 
 const SetColumn = ({...props}) => {
     const divStyle = {
@@ -22,12 +23,14 @@ const SetColumn = ({...props}) => {
                     setValue={props.setSelected}
                     options={toOption(props.columns)}
                 />
-                <button 
-                    style={{"margin":"0 40px"}} type="button" 
+                <Button 
+                    className="right"
+                    style={{"margin":"0 40px"}} 
+                    type="button" 
                     onClick={()=>{props.handleClick();}}
                 >
                     Save
-                </button>
+                </Button>
             </div>
         </>
     )

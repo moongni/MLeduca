@@ -58,18 +58,20 @@ function Params(){
                             "transform":"translateX(-50%)",
                             "justifyContent":"center"}}>
                     <Button
-                        className="center red"
+                        className="red"
                         style={{"width":"8rem",
-                                "margin":"0.5rem"
+                                "margin":"0.5rem",
+                                "height":"2.5rem"
                                 }}
                         type="button"
                         onClick={() => handleRemove()}>
                         Reset
                     </Button>
                     <Button
-                        className="center green"
+                        className="green"
                         style={{"width":"8rem",
-                                "margin":"0.5rem"
+                                "margin":"0.5rem",
+                                "height":"2.5rem"
                                 }}
                         type="submit"
                         disabled={disabled}>

@@ -9,6 +9,7 @@ import style from "../components/Common/component.module.css";
 import { FiDatabase } from "react-icons/fi";
 import { isEmptyArray } from "../components/Common/package";
 import Title from "../components/Common/title/title";
+import { Button } from "../components/Common/button/Button";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -31,29 +32,31 @@ export default function LoadData() {
                         value={url}
                         setValue={setUrl}
                     />
-                    <button 
+                    <Button
+                        className="right"
                         style={{"marginRight":"1rem"}}
                         type="button" 
                         onClick={() => {getData(url, dispatch, dataActions, '\t')}}
                     >
                         Fetch
-                    </button>
+                    </Button>
                 </div>
                 <DrogDropFile 
                     title="Load For File"
                     dispatch={dispatch}
+                    actions={dataActions}
                 />
+                { !isEmptyArray(dataColumns) &&
+                    <>
+                        <Title title="Data Table"/>
+                        <ArrayTable 
+                            style={{"height":"24rem",
+                                    "marginTop":"1rem"}}
+                            data={dataInfo}
+                            columns={dataColumns}/>
+                    </>
+                }
             </div>
-            {!isEmptyArray(dataColumns) &&
-                <>
-                    <Title title="Data Table" icon={<FiDatabase/>}/>
-                    <ArrayTable 
-                        style={{"height":"24rem",
-                                "marginTop":"1rem"}}
-                        data={dataInfo}
-                        columns={dataColumns}/>
-                </>
-            }
         </div>
     );
 }

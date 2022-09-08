@@ -7,7 +7,7 @@ import Select from "react-select";
 import { preprocessingActions } from "../../reducers/preprocessingSlice";
 import { toArray, toOption } from "../Common/package";
 
-const PreprocessingSelect = ({children, ...props}) => {
+export const PreprocessingSelect = ({children, ...props}) => {
     const dispatch = useDispatch();
     const preprocess = useSelector(state => state.preprocess.info);
     const [selectedValue, setSeletedValue] = useState([]);
@@ -34,7 +34,7 @@ const PreprocessingSelect = ({children, ...props}) => {
         {value: "fillMean", label: "Fill Mean"},
         {value: "fillMedian", label: "Fill Median"},
         {value: "fillMostFrequnce", label: "Fill Most Frequnce"},
-        {value: "oneHotEncoding", label: "OneHot Encoding"}
+        {value: "oneHotEncoding", label: "One Hot Encoding"}
     ];
 
     return (
@@ -85,5 +85,3 @@ const PreprocessingSelect = ({children, ...props}) => {
         </div>
     )
 }
-
-export default  PreprocessingSelect

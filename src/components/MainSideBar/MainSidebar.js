@@ -16,10 +16,10 @@ export const MainSidebar = (props) => {
                     <span className='logo_name'>Deep learning</span>
                 </Link>
                 <ul className='nav-links'>
-                    {sidebars.sidebarLinkName
-                        .map(sidebar => {
-                            return <SidebarList {...sidebar}/>
-                    })}
+                    { sidebars.sidebarLinkName
+                        .map(sidebar => (
+                            <SidebarList {...sidebar}/>
+                    ))}
                 </ul>
             </div>
             <section className='home-section'>

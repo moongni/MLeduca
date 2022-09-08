@@ -55,6 +55,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .container .modelTrain .div .button {
     width: 6rem;
     height: 2.5rem;
@@ -68,7 +69,22 @@
 
     cursor: pointer;
 }
-.container .modelTrain .div :hover.button{
+.container .modelTrain .div .button:hover{
     --tw-bg-opacity: 1;
     background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+}
+
+.center {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    opacity: 0.6;
+}
+
+.li {
+    list-style: none;
+    padding: 1rem 2rem;
+    word-break: break-all;
 }

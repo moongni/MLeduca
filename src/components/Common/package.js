@@ -10,9 +10,11 @@ export const isEmptyArray = (param) => {
 export const isEmpty = (param) => {
     return typeof param == "undefined" || param == null || param === "";
 }
+
 export const isEmptyStr = (param) => {
     return isEmpty(param) || param === "";
 }
+
 export const toOption = (items) => {
     const newOptions = [];
 
@@ -28,5 +30,16 @@ export const toArray = (options) => {
     const newArray = [];
     !isEmptyArray(options) && !isEmpty(options) &&
     options.map(option => newArray.push(option.value));
+    return newArray;
+}
+
+export const makeRangeArray = (start=0, end) => {
+    var num = end - start
+    let newArray = new Array(num);
+    for (var i = 0; i < num; i ++) {
+        newArray[i] = start;
+        start++;
+    }
+
     return newArray;
 }

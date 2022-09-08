@@ -4,7 +4,7 @@ import { trainActions } from "../reducers/trainSlice";
 import { isEmptyArray, toArray } from "../components/Common/package"
 import SetColumn  from "../components/Preprocessing/SetColum";
 import ArrayTable from "../components/Common/table/ArrayTable";
-import PreprocessingOptions from "../components/Preprocessing/PreprocessingOption";
+import { PreprocessingOptions } from "../components/Preprocessing/PreprocessingOption";
 import style from '../components/Common/component.module.css';
 import { MdOutlineToc } from "react-icons/md"
 import Title from "../components/Common/title/title";
@@ -62,10 +62,7 @@ const Preprocessing = () => {
                 />
                 {!isEmptyArray(labels) &&
                     <>
-                        <Title 
-                            title="Label Data Table" 
-                            icon={<MdOutlineToc/>}
-                        />
+                        <Title title="Label Data Table" />
                         <ArrayTable
                             style={{"height":"24rem"}}
                             data={labelData}
@@ -73,7 +70,6 @@ const Preprocessing = () => {
                         />
                         <PreprocessingOptions
                             title="Label"
-                            icon={<MdOutlineToc/>}
                             columns={labels}
                         />
                     </>
@@ -89,10 +85,7 @@ const Preprocessing = () => {
                 />
                 {!isEmptyArray(features) &&
                     <>
-                        <Title 
-                            title="Feature Data Table" 
-                            icon={<MdOutlineToc/>}
-                        />
+                        <Title title="Feature Data Table" />
                         <ArrayTable
                             style={{"height":"24rem"}}
                             data={featureData}
@@ -100,7 +93,6 @@ const Preprocessing = () => {
                         />
                         <PreprocessingOptions
                             title="Feature"
-                            icon={<MdOutlineToc/>}
                             columns={features}
                         />
                     </>

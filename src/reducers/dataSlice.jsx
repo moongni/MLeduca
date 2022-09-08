@@ -11,11 +11,10 @@ const dataSlice = createSlice({
 
     reducers: {
         addData(state, action) {
-            state.info = 
-            {
+            state.info = {
                 ...state.info,
                 ...action.payload
-                };
+            };
         },
         setData(state, action) {
             state.info = action.payload;
