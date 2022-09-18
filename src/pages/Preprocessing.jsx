@@ -2,12 +2,13 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { trainActions } from "../reducers/trainSlice";
 import { isEmptyArray, toArray } from "../components/Common/package"
-import SetColumn  from "../components/Preprocessing/SetColum";
+import SetColumn  from "../components/Preprocessing/SetColumn";
 import ArrayTable from "../components/Common/table/ArrayTable";
 import { PreprocessingOptions } from "../components/Preprocessing/PreprocessingOption";
 import style from '../components/Common/component.module.css';
 import { MdOutlineToc } from "react-icons/md"
 import Title from "../components/Common/title/title";
+import { Loader } from "../components/Common/Loader/Loader";
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -21,30 +22,55 @@ const Preprocessing = () => {
     const featureData = useSelector((state) => state.train.x);
 
     // 멀티 셀렉트 선택된 value state
-    const [selectedFeatures, setSelectedFeatures] = useState([]);
-    const [selectedLabels, setSelectedLabels] = useState([]);
+    const [ selectedFeatures, setSelectedFeatures ] = useState([]);
+    const [ selectedLabels, setSelectedLabels ] = useState([]);
+    const [ isLoading, setLoading ] = useState(false);
 
     const selectColumn = (data, columns) => {
         const newData = new Object();
         columns.map(column => {
             newData[column] = data[column]; 
         })
+
         return newData;
     }
 
     const handleLabelClick = useCallback(() => {
-        const labelNames = toArray(selectedLabels);
-        const newData = selectColumn(data, labelNames);
-        dispatch(trainActions.setLabelData(newData));
-        dispatch(trainActions.setLabels(labelNames));
+        try {
+            setLoading(true);
+            const labelNames = toArray(selectedLabels);
+            const newData = selectColumn(data, labelNames);
+            dispatch(trainActions.setLabelData(newData));
+            dispatch(trainActions.setLabels(labelNames));
+        } catch (e) {
+            console.log(e);
+        }
+        setLoading(false);
     })
 
     const handleFeatureClick = useCallback(() => {
-        const featureNames = toArray(selectedFeatures);
-        const newData = selectColumn(data, featureNames);
-        dispatch(trainActions.setFeatureData(newData));
-        dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
+        try {
+            setLoading(true);
+            const featureNames = toArray(selectedFeatures);
+            const newData = selectColumn(data, featureNames);
+            dispatch(trainActions.setFeatureData(newData));
+            dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
+        } catch (e) {
+            console.log(e);
+        }
+        setLoading(false);
     })
+
+    const LoadingComponenet = ({children}) => {
+        if (isLoading) 
+            return <Loader type="spin" color="black" message="Loading Data"/>
+        else 
+            return (
+                <>
+                    {children}
+                </>
+            )
+    }
 
     return (
         <div className={style.container}>
@@ -61,18 +87,21 @@ const Preprocessing = () => {
                     handleClick={handleLabelClick}
                 />
                 {!isEmptyArray(labels) &&
-                    <>
-                        <Title title="Label Data Table" />
-                        <ArrayTable
-                            style={{"height":"24rem"}}
-                            data={labelData}
-                            columns={labels}
-                        />
-                        <PreprocessingOptions
-                            title="Label"
-                            columns={labels}
-                        />
-                    </>
+                    <div style={{position:"relative",
+                                minHeight:"24rem"}}>
+                        <Title title="Label Data Table"/>
+                        <LoadingComponenet>
+                            <ArrayTable
+                                style={{"height":"24rem"}}
+                                data={labelData}
+                                columns={labels}
+                            />
+                            <PreprocessingOptions
+                                title="Label"
+                                columns={labels}
+                            />
+                        </LoadingComponenet>
+                    </div>
                 }
             </div>
             <div className={style.subContainer}>
@@ -84,18 +113,21 @@ const Preprocessing = () => {
                     handleClick={handleFeatureClick}                
                 />
                 {!isEmptyArray(features) &&
-                    <>
-                        <Title title="Feature Data Table" />
-                        <ArrayTable
-                            style={{"height":"24rem"}}
-                            data={featureData}
-                            columns={features}
-                        />
-                        <PreprocessingOptions
-                            title="Feature"
-                            columns={features}
-                        />
-                    </>
+                    <div style={{position:"relative",
+                                minHeight:"24rem"}}>
+                        <Title title="Feature Data Table"/>
+                        <LoadingComponenet>
+                            <ArrayTable
+                                style={{"height":"24rem"}}
+                                data={featureData}
+                                columns={features}
+                            />
+                            <PreprocessingOptions
+                                title="Feature"
+                                columns={features}
+                            />
+                        </LoadingComponenet>
+                    </div>
                 }
             </div >
         </div>

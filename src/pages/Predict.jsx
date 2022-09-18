@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DrogDropFile } from "../components/LoadData/DrogDropFile";
-import { getData } from "../components/LoadData/getData";
-import Inputs from "../components/Common/inputs/Inputs";
-import ArrayTable from "../components/Common/table/ArrayTable"
 import { useEffect } from "react";
 import { isEmpty, isEmptyObject } from "../components/Common/package";
-import { testActions } from "../reducers/testSlice";
 import * as tf from "@tensorflow/tfjs";
 import style from "../components/Common/component.module.css";
 import Title from "../components/Common/title/title";
 import { AiOutlineLineChart } from "react-icons/ai";
-import { Modal } from "../components/Common/modal/modal";
 import { Button } from "../components/Common/button/Button";
 import { PredictData } from "../components/Predict/PredictData";
+import { PredictModel } from "../components/Predict/PredictModel";
+
 const Predict = () => {
     const dispatch = useDispatch();
-
-    const [modalShow, setModalShow] = useState(false);
 
     const testData = useSelector(state => state.test.x);
     const testColumn = useSelector(state => state.test.features);
@@ -32,9 +26,13 @@ const Predict = () => {
         return modelList
     }
 
-    const loadModel = async () => {
-        const model = await tf.loadLayersModel("localstorage://model/my-model-1");
-        return model
+    const loadModel = async (url="localstorage://model/my-model-1") => {
+        try {
+            const model = await tf.loadLayersModel(url);
+            return model
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     useEffect(
@@ -63,14 +61,7 @@ const Predict = () => {
             </div>
             <Title title="Model For Predict" icon={<AiOutlineLineChart/>}/>
             <div className={style.subContainer}>
-                <Title title="Model Select"/>
-                <Modal
-                isShow={modalShow}
-                label="Model Select"
-                >
-                    <p>Model Select</p>
-                    <button onClick={() => setModalShow(false)}>close</button>
-                </Modal>
+                <PredictModel/>
             </div>
             <div className="w-full text-center mt-4">
                 <Button

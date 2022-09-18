@@ -5,6 +5,7 @@ import tableStyle from "./table.module.css";
 
 const ArrayTable = ({children, style,...props}) => {
     const [hovering, setHovering] = useState(false);
+    
     const handleMouseOver = useCallback(() => {
         !hovering &&
         setHovering(true);
@@ -32,20 +33,18 @@ const ArrayTable = ({children, style,...props}) => {
                             >
                                 { props.columns.map((column) => (
                                         <th className={tableStyle.th}>{column}</th>
-                                        )
-                                )}
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
                             { Object.values(props.data)[0].map((_, idx) => (
                                 <tr className={tableStyle.tbodyTr}>
                                     {props.columns.map(
-                                        column => {
-                                            return (
+                                        column => (
                                                 <td className={tableStyle.td}>
                                                     {props.data[column][idx]? props.data[column][idx]: "null"}
                                                 </td>  
-                                    )})}                
+                                    ))}                
                                 </tr>
                             ))}
                         </tbody>
@@ -64,10 +63,6 @@ const ArrayTable = ({children, style,...props}) => {
             }
         </>
     )
-}
-
-ArrayTable.defaultProps = {
-    
 }
 
 export default React.memo(ArrayTable);

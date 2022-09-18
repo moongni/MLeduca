@@ -9,38 +9,44 @@ export const DrogDropFile = ({children, dispatch, actions, ...props}) => {
     const inputRef = useRef(null);
 
     const readFile = (file, type) => {
-        var reader = new FileReader();
-        reader.onload = async function(e) {
-            var contents = e.target.result;
-            switch(type){
-                case "text/csv":
-                  const rows = contents.split((/\r?\n|\r/));
-                  const features = rows.shift().split(',');
-                  dispatch(actions.setColumns(features));
-                  const newData = new Object();
-                  features.map(feature => {
-                    newData[feature] = [];
-                  })
-                  rows.forEach(row => {
-                      const values = row.split(',');
-                      features.forEach((value, key) => {
-                          newData[value].push(values[key]);
+        try {
+            props.setLoading(true);
+            var reader = new FileReader();
+            reader.onload = async function(e) {
+                var contents = e.target.result;
+                switch(type){
+                    case "text/csv":
+                      const rows = contents.split((/\r?\n|\r/));
+                      const features = rows.shift().split(',');
+                      dispatch(actions.setColumns(features));
+                      const newData = new Object();
+                      features.map(feature => {
+                        newData[feature] = [];
                       })
-                  })
-                  dispatch(actions.setData(newData));
-                  break;            
-               case "application/json":
-                  const jsonData = await JSON.parse(contents);
-                  dispatch(actions.setColumns(Object.keys(jsonData[0])));
-                  Object.keys(jsonData[0]).map(column => {
-                    const newSample = {
-                        [column]: jsonData.map(sample => sample[column])
-                    }
-                    dispatch(actions.addData(newSample));
-                  })
-              }
-          };
-        reader.readAsText(file);
+                      rows.forEach(row => {
+                          const values = row.split(',');
+                          features.forEach((value, key) => {
+                              newData[value].push(values[key]);
+                          })
+                      })
+                      dispatch(actions.setData(newData));
+                      break;            
+                   case "application/json":
+                      const jsonData = await JSON.parse(contents);
+                      dispatch(actions.setColumns(Object.keys(jsonData[0])));
+                      Object.keys(jsonData[0]).map(column => {
+                        const newSample = {
+                            [column]: jsonData.map(sample => sample[column])
+                        }
+                        dispatch(actions.addData(newSample));
+                      })
+                  }
+              };
+            reader.readAsText(file);
+        } catch (e) {
+            console.log(e);
+        }
+        props.setLoading(false);
     }
 
     const handleDrag = useCallback((e) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "./Box";
 import data from "../../../data/data.json"
 import { compileActions } from "../../../reducers/compileSlice";
@@ -8,21 +8,35 @@ import Title from "../../Common/title/title";
 import { AiOutlineControl } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { Button } from "../../Common/button/Button";
+import Alect from "../../Common/alert/Alert";
 
 function Optimizers() {
     const dispatch = useDispatch();
     const optimizers = data.Compile.filter(v => v.title === "optimizer")[0].info;
     const optimizerRef = useNav('Optimizer');
 
+    const [ isAlectVisable, setAlectVisiable] = useState(false);
+
     const selectHandler = async (event, title, value) => {
         event.preventDefault();
-        const data = {
-            "title": title,
-            "value": value
+        const setData = async () => {
+            const data = {
+                "title": title,
+                "value": value
+            }
+            dispatch(compileActions.setOptimizer(data))
         }
-        dispatch(compileActions.setOptimizer(data));
+        
+        setData()
+        .then( _ => {
+            setAlectVisiable(true);
+            setTimeout(() => {
+                setAlectVisiable(false);
+            }, 3000);
+        })
+        .catch(response => console.log(response));
     };
-    
+
     return (
         <div
             className={style.container}
@@ -39,6 +53,11 @@ function Optimizers() {
                     onClick={() => dispatch(compileActions.removeOptimizer())}>
                         Reset
                 </Button>
+                <Alect 
+                    message="Optimizer saved" 
+                    value={isAlectVisable}
+                    setValue={setAlectVisiable}
+                />
                 {optimizers.map((info) => (
                     <Box 
                         info={info} 

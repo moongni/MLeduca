@@ -10,14 +10,19 @@ import { FiDatabase } from "react-icons/fi";
 import { isEmptyArray } from "../components/Common/package";
 import Title from "../components/Common/title/title";
 import { Button } from "../components/Common/button/Button";
+import { Loader } from "../components/Common/Loader/Loader";
 
 export default function LoadData() {
     const dispatch = useDispatch();
 
     const dataInfo = useSelector(state => state.data.info);
     const dataColumns = useSelector(state => state.data.columns);
-    const [url, setUrl] = useState("");
+    const [ url, setUrl ] = useState("");
+    const [ isLoading, setLoading ] = useState(false);
 
+    if (isLoading) 
+        return <Loader type="spin" color="black" message={"Load Data"}/>
+    
     return (
         <div className={style.container}>
             <Title title="Load Data" icon={<FiDatabase/>}/>
@@ -36,8 +41,7 @@ export default function LoadData() {
                         className="right"
                         style={{"marginRight":"1rem"}}
                         type="button" 
-                        onClick={() => {getData(url, dispatch, dataActions, '\t')}}
-                    >
+                        onClick={() => getData(url, dispatch, dataActions, '\t', setLoading)}>
                         Fetch
                     </Button>
                 </div>
@@ -45,6 +49,7 @@ export default function LoadData() {
                     title="Load For File"
                     dispatch={dispatch}
                     actions={dataActions}
+                    setLoading={setLoading}
                 />
                 { !isEmptyArray(dataColumns) &&
                     <>

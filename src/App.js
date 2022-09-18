@@ -3,18 +3,29 @@ import "./App.css"
 import Router from "./routes"
 
 function App() {
-
-  useEffect(() => {
-    let vh = 0;
-    vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, [window.innerHeight]);
-
+  const style = {
+    container: {
+      position: "relative",
+      backgroundColor: "rgb(241 245 249)",
+      minWidth: "1065px",
+      overFlow: "auto",
+    },
+    footer: {
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      height: "1rem",
+      backgroundColor: "rgb(96 165 250)",
+      zIndex: 40
+    }
+  }
+  
   return (
-      <div className="App relative bg-slate-100"
-        style={{"minHeight":"calc(var(--vh, 1vh) * 100)"}}>
+      <div className="App"
+        style={style.container}>
         <Router/>
-        <div className='fixed bottom-0 left-0 w-full h-4 bg-blue-400 border-blue-200 z-40'/>
+        <div style={style.footer}/>
       </div>
   );
 }

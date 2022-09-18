@@ -17,19 +17,20 @@ export const isEmptyStr = (param) => {
 
 export const toOption = (items) => {
     const newOptions = [];
-
-    !isEmptyArray(items) && !isEmpty(items) &&
-    items.map(item => newOptions.push({
-        label: item,
-        value: item
-    }))
+    if( !isEmptyArray(items) && !isEmpty(items) ){
+        items.map(item => newOptions.push({
+            label: item,
+            value: item
+        }))
+    }
     return newOptions
 }
 
 export const toArray = (options) => {
     const newArray = [];
-    !isEmptyArray(options) && !isEmpty(options) &&
-    options.map(option => newArray.push(option.value));
+    if( !isEmptyArray(options) && !isEmpty(options) ){
+        options.map(option => newArray.push(option.value));
+    }
     return newArray;
 }
 
