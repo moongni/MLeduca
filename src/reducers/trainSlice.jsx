@@ -24,6 +24,18 @@ const trainSlice = createSlice({
         setFeatureData(state, action) {
             state.x = action.payload;
         },  
+        setData(state, action){
+            const { title, data } = action.payload;
+            if (title == "label") {
+                state.labels = Object.keys(data);
+                state.y = data;
+            } else if (title == "feature") {
+                state.features = Object.keys(data);
+                state.x = data;
+            } else {
+                console.log("wrong title");
+            }
+        },
         initialize(state, action){
             state.labels = [];
             state.features = [];

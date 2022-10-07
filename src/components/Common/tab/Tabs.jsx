@@ -1,16 +1,17 @@
 import React from "react";
-import style from "./tab.module.css";
+import tabStyle from "./tab.module.css";
 
-function Tabs({...props}) {
+function Tabs({style, ...props}) {
     const handleTabClick = (id) => {
         props.setCurrentTab(`${id}`);
     }
 
     return (
-        <div className={style.container}>
+        <div className={tabStyle.container}
+            style={style}>
             { props.tabData.map((tab) => (
                 <button 
-                    className={style.button}
+                    className={tabStyle.button}
                     key={tab.id} 
                     disabled={props.currentTab === `${tab.id}`} 
                     onClick={()=>handleTabClick(tab.id)}

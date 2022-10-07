@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { 
-    info: {}
- };
+const initialState = { info: {} };
 
 const modelSlice = createSlice({
     name: 'model',
@@ -20,9 +18,7 @@ const modelSlice = createSlice({
             state.info = action.payload;
         },
         initialize(state, action) {
-            state = {
-                info: {}
-            };
+            state.info = {};
         }
     },
 });

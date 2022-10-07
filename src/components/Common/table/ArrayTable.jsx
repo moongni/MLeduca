@@ -1,5 +1,5 @@
 import React, { useState , useCallback } from "react";
-import { isEmptyArray } from "../package";
+import { isEmpty, isEmptyArray } from "../package";
 import "./scrollStyle.css";
 import tableStyle from "./table.module.css";
 
@@ -42,7 +42,7 @@ const ArrayTable = ({children, style,...props}) => {
                                     {props.columns.map(
                                         column => (
                                                 <td className={tableStyle.td}>
-                                                    {props.data[column][idx]? props.data[column][idx]: "null"}
+                                                    {!isEmpty(props.data[column][idx])? props.data[column][idx]: "null"}
                                                 </td>  
                                     ))}                
                                 </tr>

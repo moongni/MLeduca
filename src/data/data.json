@@ -233,40 +233,44 @@
       "title":"loss",
       "info":[
         {
-          "title":"absoluteDifference",
-          "description":"절대값오차"
-        }, 
-        {
-          "title":"computeWeightedLoss",
-          "description":"compute 가중치 손실함수"
-        }, 
-        {
-          "title":"cosineDistance",
-          "description":"코사인 거리"
-        }, 
-        {
-          "title":"hingeLoss",
-          "description":"힌지 손실 함수"
-        },
-        { 
-          "title":"huberLoss",
-          "description":"휴버 손실 함수"
-        },
-        { 
-          "title":"logLoss",
-          "description":"로그 손실 함수"
-        },
-        {
           "title":"meanSquaredError",
-          "description":"제곱근오차"
+          "description":""
+        }, 
+        {
+          "title":"meanAbsoluteError",
+          "description":""
+        }, 
+        {
+          "title":"meanAbsolutePercentageError",
+          "description":""
+        }, 
+        {
+          "title":"squaredHinge",
+          "description":""
+        },
+        { 
+          "title":"hinge",
+          "description":""
+        },
+        { 
+          "title":"categoricalHinge",
+          "description":""
         },
         {
-          "title":"sigmoidCrossEntropy",
-          "description":"시그모이드 엔트로피"
+          "title":"logcosh",
+          "description":""
         },
         {
-          "title":"softmaxCrossEntropy",
-          "description":"소프트맥스 엔트로피"
+          "title":"categoricalCrossentropy",
+          "description":""
+        },
+        {
+          "title":"poisson",
+          "description":""
+        },
+        {
+          "title":"cosineProximity",
+          "description":""
         }
       ]
     }
@@ -360,7 +364,9 @@
             {
               "kind":"input",
               "title":"shape",
-              "type":"number"
+              "placeholder":"input shape (not including batch dimension)",
+              "type":"number",
+              "required":true
             }
           ]
         }

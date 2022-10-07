@@ -14,23 +14,8 @@ export const DrogDropFile = ({children, dispatch, actions, ...props}) => {
             var reader = new FileReader();
             reader.onload = async function(e) {
                 var contents = e.target.result;
+                console.log(type);
                 switch(type){
-                    case "text/csv":
-                      const rows = contents.split((/\r?\n|\r/));
-                      const features = rows.shift().split(',');
-                      dispatch(actions.setColumns(features));
-                      const newData = new Object();
-                      features.map(feature => {
-                        newData[feature] = [];
-                      })
-                      rows.forEach(row => {
-                          const values = row.split(',');
-                          features.forEach((value, key) => {
-                              newData[value].push(values[key]);
-                          })
-                      })
-                      dispatch(actions.setData(newData));
-                      break;            
                    case "application/json":
                       const jsonData = await JSON.parse(contents);
                       dispatch(actions.setColumns(Object.keys(jsonData[0])));
@@ -40,6 +25,24 @@ export const DrogDropFile = ({children, dispatch, actions, ...props}) => {
                         }
                         dispatch(actions.addData(newSample));
                       })
+                    case "text/csv":
+                    default :
+                        const rows = contents.split((/\r?\n|\r/));
+                        const features = rows.shift().split(',');
+                        dispatch(actions.setColumns(features));
+                        const newData = new Object();
+                        features.map(feature => {
+                            newData[feature] = [];
+                        })
+                        rows.forEach(row => {
+                            const values = row.split(',');
+                            features.forEach((value, key) => {
+                                newData[value].push(values[key]);
+                            })
+                        })
+                        dispatch(actions.setData(newData));
+                        break;            
+  
                   }
               };
             reader.readAsText(file);

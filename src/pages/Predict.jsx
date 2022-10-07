@@ -66,6 +66,7 @@ const Predict = () => {
             <div className="w-full text-center mt-4">
                 <Button
                     className="center green"
+                    style={{"width":"100px"}}
                     type="button"
                     onClick={() => onClickHandler()}
                 >

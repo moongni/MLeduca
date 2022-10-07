@@ -10,7 +10,10 @@ import { FiDatabase } from "react-icons/fi";
 import { isEmptyArray } from "../components/Common/package";
 import Title from "../components/Common/title/title";
 import { Button } from "../components/Common/button/Button";
-import { Loader } from "../components/Common/Loader/Loader";
+import { Loader } from "../components/Common/loader/Loader";
+import { trainActions } from "../reducers/trainSlice";
+import { testActions } from "../reducers/testSlice";
+import { preprocessingActions } from "../reducers/preprocessingSlice";
 
 export default function LoadData() {
     const dispatch = useDispatch();
@@ -20,13 +23,11 @@ export default function LoadData() {
     const [ url, setUrl ] = useState("");
     const [ isLoading, setLoading ] = useState(false);
 
-    if (isLoading) 
-        return <Loader type="spin" color="black" message={"Load Data"}/>
-    
     return (
         <div className={style.container}>
             <Title title="Load Data" icon={<FiDatabase/>}/>
             <div className={style.subContainer}>
+                { isLoading && <Loader type="spin" color="black" message={"Load Data"}/>}
                 <div style={{"display":"flex",
                             "marginRight":"2.5rem",
                             "marginLeft":"2.5rem"}}>
@@ -41,7 +42,11 @@ export default function LoadData() {
                         className="right"
                         style={{"marginRight":"1rem"}}
                         type="button" 
-                        onClick={() => getData(url, dispatch, dataActions, '\t', setLoading)}>
+                        onClick={() => {
+                            dispatch(trainActions.initialize());
+                            dispatch(testActions.initialize());
+                            dispatch(preprocessingActions.initialize());
+                            getData(url, dispatch, dataActions, '\t', setLoading)}}>
                         Fetch
                     </Button>
                 </div>
@@ -51,17 +56,18 @@ export default function LoadData() {
                     actions={dataActions}
                     setLoading={setLoading}
                 />
-                { !isEmptyArray(dataColumns) &&
-                    <>
-                        <Title title="Data Table"/>
-                        <ArrayTable 
-                            style={{"height":"24rem",
-                                    "marginTop":"1rem"}}
-                            data={dataInfo}
-                            columns={dataColumns}/>
-                    </>
-                }
             </div>
+            { !isEmptyArray(dataColumns) &&
+                <>
+                    <Title title="Data Table"/>
+                    <div className={style.subContainer}>
+                    <ArrayTable 
+                        style={{"height":"24rem"}}
+                        data={dataInfo}
+                        columns={dataColumns}/>
+                    </div>
+                </>
+            }
         </div>
     );
 }

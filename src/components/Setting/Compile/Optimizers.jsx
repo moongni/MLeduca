@@ -17,8 +17,7 @@ function Optimizers() {
 
     const [ isAlectVisable, setAlectVisiable] = useState(false);
 
-    const selectHandler = async (event, title, value) => {
-        event.preventDefault();
+    const selectHandler = (event, title, value) => {
         const setData = async () => {
             const data = {
                 "title": title,
@@ -26,6 +25,8 @@ function Optimizers() {
             }
             dispatch(compileActions.setOptimizer(data))
         }
+
+        event.preventDefault();
         
         setData()
         .then( _ => {
@@ -43,9 +44,8 @@ function Optimizers() {
             ref={optimizerRef}
             id="optimizerContainer"
         >
-            <Title title="Optimizer" icon={<AiOutlineControl/>}/>
-
-            <div className={style.subContainer}>
+            <div style={{"display":"flex", "justifyContent":"space-between"}}>
+                <Title title="Optimizer" icon={<AiOutlineControl/>}/>
                 <Button
                     className="right red"
                     style={{"width":"4rem"}}
@@ -53,6 +53,10 @@ function Optimizers() {
                     onClick={() => dispatch(compileActions.removeOptimizer())}>
                         Reset
                 </Button>
+
+            </div>
+
+            <div className={style.subContainer}>
                 <Alect 
                     message="Optimizer saved" 
                     value={isAlectVisable}

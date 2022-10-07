@@ -35,13 +35,13 @@
             "name":"Analytic",
             "subLinkName": [],
             "icon":"IoMdAnalytics",
-            "link":"#"
+            "link":"/analytic/"
         },
         {
             "name":"Download",
             "subLinkName": [],
             "icon":"FaFileExport",
-            "link":"#"
+            "link":"/download"
         }
     ]
 }

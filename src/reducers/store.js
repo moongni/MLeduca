@@ -18,6 +18,7 @@ import trainSlice from './trainSlice';
 import testSlice from './testSlice';
 import preprocessingSlice from './preprocessingSlice';
 import modelSlice from './modelSlice';
+import historySlice from './history';
 
 const rootReducer = combineReducers({
   compile: compileSlice.reducer,
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
   train: trainSlice.reducer,
   test: testSlice.reducer,
   preprocess: preprocessingSlice.reducer,
-  model: modelSlice.reducer
+  model: modelSlice.reducer,
+  history: historySlice.reducer,
 })
 
 const persistConfig = {

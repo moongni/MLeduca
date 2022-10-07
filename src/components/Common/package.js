@@ -8,7 +8,7 @@ export const isEmptyArray = (param) => {
 }
 
 export const isEmpty = (param) => {
-    return typeof param == "undefined" || param == null || param === "";
+    return typeof param === "undefined" || param === null;
 }
 
 export const isEmptyStr = (param) => {
@@ -43,4 +43,14 @@ export const makeRangeArray = (start=0, end) => {
     }
 
     return newArray;
+}
+
+export const selectColumn = (data, columns) => {
+    const newData = new Object();
+
+    columns.map(column => {
+        newData[column] = data[column]; 
+    })
+
+    return newData;
 }

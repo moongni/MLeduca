@@ -1,136 +1,108 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { trainActions } from "../reducers/trainSlice";
-import { isEmptyArray, toArray } from "../components/Common/package"
+import { isEmptyArray } from "../components/Common/package"
 import SetColumn  from "../components/Preprocessing/SetColumn";
 import ArrayTable from "../components/Common/table/ArrayTable";
 import { PreprocessingOptions } from "../components/Preprocessing/PreprocessingOption";
 import style from '../components/Common/component.module.css';
 import { MdOutlineToc } from "react-icons/md"
 import Title from "../components/Common/title/title";
-import { Loader } from "../components/Common/Loader/Loader";
+import { Loader } from "../components/Common/loader/Loader";
+import { useEffect } from "react";
 
 const Preprocessing = () => {
-    const dispatch = useDispatch();
-
     // redux persist load 
-    const data = useSelector(state => state.data.info);
-    const dataColumns = useSelector((state) => state.data.columns);
     const labels = useSelector((state) => state.train.labels);
     const labelData = useSelector(state => state.train.y);
     const features = useSelector((state) => state.train.features);
     const featureData = useSelector((state) => state.train.x);
 
     // 멀티 셀렉트 선택된 value state
-    const [ selectedFeatures, setSelectedFeatures ] = useState([]);
-    const [ selectedLabels, setSelectedLabels ] = useState([]);
-    const [ isLoading, setLoading ] = useState(false);
-
-    const selectColumn = (data, columns) => {
-        const newData = new Object();
-        columns.map(column => {
-            newData[column] = data[column]; 
-        })
-
-        return newData;
-    }
-
-    const handleLabelClick = useCallback(() => {
-        try {
-            setLoading(true);
-            const labelNames = toArray(selectedLabels);
-            const newData = selectColumn(data, labelNames);
-            dispatch(trainActions.setLabelData(newData));
-            dispatch(trainActions.setLabels(labelNames));
-        } catch (e) {
-            console.log(e);
-        }
-        setLoading(false);
-    })
-
-    const handleFeatureClick = useCallback(() => {
-        try {
-            setLoading(true);
-            const featureNames = toArray(selectedFeatures);
-            const newData = selectColumn(data, featureNames);
-            dispatch(trainActions.setFeatureData(newData));
-            dispatch(trainActions.setFeatures(toArray(selectedFeatures)));
-        } catch (e) {
-            console.log(e);
-        }
-        setLoading(false);
-    })
-
-    const LoadingComponenet = ({children}) => {
-        if (isLoading) 
-            return <Loader type="spin" color="black" message="Loading Data"/>
-        else 
-            return (
-                <>
-                    {children}
-                </>
-            )
-    }
-
+    const [ isLabelLoading, setLabelLoading ] = useState(false);
+    const [ isFeatureLoading, setFeatureLoading ] = useState(false);
+    
     return (
-        <div className={style.container}>
-            <Title
-                title="Preprocessing"
-                icon={<MdOutlineToc/>}
-            />
-            <div className={style.subContainer}>
-                <SetColumn 
-                    title={"Labels"}
-                    selected={selectedLabels}
-                    setSelected={setSelectedLabels}
-                    columns={dataColumns}
-                    handleClick={handleLabelClick}
+        <>
+            <div className={style.container}>
+                <Title
+                    title="Label"
+                    icon={<MdOutlineToc/>}
                 />
+                <div className={style.subContainer}>
+                    <SetColumn 
+                        title={"Select Labels"}
+                        setData={trainActions.setLabelData}
+                        setColumn={trainActions.setLabels}
+                        setLoading={setLabelLoading}
+                    />
+                </div>
                 {!isEmptyArray(labels) &&
-                    <div style={{position:"relative",
-                                minHeight:"24rem"}}>
+                    <>
                         <Title title="Label Data Table"/>
-                        <LoadingComponenet>
+                        <div 
+                            className={style.subContainer}
+                            style={{position:"relative",
+                                    minHeight:"24rem"}}
+                        >
+                            { isLabelLoading && <Loader type="spin" color="black" message="Loading Data"/>}
                             <ArrayTable
                                 style={{"height":"24rem"}}
                                 data={labelData}
                                 columns={labels}
                             />
+                        </div>
+                        <Title title={`Preprocessing`}/>
+                        <div className={style.subContainer}>
                             <PreprocessingOptions
-                                title="Label"
+                                title="label"
                                 columns={labels}
+                                setLoading={setLabelLoading}
                             />
-                        </LoadingComponenet>
-                    </div>
+                        </div>
+                    </>
                 }
             </div>
-            <div className={style.subContainer}>
-                <SetColumn
-                    title={"Features"}
-                    selected={selectedFeatures}
-                    setSelected={setSelectedFeatures}
-                    columns={dataColumns}
-                    handleClick={handleFeatureClick}                
+            <div className={style.container}>
+                <Title
+                    title="Feature"
+                    icon={<MdOutlineToc/>}
                 />
+                <div className={style.subContainer}>
+                    <SetColumn
+                        title={"Select Features"}
+                        setData={trainActions.setFeatureData}
+                        setColumn={trainActions.setFeatures}
+                        setLoading={setFeatureLoading}
+                    />
+                </div >
                 {!isEmptyArray(features) &&
-                    <div style={{position:"relative",
-                                minHeight:"24rem"}}>
+                    <>
                         <Title title="Feature Data Table"/>
-                        <LoadingComponenet>
+                        <div
+                            className={style.subContainer} 
+                            style={{position:"relative",
+                                    minHeight:"24rem"}}
+                        >
+                            { isFeatureLoading && <Loader type="spin" color="black" message="Loading Data"/>}
                             <ArrayTable
                                 style={{"height":"24rem"}}
                                 data={featureData}
                                 columns={features}
                             />
+                        </div>
+                        <Title title="Preprocessing"/>
+                        <div className={style.subContainer}>
                             <PreprocessingOptions
-                                title="Feature"
+                                title="feature"
                                 columns={features}
+                                setLoading={setFeatureLoading}
                             />
-                        </LoadingComponenet>
-                    </div>
+                        </div>
+                    </>
                 }
-            </div >
-        </div>
+            </div>
+        </>
     )
 }
 

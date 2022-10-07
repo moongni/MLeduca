@@ -8,6 +8,7 @@ import Title from "../../Common/title/title";
 import { AiOutlineControl } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import Alect from "../../Common/alert/Alert";
+import { Button } from "../../Common/button/Button";
 
 function Losses() {
     const dispatch = useDispatch();
@@ -16,11 +17,13 @@ function Losses() {
 
     const [ isAlectVisable, setAlectVisiable] = useState(false);
 
-    const selectHandler = async (event, title, value) => {
-        event.preventDefault();
+    const selectHandler = (event, title, value) => {
         const setData = async () => {
             dispatch(compileActions.setLoss(title));
         }
+
+        event.preventDefault();
+        
         setData()
         .then( _ => {
             setAlectVisiable(true);
@@ -36,7 +39,16 @@ function Losses() {
             className={style.container}
             ref={lossRef}
             id="lossContainer">
-            <Title title="Loss" icon={<AiOutlineControl/>}/>
+            <div style={{"display":"flex", "justifyContent":"space-between"}}>
+                <Title title="Loss" icon={<AiOutlineControl/>}/>
+                <Button
+                    className="right red"
+                    style={{"width":"4rem"}}
+                    type="button"
+                    onClick={() => dispatch(compileActions.removeLoss())}>
+                        Reset
+                </Button>
+            </div>
             <div className={style.subContainer}>
                 {losses.map((info) => (
                     <Box 

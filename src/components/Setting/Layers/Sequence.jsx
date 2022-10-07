@@ -12,6 +12,7 @@ function Sequence({icon, ...props}) {
     const dispatch = useDispatch();
 
     const layers = useSelector((state) => state.layers.info);
+    const isModel = useSelector(state => state.layers.isModel);
 
     const [isSubOpen, setSubOpen] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -39,15 +40,13 @@ function Sequence({icon, ...props}) {
                 className={style.subContainer} 
                 onSubmit={handleSubmit}
             >
-                <div>
-                    {props.info.filter((n)=> n.name === "mainParams")[0].params
-                        .map(v => (
-                            <Inputs 
-                                {...v}
-                                value={value}
-                                setValue={setValue}/>
-                    ))}
-                </div>
+                {props.info.filter((n)=> n.name === "mainParams")[0].params
+                    .map(v => (
+                        <Inputs 
+                            {...v}
+                            value={value}
+                            setValue={setValue}/>
+                ))}
                 <AdvancedSettingButton
                     style={{"marginTop":"1rem",
                             "marginBottom":"1rem"}}
@@ -81,6 +80,7 @@ function Sequence({icon, ...props}) {
                         <LayerList 
                             style={{"maxHeight":"24rem"}}
                             data={layers}
+                            isModel={isModel}
                             isHandleRemove={true}
                             handleRemove={handleRemove}/>
                     </div>

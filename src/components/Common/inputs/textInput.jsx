@@ -14,6 +14,7 @@ export const TextInput = ({...props}) => {
                 let { value } = e.target;
                 props.setValue(value)
             }}
+            required={props.required}
         /> 
     )
 }

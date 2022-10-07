@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { SideParamBoard } from './ParamBoard';
-import { SideCompileBoard } from './CompileBoard';
-import { SideLayerBoard } from './LayerBoard';
+import { SideParamBoard, SideCompileBoard, SideLayerBoard } from './Board';
 import style from './ModelDashBoard.module.css';
 
 export const ModelDashBoard = (props) => {

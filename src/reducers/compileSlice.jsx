@@ -24,10 +24,8 @@ const compileSlice = createSlice({
             state.loss = "";
         },
         initialize(state, action) {
-            state = {
-                optimizer: {},
-                loss: ""
-            };
+            state.optimizer = {};
+            state.loss = ""
         }
     },
 });

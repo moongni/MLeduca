@@ -38,8 +38,11 @@ export const getData = async (url, dispatch, actions, sep=',', setLoading) => {
                 })
                 dispatch(actions.setData(newData));
         }
+
     } catch (e) {
+        
         console.log('error', e);
+        alert("error : ", e);
     }
 
     setLoading(false);

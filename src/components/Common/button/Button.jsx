@@ -5,10 +5,12 @@ import { isEmptyStr } from "../package";
 
 export const Button = ({children, className, style, ...props}) => {
     let styleArray = []
+    
     if (!isEmptyStr(className)){
         const clsArray = className.split(' ');
         styleArray = clsArray.map(cls => btnStyle[cls]);
     }
+
     return (
         <button 
             className={[btnStyle.button, ...styleArray].join(' ')}

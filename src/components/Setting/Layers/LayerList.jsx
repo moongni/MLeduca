@@ -3,13 +3,14 @@ import "../../Common/table/scrollStyle.css";
 import tableStyle from "../../Common/table/table.module.css";
 import { AiOutlineDelete } from "react-icons/ai";
 
-export const LayerList = ({style, data, ...props}) => {
-    const [hovering, setHovering] = useState(false);
-    
+export const LayerList = ({style, data, isModel, ...props}) => {
     const lengthArray = data.map(d => Object.keys(d.info).length);
     const maxLengthIndex = lengthArray.indexOf(Math.max(...lengthArray));
-    const columns = [...Object.keys(data[maxLengthIndex].info)];
+    const columns = data[maxLengthIndex].idx == "input"? 
+        [] : [...Object.keys(data[maxLengthIndex].info)];
 
+    const [hovering, setHovering] = useState(false);
+    
     const handleMouseOver = useCallback(() => {
         !hovering &&
         setHovering(true);
@@ -34,6 +35,7 @@ export const LayerList = ({style, data, ...props}) => {
                         style={{"width":"100%"}}
                     >
                         <th className={tableStyle.th}>index</th>
+                        {isModel && <th className={tableStyle.th}>shape</th>}
                         { columns.map((column) => (
                             <th className={tableStyle.th}>{column}</th>
                         ))}
@@ -43,6 +45,7 @@ export const LayerList = ({style, data, ...props}) => {
                     {data.map(d => (
                         <tr className={tableStyle.tbodyTr}>
                             <td className={tableStyle.td}>{d.idx}</td>
+                            {isModel && <td className={tableStyle.td}>{d.info["shape"]? d.info["shape"]:""}</td>}
                             { columns.map(
                                 column => (
                                     <td className={tableStyle.td}>

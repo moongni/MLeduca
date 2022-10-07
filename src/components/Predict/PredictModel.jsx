@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Button } from "../Common/button/Button";
-import { Modal } from "../Common/modal/modal";
 import Title from "../Common/title/title";
+import { ModelSelectModal } from "../Common/modal/CommonModal";
 
 export const PredictModel = ({model, ...props}) => {
     const [ modalShow, setModalShow ] = useState(false);
@@ -36,37 +35,9 @@ export const PredictModel = ({model, ...props}) => {
                     <span>{model? model: "No Model Data"}</span>
                 </div>
             </div>
-            <Modal
-                isShow={modalShow}
-                label="Model Select"
-            >
-                <p>Model List</p>
-                <div style={{"position":"relative",
-                            "left":"50%",
-                            "display":"flex",
-                            "transform":"translateX(-50%)",
-                            "justifyContent":"center"}}
-                > 
-                    <Button
-                        className="red"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
-                        type="button"
-                        onClick={() => setModalShow(false)}>
-                        close
-                    </Button>
-                    <Button
-                        className="green"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
-                        type="button"
-                        onClick={() => {}}>
-                        save
-                    </Button>
-                </div>
-            </Modal>
+            <ModelSelectModal
+                modalShow={modalShow}
+                setModalShow={setModalShow}/>
         </>   
     )
 }

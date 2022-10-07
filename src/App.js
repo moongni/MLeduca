@@ -25,7 +25,6 @@ function App() {
       <div className="App"
         style={style.container}>
         <Router/>
-        <div style={style.footer}/>
       </div>
   );
 }

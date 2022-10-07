@@ -23,7 +23,7 @@
 }
 
 .subContainer {
-    min-height: 100%;
+    /* min-height: 100%; */
     padding: 1.25rem;
     margin: 1.25rem 0;
     --tw-bg-opacity: 1;

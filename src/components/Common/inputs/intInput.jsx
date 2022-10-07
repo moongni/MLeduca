@@ -9,6 +9,7 @@ export const IntInput = ({...props}) => {
             type={props.type}
             min={props.min}
             value={props.value[props.title]}
+            placeholder={props.placeholder}
             defaultValue={props.default}
             step={props.step}
             onChange={(e) => {
@@ -18,6 +19,7 @@ export const IntInput = ({...props}) => {
                         [name]: parseInt(value)
                 }))
             }}
+            required={props.required}
         /> 
     )
 }

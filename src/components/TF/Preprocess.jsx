@@ -1,4 +1,6 @@
 import * as dfd from "danfojs"
+import { selectColumn } from "../Common/package";
+import { isEmpty } from "../Common/package";
 
 const preprocessOption = {
   STARDARDSCALE: "stardardScale",
@@ -6,11 +8,11 @@ const preprocessOption = {
   FILLMEAN: "fillMean",
   FILLMEDIAN: "fillMedian",
   FILLEMOSTFREQUNCE: "fillMostFrequnce",
-  ONEHOTENCODING: "oneHotEncoding"
+  ONEHOTENCODING: "oneHotEncoding",
+  LABELENCODING: "labelEncoding"
 }
 
-
-export function preprocess(data, process) {
+export async function preprocess(data, process) {
   /*
     parameter
       data: dataSlice.info
@@ -19,16 +21,6 @@ export function preprocess(data, process) {
     return
       process 내부에 있는 컬럼으로만 이루어진 data(dataSlice.info와 구조 동일) 반환
   */
-
-  const selectColumn = (data, columns) => {
-    const newData = new Object();
-
-    columns.map(column => {
-        newData[column] = data[column]; 
-    })
-
-    return newData;
-  }
 
   // const nullToNaN = (data, columns) => {
   //   for (const column of columns) {
@@ -43,8 +35,10 @@ export function preprocess(data, process) {
     const scaler = new dfd.StandardScaler();
 
     scaler.fit(dataFrame[column]);
-
+    console.log(scaler);
+    console.log(dataFrame[column]);
     dataFrame[column] = scaler.transform(dataFrame[column]).values;
+    console.log(dataFrame[column]);
   }
 
   function minMaxNormalize(dataFrame, column) {
@@ -58,7 +52,7 @@ export function preprocess(data, process) {
     dataFrame[column] = dataFrame[column].map(normalizeAlgorithm).values;
   }
 
-  async function fillMean(dataFrame, column) {
+  function fillMean(dataFrame, column) {
     const mean = dataFrame[column].mean();
 
     dataFrame[column] = dataFrame[column].fillNa(mean).values;
@@ -71,8 +65,34 @@ export function preprocess(data, process) {
   }
   
   function fillMostFrequnce(dataFrame, column) {
-    var series = dataFrame.column(dataFrame.columns[0]);
-    series.valueCounts(); // Row index must contain unique values Error!
+    const dataType = data[column].reduce(( dtype, val ) => {
+      return dtype == typeof val || isEmpty(val) ? dtype : "object";
+    }, typeof data[column][0]);
+
+    const hashmap = data[column].reduce(( acc, val ) => {
+      acc[val] = ( acc[val] || 0 ) + 1;
+      return acc
+    }, {})
+    
+    const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
+      hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )
+    
+    var convertType = {
+      number(item) {
+        return Number(item)
+      },
+      boolean(item) {
+        return Boolean(item)
+      },
+      string(item) {
+        return item
+      },
+      object(item) {
+        return item
+      }
+      
+    }
+    dataFrame[column] = dataFrame[column].fillNa(convertType[dataType](mostFreVal)).values;
   }
 
   function oneHotEncoding(dataFrame, column) {
@@ -89,6 +109,14 @@ export function preprocess(data, process) {
     const newDataFrame = dfd.concat({ dfList: [dataFrame, encodedDataFrame], axis: 1 });
 
     return newDataFrame
+  }
+
+  function labelEncoding(dataFrame, column) {
+    const encode = new dfd.LabelEncoder();
+
+    encode.fit(dataFrame[column]);
+
+    dataFrame[column] = encode.transform(dataFrame[column].values);
   }
 
   var selectedData = selectColumn(data, Object.keys(process));
@@ -111,6 +139,8 @@ export function preprocess(data, process) {
           fillMostFrequnce(dataFrame, key);
         if (preprocess == preprocessOption.ONEHOTENCODING)
           dataFrame = oneHotEncoding(dataFrame, key);
+        if (preprocess == preprocessOption.LABELENCODING)
+          labelEncoding(dataFrame, key);
       }
 
     }

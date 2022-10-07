@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { isEmptyArray } from "../Common/package";
 import { Link } from 'react-router-dom';
 import { IoMdAnalytics } from "react-icons/io";
-import { AiFillCaretDown, AiOutlineLineChart, AiOutlineMenu, AiOutlineArrowLeft, AiOutlineControl } from "react-icons/ai"
+import { AiFillCaretDown, AiOutlineLineChart, AiOutlineControl } from "react-icons/ai"
 import { FaFileExport } from "react-icons/fa"
 import { FiDatabase } from "react-icons/fi";
 import { GoTriangleRight } from "react-icons/go"

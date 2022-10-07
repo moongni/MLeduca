@@ -1,25 +1,10 @@
-만들어야 될 것
+optimizer loss ui 카드
 
-model 창희형
+전처리 스크롤, 영역별 하나 선택
 
-전처리 
+전처리 결과 저장
 
-<!-- /////////////////// -->
-
-train test split
-
-결과 디자인
-
-ui 디자인
-
-predict
-
-local file
-훈련완료된 모델 export
-import
-
-image 등등
-
+예측 모델 선택
 
 # Getting Started with Create React App
 
