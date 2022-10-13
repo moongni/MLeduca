@@ -1,42 +1,45 @@
 import * as tf from "@tensorflow/tfjs";
-import * as tfvis from "@tensorflow/tfjs-vis";
+import * as dfd from "danfojs";
 
-const mkConTensor = (data) => {
-  const tData = Object.entries(data).map(items => (
-    tf.tensor(items[1]).reshape([-1, 1])
-  ))
-  return tf.concat(tData, 1);
+export const mkConTensor = (data) => {
+  const df = new dfd.DataFrame(data);
+  const tData = df.tensor;
+  // const tData = Object.entries(data).map(items => (
+  //   tf.tensor({value:items[1], dtype:"float32"}).reshape([-1, 1])
+  // ))
+  // return tf.concat(tData, 1);
+  return tData;
 }
 
 export function convertToTensor(xs, ys) {
     console.log('Convert Array To Tensor...');
   
-    return tf.tidy(() => {
+    return tf.tidy( () => {
       // 1. 데이터 셔플
       // tf.util.shuffle();
   
       // 2. 텐서로 데이터 변환
       const inputTensor = mkConTensor(xs);
       const labelTensor = mkConTensor(ys);
-      console.log("i",inputTensor);
-      console.log("l",labelTensor);
+      console.log("i", inputTensor);
+      console.log("l", labelTensor);
       // 3. 정규화
-      const inputMax = inputTensor.max();
-      const inputMin = inputTensor.min();
-      const labelMax = labelTensor.max();
-      const labelMin = labelTensor.min();
+      // const inputMax = inputTensor.max();
+      // const inputMin = inputTensor.min();
+      // const labelMax = labelTensor.max();
+      // const labelMin = labelTensor.min();
   
-      const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-      const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+      // const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+      // const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
   
       return {
-        inputs: normalizedInputs,
-        labels: normalizedLabels,
+        inputs: inputTensor,
+        labels: labelTensor,
         // 최솟값 최댓값 반환
-        inputMax,
-        inputMin,
-        labelMax,
-        labelMin,
+        // inputMax,
+        // inputMin,
+        // labelMax,
+        // labelMin,
       }
     })
   }

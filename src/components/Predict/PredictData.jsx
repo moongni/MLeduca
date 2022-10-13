@@ -7,12 +7,18 @@ import { Button } from "../Common/button/Button";
 import { getData } from "../LoadData/getData";
 import { DrogDropFile } from "../LoadData/DrogDropFile";
 import ArrayTable from "../Common/table/ArrayTable";
+import Title from "../Common/title/title";
+import SetColumn from "../Preprocessing/SetColumn";
+import { isEmptyArray, selectColumn } from "../Common/package";
+import { PreprocessingOptions } from "../Preprocessing/PreprocessingOption";
+import { preprocessingActions } from "../../reducers/preprocessingSlice";
+import mainStyle from "../Common/component.module.css";
+import { preprocess } from "../TF/Preprocess";
 
 export const PredictData = ({children, style, className, ...props}) => {
     const [currentTab, setCurrentTab] = useState('1');
 
-    const testData = useSelector(state => state.test.x);
-    const testColumn = useSelector(state => state.test.features);
+    const testSet = useSelector( state => state.test );
 
     const tabData = [
         {
@@ -30,12 +36,12 @@ export const PredictData = ({children, style, className, ...props}) => {
         switch (curContent[0].id) {
             case "1":
                 return <CustomInput
-                            data={testData}
-                            columns={testColumn}/>
+                            data={testSet.info}
+                            columns={testSet.columns}/>
             case "2":
                 return <FileInput
-                            data={testData}
-                            columns={testColumn}/>
+                            data={testSet.info}
+                            columns={testSet.columns}/>
         }
     }
     return (
@@ -52,8 +58,12 @@ export const PredictData = ({children, style, className, ...props}) => {
 
 const CustomInput = ({children, className, style, ...props}) => {
     const dispatch = useDispatch();
-    const [inputShape, setInputShape] = useState([]);
-    const [sample, setSample] = useState([]);
+
+    const [inputShape, setInputShape] = useState({});
+    const [sample, setSample] = useState({});
+
+    console.log("inputShape", inputShape);
+    console.log("sample", sample);
 
     return (
         <>
@@ -71,7 +81,6 @@ const CustomInput = ({children, className, style, ...props}) => {
                 style={{"maxHeight":"24rem"}}
                 data={props.data}
                 columns={props.columns}
-                hasChild={true}
             >
                 <Inputs 
                     style={{"width":"100%"}}
@@ -84,15 +93,58 @@ const CustomInput = ({children, className, style, ...props}) => {
     )
 }
 
-const FileInput = ({children, className, style, ...props}) => {
-    const [url, setUrl] = useState('');
+const FileInput = ({children, className, ...props}) => {
     const dispatch = useDispatch();
-    
+
+    const features = useSelector( state => state.test.feature );
+    const featureData = useSelector( state => state.test.x );
+    const process = useSelector( state => state.preprocess );
+
+    const [ url, setUrl ] = useState('');
+    const [ isLoading, setLoading ] = useState(false);
+
+    const onClickHandler = async () => {
+        try {
+            setLoading(true);
+
+            dispatch(preprocessingActions.updateProcess({
+                title: 'feature',
+                columns: features
+            }))
+
+            const cashData = selectColumn(props.data, features);
+            const dummyData = cashData;
+
+            const { labelData, featureData } = await preprocess(dummyData, cashData, process);
+
+            dispatch(testActions.setFeatureData(featureData));
+            
+
+        } catch (e) {
+            alert(e);
+            console.log(e);
+        }
+    }
+
+    const style = {
+        btnContainer: {
+            "position":"relative",
+            "left":"50%",
+            "display":"flex",
+            "transform":"translateX(-50%)",
+            "justifyContent":"center"
+        },
+        btn: {
+            "width":"8rem",
+            "margin":"0.5rem",
+            "height":"2.5rem"
+        }
+    }
+
     return (
         <>
             <div style={{"display":"flex",
-                    "marginRight":"2.5rem",
-                    "marginLeft":"2.5rem"}}>
+                    "margin":"0 2.5rem"}}>
                 <Inputs 
                     kind="text"
                     title="Load For Url"
@@ -103,7 +155,7 @@ const FileInput = ({children, className, style, ...props}) => {
                 <Button 
                     className="right"
                     type="button"
-                    onClick={() => {getData(url, dispatch, testActions, '\t')}}
+                    onClick={() => {getData(url, dispatch, testActions, ',', setLoading)}}
                 >
                     Fetch
                 </Button>
@@ -113,11 +165,56 @@ const FileInput = ({children, className, style, ...props}) => {
             dispatch={dispatch}
             actions={testActions}
             />
-            <ArrayTable 
-                style={{"maxHeight":"24rem"}}
-                data={props.data}
-                columns={props.columns}
-            />
+            <Title title="Data Table"/>
+            <div style={{"margin":"0 2.5rem",
+                        "alignItems":"center"}}>
+                <SetColumn
+                    title={"Select Column"}
+                    setData={testActions.setFeatureData}
+                    setColumn={testActions.setFeatures}
+                    setLoading={setLoading}
+                    data={props.data}
+                    dataColumns={props.columns}
+                    />
+                {!isEmptyArray(features) &&
+                    <>
+                        <ArrayTable 
+                            style={{"maxHeight":"24rem"}}
+                            data={featureData}
+                            columns={features}
+                        />
+                        <PreprocessingOptions
+                            title="feature"
+                            columns={features}
+                            process={process}
+                        />
+                        <div style={style.btnContainer}>
+                            <Button 
+                                className="red"
+                                style={style.btn}
+                                type="button"
+                                onClick={() => {
+                                    dispatch(testActions.initialize());
+                                    dispatch(preprocessingActions.initialize());
+                                }}
+                            >
+                                reset
+                            </Button>
+                            <Button 
+                                className="green"
+                                style={style.btn}
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onClickHandler().then( _ => setLoading(false))}}
+                                >
+                                apply
+                            </Button>
+                        </div>
+
+                    </>
+                }
+            </div>
         </>
     )      
 }

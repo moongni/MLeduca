@@ -1,5 +1,5 @@
 import * as dfd from "danfojs"
-import { selectColumn } from "../Common/package";
+import { isEmptyObject, selectColumn } from "../Common/package";
 import { isEmpty } from "../Common/package";
 
 const preprocessOption = {
@@ -9,14 +9,16 @@ const preprocessOption = {
   FILLMEDIAN: "fillMedian",
   FILLEMOSTFREQUNCE: "fillMostFrequnce",
   ONEHOTENCODING: "oneHotEncoding",
-  LABELENCODING: "labelEncoding"
+  LABELENCODING: "labelEncoding",
+  DROPNA: "dropNull"
 }
 
-export async function preprocess(data, process) {
+export async function preprocess(labelData, featureData, process) {
   /*
     parameter
-      data: dataSlice.info
-      process: upreprocessingSlice.info
+      labelData: selectColumns(dataSlice.info, label)
+      featureData: selectColumns(dataSlice.info, feature)
+      process: preprocessingSlice.info
 
     return
       process 내부에 있는 컬럼으로만 이루어진 data(dataSlice.info와 구조 동일) 반환
@@ -35,10 +37,7 @@ export async function preprocess(data, process) {
     const scaler = new dfd.StandardScaler();
 
     scaler.fit(dataFrame[column]);
-    console.log(scaler);
-    console.log(dataFrame[column]);
     dataFrame[column] = scaler.transform(dataFrame[column]).values;
-    console.log(dataFrame[column]);
   }
 
   function minMaxNormalize(dataFrame, column) {
@@ -119,37 +118,87 @@ export async function preprocess(data, process) {
     dataFrame[column] = encode.transform(dataFrame[column].values);
   }
 
-  var selectedData = selectColumn(data, Object.keys(process));
-  var dataFrame = new dfd.DataFrame(selectedData);
+  function dropNa(dataFrame, column) {
+    const nall_face = dfd.toJSON(dataFrame[column].isNa())[0];
 
-  for (const [key, value] of Object.entries(process)) {
-
-    if (value.length != 0) {
-
-      for (const preprocess of value) {
-        if (preprocess == preprocessOption.STARDARDSCALE)
-          stardardScale(dataFrame, key);
-        if (preprocess == preprocessOption.NORMALIZE)
-          minMaxNormalize(dataFrame, key);
-        if (preprocess == preprocessOption.FILLMEAN)
-          fillMean(dataFrame, key);
-        if (preprocess == preprocessOption.FILLMEDIAN)
-          fillMedian(dataFrame, key);
-        if (preprocess == preprocessOption.FILLEMOSTFREQUNCE)
-          fillMostFrequnce(dataFrame, key);
-        if (preprocess == preprocessOption.ONEHOTENCODING)
-          dataFrame = oneHotEncoding(dataFrame, key);
-        if (preprocess == preprocessOption.LABELENCODING)
-          labelEncoding(dataFrame, key);
+    const nall_idx = nall_face.reduce(( acc, val, idx ) => {
+      if ( val == true ) {
+        acc.push(idx);
       }
 
+      return acc
+    }, [])
+
+    
+    dataFrame.drop({ index:nall_idx, inplace:true });
+    dataFrame.resetIndex({ inplace:true });
+
+    anotherFrame.drop({ index:nall_idx, inplace:true });
+    anotherFrame.resetIndex({ inplace:true });
+  }
+
+  // var selectedData = selectColumn(data, Object.keys(process));
+  // var dataFrame = new dfd.DataFrame(data);
+  var label_df = new dfd.DataFrame(labelData);
+  var feature_df = new dfd.DataFrame(featureData);
+  
+  for (const title of Object.keys(process)) {
+    var data = labelData;
+    var dataFrame = label_df;
+    var anotherFrame = feature_df;
+    
+    if ( title == "feature" ) {
+      data = featureData;
+      dataFrame = feature_df;
+      anotherFrame = label_df;
+    }
+
+    for (const [key, value] of Object.entries(process[title])) {
+
+      if (value.length != 0) {
+  
+        for (const preprocess of value) {
+          if (preprocess == preprocessOption.STARDARDSCALE)
+            stardardScale(dataFrame, key);
+          if (preprocess == preprocessOption.NORMALIZE)
+            minMaxNormalize(dataFrame, key);
+          if (preprocess == preprocessOption.FILLMEAN)
+            fillMean(dataFrame, key);
+          if (preprocess == preprocessOption.FILLMEDIAN)
+            fillMedian(dataFrame, key);
+          if (preprocess == preprocessOption.FILLEMOSTFREQUNCE)
+            fillMostFrequnce(dataFrame, key);
+          if (preprocess == preprocessOption.ONEHOTENCODING)
+            dataFrame = oneHotEncoding(dataFrame, key);
+          if (preprocess == preprocessOption.LABELENCODING)
+            labelEncoding(dataFrame, key);
+          if (preprocess == preprocessOption.DROPNA)
+            dropNa(dataFrame, key);
+        }
+
+      }
+  
+    }
+
+    if ( title == "feature") {
+      feature_df = dataFrame;
+      label_df = anotherFrame;
+    } else {
+      label_df = dataFrame;
+      feature_df = anotherFrame;
     }
 
   }
 
-  const jsonData = dfd.toJSON(dataFrame, {
+  const label_data = dfd.toJSON(label_df, {
     format: "row"
   });
+  const feature_data = dfd.toJSON(feature_df, {
+    format: "row"
+  })
   
-  return jsonData
+  return {
+    "labelData": label_data,
+    "featureData": feature_data
+  }
 }

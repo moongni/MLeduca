@@ -6,6 +6,7 @@ import Select from "react-select";
 
 export const PreprocessingSelect = ({children, preprocess, ...props}) => {
     const dispatch = useDispatch();
+
     const [ selectedValue, setSeletedValue ] = useState([]);
     
     var numericDisable = false;
@@ -18,6 +19,7 @@ export const PreprocessingSelect = ({children, preprocess, ...props}) => {
   
     useEffect(() => {
       var curProcess = toArray(selectedValue);
+      
       dispatch(preprocessingActions.setProcess({
         title: props.title,
         column: props.column,
@@ -69,7 +71,7 @@ export const PreprocessingSelect = ({children, preprocess, ...props}) => {
       {
         label: "etc",
         options: [
-          {value: "stripNull", label: "Strip Null Value"},
+          {value: "dropNull", label: "Drop Null Value"},
         ]
       }
     ];

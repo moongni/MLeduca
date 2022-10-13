@@ -33,3 +33,16 @@
     border-width: 1px;
     border-color: var(--tw-shadow-color);
 }
+
+.btnContainer {
+    position: relative;
+    left: 50%;
+    display: flex;
+    transform: translateX(-50%);
+    justify-content: center;
+}
+.btn {
+    width: 8rem;
+    margin: 0.5rem;
+    height: 2.5rem;
+}

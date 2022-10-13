@@ -42,7 +42,7 @@ export const SideCompileBoard = ({children, className, style, ...props}) => {
     )
 }
 
-export const OptimizerBoard = ({ style }) => {
+const OptimizerBoard = ({ style }) => {
     const compile = useSelector(state => state.compile);
 
     const optimizerContent = () => {
@@ -78,7 +78,7 @@ export const OptimizerBoard = ({ style }) => {
     )        
 }
 
-export const LossBoard = ({ style }) => {
+const LossBoard = ({ style }) => {
     const compile = useSelector(state => state.compile);
 
     const lossContent = () => {
@@ -101,65 +101,6 @@ export const LossBoard = ({ style }) => {
             <div className={mainStyle.subContainer}
                 style={style.contentStyle}>
                 {lossContent()}
-            </div>
-        </div>
-    )    
-}
-
-export const CompileBoard = () => {
-    const compile = useSelector(state => state.compile);
-
-    const optimizerContent = () => {
-        if (isEmptyObject(compile.optimizer)){
-            return (
-                <div className={boardStyle.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <Title title={compile.optimizer.title}/>
-                    <div style={{"display":"flex"}}>
-                        {Object.entries(compile.optimizer.value)
-                            .map(value => (
-                                <li className={boardStyle.li}>{value[0]}&nbsp;:&nbsp;{value[1]}</li>
-                        ))}
-                    </div>
-                </div>
-            )
-        }
-    }
-
-    const lossContent = () => {
-        if (isEmptyStr(compile.loss)){
-            return (
-                <div className={boardStyle.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                    <li className={boardStyle.li}>{compile.loss}</li>
-            )
-        }
-    }
-
-    return (
-        <div style={{"display":"inline-block", "verticalAlign":"top"}}>
-            <div style={{"display":"inline-block",
-                        "minHeight":"202px", "verticalAlign":"top"}}>
-                <Title title="optimizer"/>
-                <div className={mainStyle.subContainer}>
-                    {optimizerContent()}
-                </div>
-            </div>
-            <div style={{"display":"inline-block",
-                        "minHeight":"202px", "verticalAlign":"top"}}>
-                <Title title="loss"/>
-                <div className={mainStyle.subContainer}>
-                    {lossContent()}
-                </div>
             </div>
         </div>
     )    
@@ -192,8 +133,22 @@ export const SideLayerBoard = ({children, className, style, ...props}) => {
     )
 }
 
-export const LayerBoard = ({ style }) => {
+export const LayerBoard = () => {
     const layers = useSelector((state) => state.layers);
+
+    const style = {
+        mainStyle: {
+            "display":"inline-block",
+            "verticalAlign":"top",
+            "margin":"0 10px"
+        },
+        contentStyle: {
+            "position":"relative",
+            "display":"flex",
+            "minHeight":"130px",
+            "alignItems":"center"
+        }
+    }
 
     const content = () => {
         if (isEmptyArray(layers.info)){
@@ -242,7 +197,7 @@ export const SideParamBoard = ({children, className, style, ...props}) => {
     )
 }
 
-export const ParamBoard = ({ style }) => {
+const ParamBoard = ({ style }) => {
     const parameter = useSelector((state) => state.parameter.info);
 
     const content = () => {
@@ -275,7 +230,7 @@ export const ParamBoard = ({ style }) => {
     )
 }
 
-export const ModelInfoBoard = () => {
+export const SettingBoard = () => {
     const style = {
         mainStyle: {
             "display":"inline-block",
@@ -287,20 +242,15 @@ export const ModelInfoBoard = () => {
             "display":"flex",
             "minHeight":"130px",
             "alignItems":"center"
-        }
+        },
+
     }
 
     return (
-        <div>
-            <div className={style.subContainer}
-                style={{"width":"100%"}}>
-                <LayerBoard style={style}/>
-                <div style={{"display":"flex", "justifyContent":"start"}}>
-                    <OptimizerBoard style={style}/>
-                    <LossBoard style={style}/>
-                    <ParamBoard style={style}/>
-                </div>
-            </div>
+        <div style={{"display":"flex", "justifyContent":"start"}}>
+            <OptimizerBoard style={style}/>
+            <LossBoard style={style}/>
+            <ParamBoard style={style}/>
         </div>
     )
 }

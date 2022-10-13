@@ -1,10 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    labels: [],
-    features: [],
-    x: {},
+    label: [],
     y: {},
+
+    feature: [],
+    x: {},
+
+    columns: [],
+    info: {},
 }
 
 const testSlice = createSlice({
@@ -13,41 +17,39 @@ const testSlice = createSlice({
 
     reducers: {
         addData(state, action) {
-            state.x = 
-            {
-                ...state.x,
+            state.info = {
+                ...state.info,
                 ...action.payload
-                };
+            };
         },
         setData(state, action) {
-            state.x = action.payload;
+            state.info = action.payload;
         },
         setColumns(state, action){
-            state.features = action.payload;
+            state.columns = action.payload;
         },
-        // addData(state,action) {
-        //     const { columns , samples } = action.payload;
-        //     state.columns = columns;
-        //     state.info = samples;
-        // },
-        initialize(state, action){
-            state.labels = [];
-            state.features = [];
-            state.x = {};
-            state.y = {};
+        setLabelData(state, action){
+            state.y = action.payload;
+            state.label = Object.keys(state.y);
         },
         setLabels(state, action){
-            state.labels = action.payload
+            state.label = action.payload
         },
         setFeatures(state, action){
-            state.features = action.payload;
+            state.feature = action.payload;
+        },
+        setFeatureData(state, action) {
+            state.x = action.payload;
+            state.feature = Object.keys(state.x);
         },
         initialize(state, action){
-            state.labels = [];
-            state.features = [];
-            state.x = [];
-            state.y = [];
-        }
+            state.label= [];
+            state.y= {};
+            state.feature= [];
+            state.x= {};
+            state.columns= [];
+            state.info= {};
+        }    
     }
 })
 

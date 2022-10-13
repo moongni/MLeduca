@@ -4,11 +4,86 @@ import { Button } from "../button/Button";
 import * as tf from "@tensorflow/tfjs";
 import Inputs from "../inputs/Inputs";
 import Tabs from "../tab/Tabs";
+import { useDispatch } from "react-redux";
+import { layerActions } from "../../../reducers/layerSlice";
 
-export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
+export const ModelSelectModal = ({ modalShow, setModalShow, modelUrl, setModelUrl, ...props }) => {
+    const dispatch = useDispatch();
+
     const [ currentTab, setCurrentTab ] = useState('1');
-    const [ modelList, setModelList ] = useState([]);
     const [ value, setValue ] = useState("");
+
+    const loadModel = (url) => {
+        tf.loadLayersModel(url)
+        .then( async ( model ) => {
+            // setLoading(true)
+
+            dispatch(layerActions.initialize());
+            
+            // layer update
+            model.layers.map( layer => {
+                if ( layer.constructor.name === "InputLayer" ) {
+
+                    dispatch(layerActions.addModel({
+                        "shape":layer.batchInputShape
+                    }))
+
+                } else if ( layer.constructor.name === "Dense") {
+                    const newLayer = {
+                        "units":layer.units,
+                        "inputShape":layer.batchInputShape,
+                        "activation":layer.activation.constructor.name.toLowerCase(),
+                        "bias":layer.bias? true: false
+                    }
+
+                    dispatch(layerActions.addLayer(newLayer));
+
+                } else {
+                    
+                    alert("can not read layer information.");
+
+                }
+            })
+
+            if ( typeof props.setModel == "function" ) {
+                props.setModel(model);
+            }
+        })
+        .then( _ => {
+
+            // setLoading(false);
+
+        })
+        .catch( respond => {
+            
+            alert(respond);
+
+        })
+    }
+
+    const onClickHandler = (event) => {
+        event.preventDefault();
+
+        loadModel(value);
+        setModelUrl(value);
+        setModalShow(false);
+    }
+
+    const style = {
+        btnContainer: {
+            "position":"absolute",
+            "bottom":"0.75rem",
+            "left":"50%",
+            "display":"flex",
+            "transform":"translateX(-50%)",
+            "justifyContent":"center"
+        },
+        btn: {
+            "width":"8rem",
+            "margin":"0.5rem",
+            "height":"2.5rem"
+        }
+    }
 
     const tabInfo = [
         {
@@ -27,50 +102,9 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
             case "localstorage":
                 return <Localstorage 
                             value={value}
-                            setValue={setValue}
-                            modelList={modelList}
-                            />
+                            setValue={setValue}/>
             case "download":
                 return <Download />
-        }
-    }
-
-    useEffect(() => {
-        const modelList = async () => {
-            const ret = await tf.io.listModels();
-            return ret
-        }
-        modelList().then( result => {
-            setModelList(Object.keys(result));
-        });
-    }, []) 
-
-    const onClickHandler = (event) => {
-        event.preventDefault();
-        if ( currentTab == '1' ) {
-            var valueArray = value.split('/');
-
-            props.setModelName(valueArray[valueArray.length - 1]);
-            props.setStorage("localstorage");
-            setModalShow(false);
-        } else if ( currentTab == '2' ) {
-            
-        }
-    }
-
-    const style = {
-        btnContainer: {
-            "position":"absolute",
-            "bottom":"0.75rem",
-            "left":"50%",
-            "display":"flex",
-            "transform":"translateX(-50%)",
-            "justifyContent":"center"
-        },
-        btn: {
-            "width":"8rem",
-            "margin":"0.5rem",
-            "height":"2.5rem"
         }
     }
     
@@ -109,7 +143,21 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
     )
 }
 
-const Localstorage = ({ value, setValue, modelList, ...props }) => {
+const Localstorage = ({ value, setValue, ...props }) => {
+    const [ modelList, setModelList ] = useState([]);
+
+    useEffect(() => {
+        const modelList = async () => {
+            const ret = await tf.io.listModels();
+            return ret
+        }
+
+        modelList().then( result => {
+            setModelList(Object.keys(result));
+        });
+
+    }, [])
+
     return (
         <div style={{"display":"flex",
                     "paddingBottom":"280px"}}
@@ -140,26 +188,36 @@ const Download = ({ ...props }) => {
 }
 
 export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
+    const style = {
+        btnContainer: {
+            "position":"absolute",
+            "bottom":"0.75rem",
+            "left":"50%",
+            "display":"flex",
+            "transform":"translateX(-50%)",
+            "justifyContent":"center"
+        },
+        btn: {
+            "width":"8rem",
+            "margin":"0.5rem",
+            "height":"2.5rem"
+        }
+    }
+
     const onClickHandler = (event) => {
         event.preventDefault();
 
     }
+
     return (
         <Modal
         isShow={modalShow}
         >
-            <div style={{"position":"absolute",
-                        "bottom":"10px",
-                        "left":"50%",
-                        "display":"flex",
-                        "transform":"translateX(-50%)",
-                        "justifyContent":"center"}}
+            <div style={style.btnContainer}
             > 
                 <Button
                     className="red"
-                    style={{"width":"8rem",
-                            "margin":"0.5rem",
-                            "height":"2.5rem"}}
+                    style={style.btn}
                     type="button"
                     onClick={() => {
                         setModalShow(false)}}>
@@ -167,9 +225,7 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
                 </Button>
                 <Button
                     className="green"
-                    style={{"width":"8rem",
-                            "margin":"0.5rem",
-                            "height":"2.5rem"}}
+                    style={style.btn}
                     type="button"
                     onClick={(e) => onClickHandler(e)}>
                     save

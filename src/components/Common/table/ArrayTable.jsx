@@ -18,7 +18,7 @@ const ArrayTable = ({children, style,...props}) => {
 
     return (
         <>
-            { !isEmptyArray(props.columns) && 
+            {!isEmptyArray(props.columns) && 
                 <div 
                     className={`${hovering? "scrollhost":"disViable"} ${tableStyle.container}`}
                     style={style}
@@ -31,8 +31,8 @@ const ArrayTable = ({children, style,...props}) => {
                                 key={"column"}
                                 className={tableStyle.theadTr}
                             >
-                                { props.columns.map((column) => (
-                                        <th className={tableStyle.th}>{column}</th>
+                                {props.columns.map((column) => (
+                                    <th className={tableStyle.th}>{column}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -41,20 +41,19 @@ const ArrayTable = ({children, style,...props}) => {
                                 <tr className={tableStyle.tbodyTr}>
                                     {props.columns.map(
                                         column => (
-                                                <td className={tableStyle.td}>
-                                                    {!isEmpty(props.data[column][idx])? props.data[column][idx]: "null"}
-                                                </td>  
+                                            <td className={tableStyle.td}>
+                                                {!isEmpty(props.data[column][idx])? props.data[column][idx]: "null"}
+                                            </td>  
                                     ))}                
                                 </tr>
                             ))}
                         </tbody>
                         <tbody>
                             <tr>
-                                { props.hasChild &&
-                                    props.columns.map((_) => (
-                                        <th className={tableStyle.children}>
-                                            {children}
-                                        </th>
+                                {props.columns.map((_, i) => (
+                                    <th className={tableStyle.children}>
+                                        {children}
+                                    </th>
                                 ))}
                             </tr>
                         </tbody>

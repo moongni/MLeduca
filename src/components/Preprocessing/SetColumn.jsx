@@ -4,17 +4,14 @@ import { toArray, toOption, selectColumn } from "../Common/package";
 import { Button } from "../Common/button/Button";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
 
-const SetColumn = ({ setData, setColumn, setLoading, ...props }) => {
+const SetColumn = ({ setData, setColumn, setLoading, data, dataColumns, ...props }) => {
     const dispatch = useDispatch();
-
-    const data = useSelector(state => state.data.info);
-    const dataColumns = useSelector((state) => state.data.columns);
     
     const [ selectedValue, setSelectedValue ] = useState([]);
 
-    const onClickHandler = async () => {
+    const onClickHandler = () => {
+
         try {
             setLoading(true);
         
@@ -28,11 +25,13 @@ const SetColumn = ({ setData, setColumn, setLoading, ...props }) => {
             dispatch(setColumn(newCol));
         
         } catch (err) {
-        
-            console.log(err);
-            alert("error : ", err);
-        
+
+            alert(err);
+            console.log("set column catch");
+            setLoading(false);
+
         }
+
     }
 
     const divStyle = {
@@ -61,7 +60,10 @@ const SetColumn = ({ setData, setColumn, setLoading, ...props }) => {
                     onClick={(e) => {
                         e.preventDefault();
                         onClickHandler()
-                        .then( _ => setLoading(false));
+                        .then( _ => {
+                            console.log("set column then")
+                            setLoading(false)
+                        });
                     }}
                 >
                     Save

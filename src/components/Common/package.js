@@ -1,21 +1,21 @@
-export const isEmptyObject = (param) => {
+export const isEmptyObject = ( param ) => {
     return Object.keys(param).length === 0 && param.constructor === Object;
 }
 
-export const isEmptyArray = (param) => {
+export const isEmptyArray = ( param ) => {
 
     return Array.isArray(param) && !param.length
 }
 
-export const isEmpty = (param) => {
+export const isEmpty = ( param ) => {
     return typeof param === "undefined" || param === null;
 }
 
-export const isEmptyStr = (param) => {
+export const isEmptyStr = ( param ) => {
     return isEmpty(param) || param === "";
 }
 
-export const toOption = (items) => {
+export const toOption = ( items ) => {
     const newOptions = [];
     if( !isEmptyArray(items) && !isEmpty(items) ){
         items.map(item => newOptions.push({
@@ -26,7 +26,7 @@ export const toOption = (items) => {
     return newOptions
 }
 
-export const toArray = (options) => {
+export const toArray = ( options ) => {
     const newArray = [];
     if( !isEmptyArray(options) && !isEmpty(options) ){
         options.map(option => newArray.push(option.value));
@@ -34,7 +34,7 @@ export const toArray = (options) => {
     return newArray;
 }
 
-export const makeRangeArray = (start=0, end) => {
+export const makeRangeArray = ( start=0, end ) => {
     var num = end - start
     let newArray = new Array(num);
     for (var i = 0; i < num; i ++) {
@@ -45,7 +45,7 @@ export const makeRangeArray = (start=0, end) => {
     return newArray;
 }
 
-export const selectColumn = (data, columns) => {
+export const selectColumn = ( data, columns ) => {
     const newData = new Object();
 
     columns.map(column => {

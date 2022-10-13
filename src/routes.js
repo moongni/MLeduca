@@ -21,8 +21,7 @@ function Router() {
         <Route path='loadData' element={<LoadData/>}/>
         <Route path='preprocessing' element={<Preprocessing/>}/>
         <Route path='setting' element={<Setting/>}/>
-        <Route path='analytic/*' element={<Analytic/>}/>
-        <Route path='analytic/:storageParam/:nameParam' element={<Analytic/>}/>
+        <Route path='analytic/' element={<Analytic/>}/>
         <Route path='download' element={<Download/>}/>
       </Route>
       <Route path="*" element={<Page404/>}/>

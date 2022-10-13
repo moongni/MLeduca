@@ -20,6 +20,7 @@ export default function LoadData() {
 
     const dataInfo = useSelector(state => state.data.info);
     const dataColumns = useSelector(state => state.data.columns);
+
     const [ url, setUrl ] = useState("");
     const [ isLoading, setLoading ] = useState(false);
 
@@ -46,7 +47,7 @@ export default function LoadData() {
                             dispatch(trainActions.initialize());
                             dispatch(testActions.initialize());
                             dispatch(preprocessingActions.initialize());
-                            getData(url, dispatch, dataActions, '\t', setLoading)}}>
+                            getData(url, dispatch, dataActions, ',', setLoading)}}>
                         Fetch
                     </Button>
                 </div>

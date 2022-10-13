@@ -40,9 +40,9 @@ export const getData = async (url, dispatch, actions, sep=',', setLoading) => {
         }
 
     } catch (e) {
+
+        alert(e);
         
-        console.log('error', e);
-        alert("error : ", e);
     }
 
     setLoading(false);

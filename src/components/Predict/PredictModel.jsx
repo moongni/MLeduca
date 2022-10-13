@@ -1,10 +1,29 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Title from "../Common/title/title";
 import { ModelSelectModal } from "../Common/modal/CommonModal";
+import { isEmptyStr } from "../Common/package";
+import * as tf from "@tensorflow/tfjs";
 
-export const PredictModel = ({model, ...props}) => {
+export const PredictModel = ({ setModel, ...props }) => {
     const [ modalShow, setModalShow ] = useState(false);
+    const [ modelUrl, setModelUrl ] = useState("");
+
+    useEffect(() => {
+        const initLoad = async () => {
+            const modelList = await tf.io.listModels();
+
+            if ( Object.keys(modelList).includes("localstorage://model/recent") ) {
+                const model = await tf.loadLayersModel("localstorage://model/recent");
+                
+                setModel(model);
+                setModelUrl("localstorage://model/recent");
+            }
+
+        }
+        
+        initLoad();
+
+    }, [])
 
     const style = {
         container: {
@@ -23,6 +42,11 @@ export const PredictModel = ({model, ...props}) => {
 
     return (
         <>
+            <ModelSelectModal
+                modalShow={modalShow}
+                setModalShow={setModalShow}
+                setModelUrl={setModelUrl}
+                setModel={setModel}/>
             <div>
                 <Title 
                     title="Selected Model"
@@ -30,14 +54,10 @@ export const PredictModel = ({model, ...props}) => {
                             width:"200px"}}
                 />
                 <div style={style.container}
-                    onClick={() => setModalShow(true)}
-                >
-                    <span>{model? model: "No Model Data"}</span>
+                    onClick={() => setModalShow(true)}>
+                    <span>{!isEmptyStr(modelUrl)? modelUrl: "No Model Data"}</span>
                 </div>
             </div>
-            <ModelSelectModal
-                modalShow={modalShow}
-                setModalShow={setModalShow}/>
         </>   
     )
 }

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { isEmpty, isEmptyObject } from "../components/Common/package";
+import { useSelector } from "react-redux";
+import { isEmptyObject, isEmptyStr, isEmptyArray } from "../components/Common/package";
 import { ModelSelectModal, HistorySelectModal } from "../components/Common/modal/CommonModal";
 import Title from "../components/Common/title/title";
-import { ModelInfoBoard } from "../components/ModelDashBoard/Board";
+import { LayerBoard, SettingBoard } from "../components/ModelDashBoard/Board";
 import { Loader } from "../components/Common/loader/Loader";
-import style from "../components/Common/component.module.css";
-import * as tf from "@tensorflow/tfjs";
-import { layerActions } from "../reducers/layerSlice";
-import { paramActions } from "../reducers/paramSlice";
-import { Line } from "react-chartjs-2";
+import mainStyle from "../components/Common/component.module.css";
+import { Bubble, Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -22,6 +18,8 @@ import {
     Legend,
   } from 'chart.js';
 import { Button } from "../components/Common/button/Button";
+import Inputs from "../components/Common/inputs/Inputs";
+import { useCallback } from "react";
 
 ChartJS.register(
     CategoryScale,
@@ -34,124 +32,129 @@ ChartJS.register(
   );
 
 const Analytic = () => {
-    let { storageParam, nameParam }  = useParams();
-
-    const dispatch = useDispatch();
-
     const history = useSelector( state => state.history.info );
 
     const [ isLoading, setLoading ] = useState(false);
     const [ modelModal, setModelModal ] = useState(false);
-    const [ modelName, setModelName ] = useState(nameParam);
     const [ historyModal, setHistoryModal ] = useState(false);
+    const [ modelUrl, setModelUrl ] = useState("");
 
-    const [ storage, setStorage ] = useState(storageParam);
-    const [ data, setData ] = useState({});
+    const [ histData, setHistData ] = useState({
+        datasets: []
+    });
+    const [ plotData, setPlotData ] = useState({
+        datasets: []
+    });
+    const [ plotOpt, setPlotOpt ] = useState({});
 
-    const loadModel = (modelName, storage) => {
-        var modelPath = "";
-
-        if ( storage == "localstorage" ) {
-            modelPath = storage + "://model/" + modelName;
-        }
-
-        tf.loadLayersModel(modelPath)
-        .then( async ( model ) => {
-            // console.log(model);
-            // model.summary();
-            setLoading(true)
-
-            dispatch(layerActions.initialize());
-            
-            // layer update
-            model.layers.map( layer => {
-                if ( layer.constructor.name === "InputLayer" ) {
-                    dispatch(layerActions.addModel({
-                        "shape":layer.batchInputShape
-                    }))
-                } else if ( layer.constructor.name === "Dense") {
-                    const newLayer = {
-                        "units":layer.units,
-                        "inputShape":layer.batchInputShape,
-                        "activation":layer.activation.constructor.name.toLowerCase(),
-                        "bias":layer.bias? true: false
-                    }
-                    dispatch(layerActions.addLayer(newLayer));
-                } else {
-                    alert("can not read layer information.");
+    const histOpt = {
+        reponsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        stacked: false,
+        plugins: {
+            title: {
+                display: true,
+                text: "Loss by Epochs"
+            }
+        },
+        scales: {
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: "loss"
                 }
-            })
-        })
-        .then( _ => {
-            setLoading(false);
-        })
-        .catch( respond => {
-            alert(respond);
-        })
+            },
+            x: {
+                type: 'linear',
+                display: true,
+                title: {
+                    display: true,
+                    text: "epoch"
+                }
+            }
+        }
     }
 
     useEffect(() => {
-        console.log("load Model");
-
-        if ( isEmpty(modelName) || isEmpty(storage) ) {
-            setModelModal(true);
-        } else {
-            loadModel(modelName, storage);
-        }
-    }, [ modelName ])
-
-    useEffect(() => {
         if ( !isEmptyObject(history) ) {
-            // dispatch(paramActions.setParam({
-            //     "batchSize": history.params.batchSize,
-            //     "epochs": history.params.epochs
-            // }))
-
-            setData({
+            setHistData({
                 labels: history.epoch,
                 datasets: [
                     {
-                        label: "Loss by Epochs",
+                        label: "History" + "1",
                         data: history.history.loss,
                         fill: false,
                         backgroundColor: "rgba(78, 115, 223, 0.05)",
                         borderColor: "rgba(78, 115, 223, 1)",
-                        pointRadius: 1,
                         pointBackgroundColor: "rgba(78, 115, 223, 1)",
                         pointBorderColor: "rgba(78, 115, 223, 1)",
-                        pointHoverRadius: 3,
                         pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
                         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                        pointHitRadius: 1,
-                        pointBorderWidth: 1,
                     }
                 ]
             });
-
         }
     }, [ history ])
+
+    const style = {
+        loadingStyle: {
+            "position":"fixed",
+            "top":"0",
+            "left":"0",
+            "width":"100vw",
+            "height":"100vw",
+            "backgroundColor":"gray",
+            "opacity":"0.3",
+            "zIndex":"100"
+        },
+        btn: {
+            "alignText":"center",
+            "marginLeft":"auto"
+        }
+    }
+
+    const content = useCallback(({ element, children, checkFunction }) => {
+        const style = {
+            center: {
+                "width": "100%",
+                "padding": "10px",
+                "textAlign": "center",
+                "fontSize": "1.25rem",
+                "lineHeight": "1.75rem",
+                "opacity": "0.6",
+            }
+        }
+
+        if ( checkFunction( element ) ){
+            return (
+                <div style={style.center}>
+                    <span >No Data</span>
+                </div>
+            )
+        } else {
+            return children
+        }
+
+    })
 
     return (
         <>
             <ModelSelectModal
                 modalShow={modelModal}
                 setModalShow={setModelModal}
-                setModelName={setModelName}
-                setStorage={setStorage}/>
+                setModelUrl={setModelUrl}
+                setLoading={setLoading}/>
             <HistorySelectModal
                 modalShow={historyModal}
                 setModalShow={setHistoryModal}/>
             {isLoading &&
-                <div style={{
-                    "position":"fixed",
-                    "top":"0",
-                    "left":"0",
-                    "width":"100vw",
-                    "height":"100vw",
-                    "backgroundColor":"gray",
-                    "opacity":"0.3",
-                    "zIndex":"100"}}
-                >
+                <div style={style.loadingStyle}>
                     <Loader 
                         type="spin" 
                         color="black" 
@@ -159,34 +162,48 @@ const Analytic = () => {
                         style={{"position":"fixed"}}/>
                 </div>
             }
-            <div className={style.container}>
-                    <div style={{"display":"flex"}}>
-                        <Title title="Model Info"/>
-                        <Button 
-                            className="right"
-                            type="button"
-                            style={{"alignText":"center",
-                                    "marginLeft":"auto"}}
-                            onClick={() => {
-                                setModelModal(true);
-                            }}
-                            >
-                            Model Select
-                        </Button>
-
-                    </div>
-                    <div className={style.subContainer}>
-                        <ModelInfoBoard/>
-                    </div>
+            <div className={mainStyle.container}>
+                <div style={{"display":"flex"}}>
+                    <Title title="Model Info"/>
+                    <Button 
+                        className="right"
+                        type="button"
+                        style={style.btn}
+                        onClick={() => {
+                            setModelModal(true);
+                        }}
+                        >
+                        Model Select
+                    </Button>
+                </div>
+                <div className={mainStyle.subContainer}>
+                    <LayerBoard />
+                </div>
             </div>
-            <div className={style.container}>
+            <div className={mainStyle.container}>
+                <div style={{"display":"flex"}}>
+                    <Title title="Setting Info"/>
+                    <Button
+                        className="right"
+                        type="button"
+                        style={style.btn}
+                        onClick={() => {
+                            
+                        }}>
+                        Setting Select
+                    </Button>
+                </div>
+                <div className={mainStyle.subContainer}>
+                    <SettingBoard/>
+                </div>
+            </div>
+            <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
                     <Title title="History"/>
                     <Button 
                         className="right"
                         type="button"
-                        style={{"alignText":"center",
-                                "marginLeft":"auto"}}
+                        style={style.btn}
                         onClick={() => {
                             setHistoryModal(true);
                         }}
@@ -194,11 +211,108 @@ const Analytic = () => {
                         History Select
                     </Button>
                 </div>
-                <div className={style.subContainer}>
-                    {!isEmptyObject(data) &&
-                        <Line data={data}/>
-                    }
+                <div className={mainStyle.subContainer}>
+                    {content({
+                        element: histData.datasets, 
+                        children:<Line options={histOpt} data={histData}/>, 
+                        checkFunction: isEmptyArray})}
                 </div>
+            </div>
+            <div className={mainStyle.container}>
+                <Title title="Data Set"/>
+                <PlotData
+                    setPlotData={setPlotData}
+                    setOption={setPlotOpt}/>
+                <div className={mainStyle.subContainer}>
+                    {content({
+                        element: plotData.datasets, 
+                        children: <Bubble options={plotOpt} data={plotData}/>,
+                        checkFunction: isEmptyArray})}
+                </div>
+            </div>
+        </>
+    )
+}
+
+const PlotData = ({setPlotData, setOption, ...props}) => {
+    const train = useSelector( state => state.train );
+
+    const columns = train.label.concat(train.feature);
+    const rowData = {
+        ...train.x,
+        ...train.y
+    }
+
+    const [ xTick, setXTick ] = useState("");
+    const [ yTick, setYTick ] = useState("");
+    
+    useEffect( () => {
+        if ( !isEmptyStr(xTick) && !isEmptyStr(yTick) ){
+            setOption({
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: yTick
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: xTick
+                        }
+                    }
+                }
+            })
+            setPlotData({                    
+                datasets: [
+                    {
+                        label: "Data",
+                        data: Array.from(rowData[xTick], 
+                            ( element, index ) => ({
+                                x: rowData[xTick][index],
+                                y: rowData[yTick][index],
+                                r: 5
+                            })),
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    },
+                    // {
+                    //     label: yTick,
+                    //     data: Array.from(rowData[yTick],
+                    //         ( element, index )=> ({
+                    //             x: rowData[xTick][index],
+                    //             y: element,
+                    //             r: 5
+                    //         })),
+                    //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    // }
+                ]
+            });
+        }
+
+    }, [ xTick, yTick ])
+
+    return (
+        <>
+            <div style={{"display":"flex"}}>
+                <Inputs
+                    title="x-ticks"
+                    kind="selectOne"
+                    value={xTick}
+                    setValue={setXTick}
+                    default={""}
+                    defaultName={"select x-ticks"}
+                    list={columns}
+                />
+                <Inputs
+                    title="y-ticks"
+                    kind="selectOne"
+                    value={yTick}
+                    setValue={setYTick}
+                    default={""}
+                    defaultName={"select y-ticks"}
+                    list={columns}
+                />
             </div>
         </>
     )

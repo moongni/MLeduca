@@ -18,7 +18,7 @@ import trainSlice from './trainSlice';
 import testSlice from './testSlice';
 import preprocessingSlice from './preprocessingSlice';
 import modelSlice from './modelSlice';
-import historySlice from './history';
+import historySlice from './historySlice';
 
 const rootReducer = combineReducers({
   compile: compileSlice.reducer,
