@@ -1,0 +1,394 @@
+{
+  "Compile" : [
+    {
+      "id":1,
+      "title":"optimizer",
+      "info":[
+        {
+          "title":"sgd",
+          "description":"확률적 경사 하강법",
+          "params": [
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.1,
+              "step": 0.01
+            }
+          ]
+        }, 
+        {
+          "title":"momentum",
+          "description":"모멘텀",
+          "params": [
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.1,
+              "step": 0.01
+            },            
+            {
+              "kind":"float",
+              "title":"mementum",
+              "type": "number",
+              "min":0,
+              "default":0.1,
+              "step": 0.01
+            },
+            {
+              "kind":"bool",
+              "title":"useNesterov",
+              "list": ["true", "false"],
+              "default": false
+            }
+          ]
+        },
+        {
+          "title":"adagrad",
+          "description":"에이다 미분",
+          "params": [
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.1,
+              "step": 0.01
+            },
+            {
+              "kind":"float",
+              "title":"initialAccumulatorValue",
+              "type": "number",
+              "min":0,
+              "default":0.1,
+              "step": 0.01
+            }           
+          ]
+        }, 
+        {
+          "title":"adadelta",
+          "description":"에이다 델타",
+          "params":[
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.001,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"rho",
+              "type": "number",
+              "min":0,
+              "default":0.95,
+              "step": 0.01
+            },
+            {
+              "kind":"float",
+              "title":"epsilon",
+              "type": "number",
+              "min":0,
+              "default":0.00001,
+              "step": 0.000001
+            }
+          ]
+        }, 
+        {
+          "title":"adam",
+          "description":"에이다 엠",
+          "params":[
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.001,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"beta1",
+              "type": "number",
+              "min":0,
+              "default":0.9,
+              "step": 0.01
+            },
+            {
+              "kind":"float",
+              "title":"beta2",
+              "type": "number",
+              "min":0,
+              "default":0.999,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"epsilon",
+              "type": "number",
+              "min":0,
+              "default":0.00001,
+              "step": 0.000001
+            }
+          ]
+        }, 
+        {
+          "title":"adamax",
+          "description":"에이다 맥스",
+          "params":[
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.002,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"beta1",
+              "type": "number",
+              "min":0,
+              "default":0.9,
+              "step": 0.01
+            },
+            {
+              "kind":"float",
+              "title":"beta2",
+              "type": "number",
+              "min":0,
+              "default":0.999,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"epsilon",
+              "type": "number",
+              "min":0,
+              "default":0.00001,
+              "step": 0.000001
+            },
+            {
+              "kind":"float",
+              "title":"decay",
+              "type": "number",
+              "min":0,
+              "default":0.0,
+              "step": 0.1
+            }
+          ]
+        }, 
+        {
+          "title":"rmsprop",
+          "description":"rmsprop",
+          "params":[
+            {
+              "kind":"float",
+              "title":"learningRate",
+              "type": "number",
+              "min":0,
+              "default":0.002,
+              "step": 0.001
+            },
+            {
+              "kind":"float",
+              "title":"decay",
+              "type": "number",
+              "min":0,
+              "default":0.9,
+              "step": 0.1
+            },
+            {
+              "kind":"float",
+              "title":"mementum",
+              "type": "number",
+              "min":0,
+              "default":0.0,
+              "step": 0.01
+            },
+            {
+              "kind":"float",
+              "title":"epsilon",
+              "type": "number",
+              "min":0,
+              "default":0.00001,
+              "step": 0.000001
+            },
+            {
+              "kind":"bool",
+              "title":"centered",
+              "list": ["true", "false"],
+              "default":false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id":2,
+      "title":"loss",
+      "info":[
+        {
+          "title":"meanSquaredError",
+          "description":""
+        }, 
+        {
+          "title":"meanAbsoluteError",
+          "description":""
+        }, 
+        {
+          "title":"meanAbsolutePercentageError",
+          "description":""
+        }, 
+        {
+          "title":"squaredHinge",
+          "description":""
+        },
+        { 
+          "title":"hinge",
+          "description":""
+        },
+        { 
+          "title":"categoricalHinge",
+          "description":""
+        },
+        {
+          "title":"logcosh",
+          "description":""
+        },
+        {
+          "title":"categoricalCrossentropy",
+          "description":""
+        },
+        {
+          "title":"poisson",
+          "description":""
+        },
+        {
+          "title":"cosineProximity",
+          "description":""
+        }
+      ]
+    }
+
+],
+  "Layers":[
+    {
+      "id":1,
+      "title": "Sequence",
+      "info": [
+        {
+          "name": "mainParams",
+          "params": [
+            {
+              "kind":"input",
+              "title":"units",
+              "type": "number",
+              "min":1,
+              "default":1,
+              "step":1
+            }, 
+            {
+              "kind":"array",
+              "title":"inputShape",
+              "type":"text",
+              "placeholder":"[ , ...]",
+              "default":[1]
+            }, 
+            {
+              "kind":"select",
+              "title":"activation",
+              "list": [
+                "elu","hardSigmoid","linear","relu","relu6", "selu",
+                "sigmoid","softmax","softplus","softsign","tanh",
+                "swish","mish"
+              ],
+              "default":"linear"
+            },
+            {
+              "kind":"bool",
+              "title":"useBias",
+              "list": ["true", "false"],
+              "default":true
+            }
+
+          ]
+        },
+        {
+          "name": "subParams",
+          "params": [
+            {
+              "kind":"array",
+              "title":"batchInputShape",
+              "type":"text",
+              "placeholder":"[null, 1]"
+            },
+            { "kind":"select",
+              "title":"kerneldefaultializer",
+              "list": [
+                "constant","glorotNormal","glorotUniform","heNormal",
+                "heUniform","identity", "leCunNormal","leCunUniform",
+                "ones","orthogonal","randomNormal", "randomUniform",
+                "truncatedNormal","varianceScaling","zeros"
+              ]
+            },
+            {
+              "kind":"select",
+              "title":"biasdefaultializer",
+              "list": [
+                "constant","glorotNormal","glorotUniform","heNormal",
+                "heUniform","identity", "leCunNormal","leCunUniform",
+                "ones","orthogonal","randomNormal", "randomUniform",
+                "truncatedNormal","varianceScaling","zeros"
+              ]
+            },
+            {
+              "kind":"input",
+              "title":"inputDim",
+              "min":1
+            }
+          ]}
+      ]
+    },
+    {
+      "id":2,
+      "title": "Model",
+      "info": [
+        {
+          "name": "mainParams",
+          "params": [
+            {
+              "kind":"input",
+              "title":"shape",
+              "placeholder":"input shape (not including batch dimension)",
+              "type":"number",
+              "required":true
+            }
+          ]
+        }
+      ]
+    }  
+  ],
+  "Parameters":[
+    {
+      "kind":"input",
+      "title":"batchSize",
+      "type":"number",
+      "placeholder":"number",
+      "min":1,
+      "default":32
+    },
+    {
+      "kind":"input",
+      "title":"epochs",
+      "type":"number",
+      "placeholder":"number",
+      "min":1,
+      "default":50
+    }
+  ]
+}

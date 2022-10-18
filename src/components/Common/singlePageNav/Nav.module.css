@@ -1,0 +1,28 @@
+.navContainer {
+    position: relative;
+    text-align: left;
+}
+
+.navLinkContainer {
+    padding: 0.5rem;
+    width: 14rem;
+    margin-right: auto;
+    display: inline-block;
+}
+
+.navSpan {
+    cursor: pointer;
+    opacity: 0.8;
+}
+.navSpanDisabled{
+    --tw-shadow-color: #94a3b8;
+    color: var(--tw-shadow-color);
+}
+:hover.navSpanDisabled {
+    color: #bfc8d6;
+}
+.navSpanActive {
+    border-bottom-width: 2px;
+    --tw-border-opacity: 1;
+    border-color: rgb(203 213 225 / var(--tw-border-opacity));
+}
