@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { isEmptyObject, isEmptyStr, isEmptyArray } from "../components/Common/package";
-import { ModelSelectModal, HistorySelectModal } from "../components/Common/modal/CommonModal";
+import { isEmptyObject, isEmptyStr, isEmptyArray, contentView } from "../components/Common/package";
+import { ModelSelectModal, HistorySelectModal } from "../components/Common/modal/modal";
 import Title from "../components/Common/title/title";
 import { LayerBoard, SettingBoard } from "../components/ModelDashBoard/Board";
 import { Loader } from "../components/Common/loader/Loader";
@@ -19,7 +19,7 @@ import {
   } from 'chart.js';
 import { Button } from "../components/Common/button/Button";
 import Inputs from "../components/Common/inputs/Inputs";
-import { useCallback } from "react";
+import { useOutletContext } from "react-router-dom";
 
 ChartJS.register(
     CategoryScale,
@@ -33,12 +33,12 @@ ChartJS.register(
 
 const Analytic = () => {
     const history = useSelector( state => state.history.info );
-
+    
     const [ isLoading, setLoading ] = useState(false);
     const [ modelModal, setModelModal ] = useState(false);
     const [ historyModal, setHistoryModal ] = useState(false);
-    const [ modelUrl, setModelUrl ] = useState("");
-
+    const [ model, setModel ] = useOutletContext();
+    
     const [ histData, setHistData ] = useState({
         datasets: []
     });
@@ -57,7 +57,7 @@ const Analytic = () => {
         plugins: {
             title: {
                 display: true,
-                text: "Loss by Epochs"
+                text: "History by Epochs"
             }
         },
         scales: {
@@ -65,10 +65,6 @@ const Analytic = () => {
                 type: 'linear',
                 display: true,
                 position: 'left',
-                title: {
-                    display: true,
-                    text: "loss"
-                }
             },
             x: {
                 type: 'linear',
@@ -87,7 +83,7 @@ const Analytic = () => {
                 labels: history.epoch,
                 datasets: [
                     {
-                        label: "History" + "1",
+                        label: "loss",
                         data: history.history.loss,
                         fill: false,
                         backgroundColor: "rgba(78, 115, 223, 0.05)",
@@ -96,6 +92,17 @@ const Analytic = () => {
                         pointBorderColor: "rgba(78, 115, 223, 1)",
                         pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
                         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    },
+                    {
+                        label: "accuracy",
+                        data: history.history.acc,
+                        fill: false,
+                        backgroundColor: "rgba(255, 99, 71, 0.05)",
+                        borderColor: "rgba(255, 99, 71, 1)",
+                        pointBackgroundColor: "rgba(255, 99, 71, 1)",
+                        pointBorderColor: "rgba(255, 99, 71, 1)",
+                        pointHoverBackgroundColor: "rgba(255, 99, 71, 1)",
+                        pointHoverBorderColor: "rgba(255, 99, 71, 1)",
                     }
                 ]
             });
@@ -119,36 +126,11 @@ const Analytic = () => {
         }
     }
 
-    const content = useCallback(({ element, children, checkFunction }) => {
-        const style = {
-            center: {
-                "width": "100%",
-                "padding": "10px",
-                "textAlign": "center",
-                "fontSize": "1.25rem",
-                "lineHeight": "1.75rem",
-                "opacity": "0.6",
-            }
-        }
-
-        if ( checkFunction( element ) ){
-            return (
-                <div style={style.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return children
-        }
-
-    })
-
     return (
         <>
             <ModelSelectModal
                 modalShow={modelModal}
                 setModalShow={setModelModal}
-                setModelUrl={setModelUrl}
                 setLoading={setLoading}/>
             <HistorySelectModal
                 modalShow={historyModal}
@@ -164,7 +146,7 @@ const Analytic = () => {
             }
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="Model Info"/>
+                    <Title title="모델 정보"/>
                     <Button 
                         className="right"
                         type="button"
@@ -173,7 +155,7 @@ const Analytic = () => {
                             setModelModal(true);
                         }}
                         >
-                        Model Select
+                        모델 선택
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
@@ -182,7 +164,7 @@ const Analytic = () => {
             </div>
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="Setting Info"/>
+                    <Title title="설정 정보"/>
                     <Button
                         className="right"
                         type="button"
@@ -190,7 +172,7 @@ const Analytic = () => {
                         onClick={() => {
                             
                         }}>
-                        Setting Select
+                        설정 선택
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
@@ -212,7 +194,7 @@ const Analytic = () => {
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
-                    {content({
+                    {contentView({
                         element: histData.datasets, 
                         children:<Line options={histOpt} data={histData}/>, 
                         checkFunction: isEmptyArray})}
@@ -224,7 +206,7 @@ const Analytic = () => {
                     setPlotData={setPlotData}
                     setOption={setPlotOpt}/>
                 <div className={mainStyle.subContainer}>
-                    {content({
+                    {contentView({
                         element: plotData.datasets, 
                         children: <Bubble options={plotOpt} data={plotData}/>,
                         checkFunction: isEmptyArray})}
@@ -235,12 +217,12 @@ const Analytic = () => {
 }
 
 const PlotData = ({setPlotData, setOption, ...props}) => {
-    const train = useSelector( state => state.train );
+    const trainSet = useSelector( state => state.train );
 
-    const columns = train.label.concat(train.feature);
+    const columns = trainSet.label.columns.concat(trainSet.feature.columns);
     const rowData = {
-        ...train.x,
-        ...train.y
+        ...trainSet.feature.data,
+        ...trainSet.label.data
     }
 
     const [ xTick, setXTick ] = useState("");
@@ -264,6 +246,7 @@ const PlotData = ({setPlotData, setOption, ...props}) => {
                     }
                 }
             })
+            
             setPlotData({                    
                 datasets: [
                     {

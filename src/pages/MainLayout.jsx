@@ -6,7 +6,9 @@ import { Outlet } from "react-router-dom";
 const MainLayout = () => {
     const [ isOpen, setMenu ] = useState(false);
     const [ isDashboardOpen, setDashboard ] = useState(false);
-
+    
+    const [ model, setModel ] = useState({});
+    console.log("in mainLayout ",model);    
     useEffect(() => {
         let vh = 0;
         vh = window.innerHeight * 0.01;
@@ -38,7 +40,7 @@ const MainLayout = () => {
             />
             <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' }`}
                 style={styles.main}>
-                <Outlet/>
+                <Outlet context={[model, setModel]}/>
             </div>
 
         </>

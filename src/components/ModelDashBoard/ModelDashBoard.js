@@ -29,7 +29,7 @@ export const ModelDashBoard = (props) => {
             </div>
             <div className={style.modelTrain}>
                 <div className={style.div}>
-                    <Link to='/tfjs_test/'>
+                    <Link to='/fit/'>
                     <button className={style.button}>fit</button>
                     </Link>
                 </div>

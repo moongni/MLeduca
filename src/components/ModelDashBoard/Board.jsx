@@ -6,9 +6,10 @@ import Title from "../Common/title/title";
 import mainStyle from "../Common/component.module.css";
 import boardStyle from "./ModelDashBoard.module.css";
 import { LayerList } from "../Setting/Layers/LayerList";
+import { contentView } from "../Common/package";
 
 export const SideCompileBoard = ({children, className, style, ...props}) => {
-    const compile = useSelector((state) => state.compile);
+    const compile = useSelector( state => state.setting.compile );
 
     return (
         <ul style={{"marginBottom":"0.5rem"}}>
@@ -22,10 +23,10 @@ export const SideCompileBoard = ({children, className, style, ...props}) => {
                                 <p style={{"wordBreak":"break-all"}}>{setting[0]}:&nbsp; &nbsp;{setting[1].title}</p>
                                 {!isEmptyObject(setting[1].value) &&
                                     Object.entries(setting[1].value).map(item => (
-                                            <p style={{"wordBreak":"break-all",
-                                                    "paddingLeft":"2rem"}}>
-                                                {item[0]}&nbsp; &nbsp;{item[1]}
-                                            </p>
+                                        <p style={{"wordBreak":"break-all",
+                                                "paddingLeft":"2rem"}}>
+                                            {item[0]}&nbsp; &nbsp;{item[1]}
+                                        </p>
                                 ))}
                             </li>  
                         )
@@ -43,71 +44,53 @@ export const SideCompileBoard = ({children, className, style, ...props}) => {
 }
 
 const OptimizerBoard = ({ style }) => {
-    const compile = useSelector(state => state.compile);
-
-    const optimizerContent = () => {
-        if (isEmptyObject(compile.optimizer)){
-            return (
-                <div className={boardStyle.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <Title title={compile.optimizer.title}/>
-                    <div style={{"display":"flex"}}>
-                        {Object.entries(compile.optimizer.value)
-                            .map(value => (
-                                <li className={boardStyle.li}>{value[0]}&nbsp;:&nbsp;{value[1]}</li>
-                        ))}
-                    </div>
-                </div>
-            )
-        }
-    }
-
+    const optimizer = useSelector( state => state.setting.compile.optimizer );
+    
     return (
         <div style={style.mainStyle}>
             <Title title="optimizer"/>
             <div className={mainStyle.subContainer}
                 style={style.contentStyle}>
-                {optimizerContent()}
+                {contentView({
+                    element: optimizer,
+                    children:                 
+                        <div>
+                            <Title title={optimizer.title}/>
+                            <div style={{"display":"flex"}}>
+                                {Object.entries(optimizer.value? optimizer.value : {})
+                                    .map(value => (
+                                        <li className={boardStyle.li}>{value[0]}&nbsp;:&nbsp;{value[1]}</li>
+                                ))}
+                            </div>
+                        </div>,
+                    checkFunction: isEmptyObject
+                })}
             </div>
         </div>
     )        
 }
 
 const LossBoard = ({ style }) => {
-    const compile = useSelector(state => state.compile);
-
-    const lossContent = () => {
-        if (isEmptyStr(compile.loss)){
-            return (
-                <div className={boardStyle.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                <li className={boardStyle.li}>{compile.loss}</li>
-            )
-        }
-    }
+    const loss = useSelector( state => state.setting.compile.loss );
 
     return (
         <div style={style.mainStyle}>
-            <Title title="loss"/>
+            <Title title="손실 함수"/>
             <div className={mainStyle.subContainer}
                 style={style.contentStyle}>
-                {lossContent()}
+                {contentView({
+                    element: loss,
+                    children: 
+                        <li className={boardStyle.li}>{loss}</li>,
+                    checkFunction: isEmptyStr
+                })}
             </div>
         </div>
     )    
 }
 
 export const SideLayerBoard = ({children, className, style, ...props}) => {
-    const layers = useSelector((state) => state.layers.info);
+    const layers = useSelector( state => state.setting.layer.info );
 
     return (
         <ul style={{"marginBottom":"0.5rem"}}>
@@ -134,7 +117,7 @@ export const SideLayerBoard = ({children, className, style, ...props}) => {
 }
 
 export const LayerBoard = () => {
-    const layers = useSelector((state) => state.layers);
+    const layers = useSelector( state => state.setting.layer );
 
     const style = {
         mainStyle: {
@@ -150,29 +133,22 @@ export const LayerBoard = () => {
         }
     }
 
-    const content = () => {
-        if (isEmptyArray(layers.info)){
-            return (
-                <div className={boardStyle.center}>
-                    <span>No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                <LayerList
-                    style={{...style.contentStyle,
-                        "maxHeight":"24rem"}}
-                    data={layers.info}
-                    isModel={layers.isModel}/>
-            )
-        }
-    }
-
     return (
         <div style={{...style.mainStyle, "display":"block"}}>
-            <Title title="Layers"/>
+            <Title title="레이어 테이블"/>
             <div className={mainStyle.subContainer}>
-                {content()}
+                {contentView({
+                    element: layers.info,
+                    children: 
+                        <LayerList
+                            style={{...style.contentStyle,
+                                "maxHeight":"24rem"}}
+                            data={layers.info}
+                            isModel={layers.isModel}
+                        />,
+                    checkFunction: isEmptyArray
+
+                })}
             </div>
         </div >
     )
@@ -180,7 +156,7 @@ export const LayerBoard = () => {
 
 
 export const SideParamBoard = ({children, className, style, ...props}) => {
-    const parameter = useSelector((state) => state.parameter.info);
+    const parameter = useSelector( state => state.setting.parameter.info );
     
     return (
         <ul style={{"marginBottom":"0.5rem"}}>
@@ -198,33 +174,24 @@ export const SideParamBoard = ({children, className, style, ...props}) => {
 }
 
 const ParamBoard = ({ style }) => {
-    const parameter = useSelector((state) => state.parameter.info);
-
-    const content = () => {
-        if (isEmptyObject(parameter)) {
-            return (
-                <div className={boardStyle.center}>
-                    <span>No Data</span>
-                </div>
-            )
-        } else {
-            return (
-                <div style={{"display":"flex"}}>
-                    {Object.entries(parameter)
-                        .map(value => (
-                            <li className={boardStyle.li}>{value[0]}&nbsp;:&nbsp;{value[1]}</li>
-                    ))}
-                </div>
-            )
-        }
-    }
+    const parameter = useSelector( state => state.setting.parameter.info );
 
     return (
         <div style={style.mainStyle}>
-            <Title title="Parameter"/>
+            <Title title="파라미터"/>
             <div className={mainStyle.subContainer}
                 style={style.contentStyle}>
-                {content()}
+                {contentView({
+                    element: parameter,
+                    children:
+                        <div style={{"display":"flex"}}>
+                            {Object.entries(parameter)
+                                .map(value => (
+                                    <li className={boardStyle.li} >{value[0]}&nbsp;:&nbsp;{value[1]}</li>
+                            ))}
+                        </div>,
+                    checkFunction: isEmptyObject
+                })}
             </div>
         </div>
     )
@@ -247,7 +214,7 @@ export const SettingBoard = () => {
     }
 
     return (
-        <div style={{"display":"flex", "justifyContent":"start"}}>
+        <div style={{"display":"table", "justifyContent":"start"}}>
             <OptimizerBoard style={style}/>
             <LossBoard style={style}/>
             <ParamBoard style={style}/>

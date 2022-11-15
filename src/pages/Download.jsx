@@ -4,33 +4,84 @@ import mainStyle from "../components/Common/component.module.css"
 import Title from "../components/Common/title/title";
 import { FaFileExport } from "react-icons/fa"
 import { useState } from "react";
-import { SaveModal } from "../components/Common/modal/SaveModal";
+import { LocalSave, SaveModal } from "../components/Common/modal/SaveModal";
 import { useSelector } from "react-redux";
+import * as tf from "@tensorflow/tfjs";
+import { useOutletContext } from "react-router-dom";
+import { isEmptyObject } from "../components/Common/package";
 
 const Download = () => {
     const history = useSelector( state => state.history.info );
     const preprocess = useSelector( state => state.preprocess );
-    const compile = useSelector( state => state.compile );
-    const parameter = useSelector( state => state.parameter );
+    const setting = useSelector( state => state.setting );
+
+    const [ model, setModel ] = useOutletContext();
+
+    const modelSubmitHandler = async ( event, model, fileName ) => {
+        event.preventDefault();
+
+        try {
+            
+            const saveResults = await model.save(`downloads://${fileName}`);
+
+        } catch (err) {
+            if (err.name == "TypeError") {
+                alert("model이 정의되지 않았습니다.");
+            }
+        }
+    }
+    
+    const locModelSumitHandler = async ( event, model, fileName ) => {
+        event.preventDefault();
+
+        if (isEmptyObject(model)) {
+            alert("model이 정의되지 않았습니다.");
+            return 0;
+        }
+
+        await model.save(`localstorage://model/${fileName}`).then( saveResults => {
+            alert(`localstorage://model/${fileName} 저장완료`);
+        })
+    }
+
+    const jsonSubmitHandler = ( event, data, fileName ) => {
+        event.preventDefault();
+
+        const exportAsFile = ( data, filename ) => {
+            const jsonString = `data:text/json;chartset=utf-8,${encodeURIComponent(
+                JSON.stringify(data)
+            )}`;
+            const link = document.createElement("a");
+            link.href = jsonString;
+            link.download = `${filename}.json`;
+    
+            link.click();
+        }
+    
+        exportAsFile(data, fileName)
+    }
 
     const dataArr = [
         {
             title: "Model",
             isLocalstorage: true,
+            data: model,
+            submitHandler: modelSubmitHandler,
+            locSubmitHandler: locModelSumitHandler
         },
         {
             title: "History",
-            data: {
-                "history": history
-            }
+            data: history,
+            submitHandler: jsonSubmitHandler
         },
         {
-            title: "Compiler Setting",
+            title: "Setting",
             data: {
                 "preprocess":preprocess,
-                "compile":compile,
-                "parameter":parameter
-            }
+                "compile": setting.compile,
+                "parameter": setting.parameter
+            },
+            submitHandler: jsonSubmitHandler
         }
     ]
 
@@ -91,6 +142,14 @@ const DownloadList = ({ ...props }) => {
                 modalShow={modalShow}
                 setModalShow={setModalShow}
                 {...props}/>
+            {props.isLocalstorage && 
+                <LocalSave
+                    modalShow={locModShow}
+                    setModalShow={setLocModShow}
+                    title={props.title}
+                    data={props.data}
+                    submitHandler={props.locSubmitHandler}/>
+            }
             <div style={style.container}>
                 <p>{props.title}</p>
                 <div style={style.btnContainer}>

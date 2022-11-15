@@ -53,3 +53,9 @@
     --tw-bg-opacity: 1;
     border-bottom: solid 2px rgb(203 213 225 / var(--tw-bg-opacity));
 }
+
+.inCenter {
+    width: 8rem;
+    margin: 0.5rem;
+    height: 2.5rem;
+}

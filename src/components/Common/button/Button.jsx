@@ -8,6 +8,7 @@ export const Button = ({children, className, style, ...props}) => {
     
     if (!isEmptyStr(className)){
         const clsArray = className.split(' ');
+    
         styleArray = clsArray.map(cls => btnStyle[cls]);
     }
 

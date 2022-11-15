@@ -34,7 +34,7 @@
     border-color: var(--tw-shadow-color);
 }
 
-.btnContainer {
+.centerContainer {
     position: relative;
     left: 50%;
     display: flex;

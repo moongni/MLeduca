@@ -1,38 +1,58 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Inputs from "../../Common/inputs/Inputs";
 import { AdvancedSettingButton } from "../../Common/button/Button";
+import { BsQuestion } from "react-icons/bs";
+import boxStyle from "./box.module.css";
 
 function Box({style, ...props}){
-    const [value, setValue] = useState({});
-    const [isSubOpen, setSubOpen] = useState(false);
-
-    const boxStyle = {
-        container:{
-            margin: "30px 10px",
-        },
-        header: {
-            fontSize: "1.25rem",
-            lineHeight: "1.75rem"
-        }
-    }
-
+    const [ value, setValue ] = useState({});
+    const [ isSubOpen, setSubOpen ] = useState(false);
+    const [ hovering, setHovering ] = useState(true);
+    
+    const handleMouseOver = useCallback(() => {
+        !hovering &&
+        setHovering(true);
+    }, [hovering]);
+    
+    const handleMouseOut = useCallback(() => {
+        !!hovering &&
+        setHovering(false);
+    }, [hovering]);
+    
     return (
-        <div style={boxStyle.container}>
-            <button onClick={(event)=> props.selectHandler(event, props.info.title, value)}>
-                <h2 className="hover:opacity-50"
-                    style={boxStyle.header}
-                >
-                    {props.info.title}
-                </h2>
-            </button>
+        <div className={boxStyle.container}>
+            <div className={boxStyle.subContainer}>
+                <div style={{"display":"flex"}}>
+                    <button onClick={(event)=> props.selectHandler(event, props.info.title, value)}>
+                        <h2 className={boxStyle.header}>
+                            {props.info.title}
+                        </h2>
+                    </button>
+                    <i className={boxStyle.i}
+                        onMouseLeave={handleMouseOut}
+                        onMouseEnter={handleMouseOver}>
+                        <BsQuestion/>
+                    </i>
+                {hovering &&
+                    <div className={boxStyle.iTooltip}
+                        onMouseLeave={handleMouseOut}
+                        onMouseEnter={handleMouseOver}>
+                        <h3 className={boxStyle.h3}>{props.info.description.header}</h3>
+                        <span className={boxStyle.span}>
+                            {props.info.description.content}
+                        </span>
+                    </div>
+                }
+                </div>
             {props.info.params &&
                 <AdvancedSettingButton 
-                    type="button" 
-                    value={isSubOpen}
-                    setValue={setSubOpen}/>
+                type="button" 
+                value={isSubOpen}
+                setValue={setSubOpen}/>
             }
-            <div className={`${isSubOpen? "" : "hidden opacity-0 cursor-default"}`}>
+            </div>
+            <div className={`${isSubOpen? "" : boxStyle.isSubOpen}`}>
                 {props.info.params &&
                     props.info.params.map(param => (
                         <Inputs 

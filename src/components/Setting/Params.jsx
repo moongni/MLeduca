@@ -1,109 +1,94 @@
 import React, { useState } from "react";
 import Inputs from "../Common/inputs/Inputs";
 import data from "../../data/data.json"
-import { useDispatch, useSelector } from "react-redux";
-import { paramActions } from "../../reducers/paramSlice";
+import { useDispatch } from "react-redux";
 import { useNav } from "../Common/singlePageNav/useNav"
-import style from "../Common/component.module.css";
+import mainStyle from "../Common/component.module.css";
 import Title from "../Common/title/title";
 import { AiOutlineControl } from "react-icons/ai";
 import { Button } from "../Common/button/Button";
-import Alect from "../Common/alert/Alert";
+import { settingActions } from "../../reducers/settingSlice";
 
-function Params(){
+function Params({ ...props }){
     const dispatch = useDispatch();
 
     const dataForInputs = data.Parameters
-    const [value, setValue] = useState({});
-    const [disabled, setDisabled] = useState(false);
+    
+    const [ value, setValue ] = useState({});
+    const [ disabled, setDisabled ] = useState(false);
 
-    const [ isAlectVisable, setAlectVisiable ] = useState(false);
-    const [ message, setMessage ] = useState("");
+    const paramRef = useNav('Param');
 
     const handleSubmit = async (event) => {
-        setDisabled(true);
-        event.preventDefault();
         const setData = async () => {
-            dispatch(paramActions.setParam(value));
+            dispatch(settingActions.setParam(value));
         }
+        
+        setDisabled(true);
+
+        event.preventDefault();
+        
         setData()
         .then( _ => {
-            setAlectVisiable(true);
-            setMessage("parameter saved");
-            setTimeout(() => {
-                setAlectVisiable(false);
-            }, 1000);
+            props.setAlectMsg("parameter saved");
+            props.setAlectVisiable(true);
         })
-        .catch( response => console.log(response));
+        .catch( response => alert(response) );
+        
         setDisabled(false);
     }
 
     const handleRemove = async () => {
         setDisabled(true);
+        
         const setData = async () => {
-            dispatch(paramActions.removeParam());
+            dispatch(settingActions.removeParam());
         }
+        
         setData()
         .then( _ => {
-            setAlectVisiable(true);
-            setMessage("parameter removed");
-            setTimeout(() => {
-                setAlectVisiable(false);
-            }, 1000);
+            props.setAlectMsg("parameter removed");
+            props.setAlectVisiable(true);
         })
-        .catch( response => console.log(response));
+        .catch( response => alert(response));
+        
         setDisabled(false);
     }
 
-    const paramRef = useNav('Param');
 
     return (
         <div 
-            className={style.container}
+            className={mainStyle.container}
             ref={paramRef}
             id="paramContainer"
         >
-            <Title title="Parameter" icon={<AiOutlineControl/>}/>
+            <Title title="파라미터 설정" icon={<AiOutlineControl/>}/>
             <form 
-                className={style.subContainer}
+                className={mainStyle.subContainer}
                 onSubmit={handleSubmit}
             >
                 {dataForInputs.map(
-                        param => (
-                            <Inputs 
-                                {...param}
-                                value={value}
-                                setValue={setValue}/>
+                    param => (
+                        <Inputs 
+                            {...param}
+                            value={value}
+                            setValue={setValue}/>
                 ))}
-                <div style={{"position":"relative",
-                            "left":"50%",
-                            "display":"flex",
-                            "transform":"translateX(-50%)",
-                            "justifyContent":"center"}}
-                >
+                <div className={mainStyle.centerContainer}>
                     <Button
-                        className="red"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
+                        className="red inCenter"
                         type="button"
                         onClick={() => handleRemove()}>
-                        Reset
+                        초기화
                     </Button>
                     <Button
-                        className="green"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
+                        className="green inCenter"
                         type="submit"
                         disabled={disabled}>
-                        set Param
+                        적용
                     </Button>
                 </div>
             </form>
-            <Alect
-                message={message}
-                value={isAlectVisable}/>
         </div>
     )
 }

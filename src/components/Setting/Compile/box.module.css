@@ -1,0 +1,65 @@
+.container {
+    margin: 30px 10px;
+}
+.subContainer {
+    display: flex;
+    justify-content: space-between;
+}
+.header {
+    font-size: 1.25rem;
+    line-height: 1.75rem
+}
+.header:hover {
+    opacity: 0.5;
+}
+.i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    width: 5rem;
+    padding: 0 1rem;
+    cursor: pointer
+}
+.iTooltip {
+    --tw-bg-opacity: 1;
+    --tw-shadow-color: rgb(203 213 225 / var(--tw-bg-opacity));
+    background-color: rgb(248 250 252 / var(--tw-bg-opacity));
+    border-color: var(--tw-shadow-color);
+    border-width: 1px;
+    border-radius: 5px;
+    color: #000;
+    height: auto;
+    position: relative;
+    padding: 5px 11px;
+    display: flex;
+    width: fit-content;
+    z-index: 100; 
+    letter-spacing: -0.25px;
+    transition: all .3s ease-in-out;
+}
+.iTooltip::before {
+    border: solid transparent;
+    border-width: 0 5px 25px 5px;
+    background: transparent;
+    content: "";
+    position: absolute;
+    left: calc(100%);
+    top: 50%;
+    transform: translateY(-50%);
+    
+}
+.iTooltip .h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+.iTooltip .span {
+    font-size: 1rem;
+    font-weight: 300;
+}
+.isSubOpen {
+    display: none;
+    opacity: 0;
+    cursor: default;
+}

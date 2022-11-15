@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import Layers from "../components/Setting/Layers/Layers";
 import Params from "../components/Setting/Params";
-import Optimizers from "../components/Setting/Compile/Optimizers";
-import Losses from "../components/Setting/Compile/Losses";
 import Nav from "../components/Common/singlePageNav/Nav";
 import NavProvider from "../components/Common/singlePageNav/NavContext";
 import { settingLinks } from "../components/Setting/settingLinks";
+import Compile from "../components/Setting/Compile/compile";
+import { useEffect } from "react";
+import Alect from "../components/Common/alert/Alert";
 
 const Setting = ({children, ...props}) => {
+    const [ isAlectVisable, setAlectVisiable ] = useState(false);
+    const [ alectMsg, setAlectMsg ] = useState("");
+
+    useEffect(() => {
+        if (isAlectVisable) {
+            setTimeout(() => {
+                setAlectVisiable(false);
+            }, 1000);
+        }
+    }, [ isAlectVisable ])
+
     const style = {
         main:{
             position:"relative",
@@ -36,11 +48,15 @@ const Setting = ({children, ...props}) => {
                 </div>
                 <div style={style.setting}>
                     <Layers />
-                    <Optimizers />
-                    <Losses />
-                    <Params />
+                    <Compile setAlectVisiable={setAlectVisiable} setAlectMsg={setAlectMsg}/>
+                    <Params setAlectVisiable={setAlectVisiable} setAlectMsg={setAlectMsg}/>
                 </div>
             </NavProvider>
+            <Alect 
+                    message={alectMsg}
+                    value={isAlectVisable}
+                    setValue={setAlectVisiable}
+                />
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import * as dfd from "danfojs"
-import { isEmptyObject, selectColumn } from "../Common/package";
 import { isEmpty } from "../Common/package";
 
 const preprocessOption = {
@@ -196,9 +195,9 @@ export async function preprocess(labelData, featureData, process) {
   const feature_data = dfd.toJSON(feature_df, {
     format: "row"
   })
-  
+
   return {
     "labelData": label_data,
-    "featureData": feature_data
+    "featureData": feature_data,
   }
 }

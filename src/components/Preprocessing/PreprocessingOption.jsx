@@ -3,7 +3,7 @@ import { isEmptyArray } from "../Common/package";
 import tableStyle from "../Common/table/table.module.css";
 import { PreprocessingSelect } from "./PreprocessingSelect";
 
-export const PreprocessingOptions = ({children, process, ...props}) => {
+export const PreprocessingOptions = ({children, preprocess, ...props}) => {
   const [ hovering, setHovering ] = useState(false);
   
   const handleMouseOver = useCallback(() => {
@@ -39,8 +39,9 @@ export const PreprocessingOptions = ({children, process, ...props}) => {
                     style={{"verticalAlign":"top"}}>
                     <PreprocessingSelect
                       title={props.title}
+                      kind={props.kind}
                       column={column}
-                      preprocess={process[props.title]}/>
+                      preprocess={preprocess[props.title]}/>
                   </th>
                 ))}
               </tr>

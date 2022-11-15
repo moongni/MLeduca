@@ -5,19 +5,15 @@ import { Button } from "../Common/button/Button";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const SetColumn = ({ setData, setColumn, setLoading, data, dataColumns, ...props }) => {
+const SetColumn = ({ setData, setColumn, setLoading, data, dataColumns, style, ...props }) => {
     const dispatch = useDispatch();
     
     const [ selectedValue, setSelectedValue ] = useState([]);
 
-    const onClickHandler = () => {
-
+    const onClickHandler = async () => {
         try {
             setLoading(true);
         
-            console.log("set column call");
-            
-
             const newCol = toArray(selectedValue);
             const newData = selectColumn(data, newCol);
             
@@ -27,8 +23,6 @@ const SetColumn = ({ setData, setColumn, setLoading, data, dataColumns, ...props
         } catch (err) {
 
             alert(err);
-            console.log("set column catch");
-            setLoading(false);
 
         }
 
@@ -44,32 +38,29 @@ const SetColumn = ({ setData, setColumn, setLoading, data, dataColumns, ...props
     }
     
     return (
-        <>
-            <div style={divStyle}>
-                <Inputs 
-                    kind="MultiSelect"
-                    title={props.title}
-                    value={selectedValue}
-                    setValue={setSelectedValue}
-                    options={toOption(dataColumns)}
-                />
-                <Button 
-                    className="right"
-                    style={{"margin":"0 40px"}} 
-                    type="button" 
-                    onClick={(e) => {
-                        e.preventDefault();
-                        onClickHandler()
-                        .then( _ => {
-                            console.log("set column then")
-                            setLoading(false)
-                        });
-                    }}
-                >
-                    Save
-                </Button>
-            </div>
-        </>
+        <div style={{...divStyle, ...style}}>
+            <Inputs 
+                kind="MultiSelect"
+                title={props.title}
+                value={selectedValue}
+                setValue={setSelectedValue}
+                options={toOption(dataColumns)}
+            />
+            <Button 
+                className="right"
+                style={{"margin":"0 40px"}} 
+                type="button" 
+                onClick={(e) => {
+                    e.preventDefault();
+                    onClickHandler()
+                    .finally( _ => {
+                        setLoading(false)
+                    });
+                }}
+            >
+                Save
+            </Button>
+        </div>
     )
 }
 

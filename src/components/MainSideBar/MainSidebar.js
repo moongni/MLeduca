@@ -16,7 +16,7 @@ export const MainSidebar = (props) => {
                     <span className='logo_name'>Deep learning</span>
                 </Link>
                 <ul className='nav-links'>
-                    { sidebars.sidebarLinkName
+                    {sidebars.sidebarLinkName
                         .map(sidebar => (
                             <SidebarList {...sidebar}/>
                     ))}

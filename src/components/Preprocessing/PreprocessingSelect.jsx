@@ -23,21 +23,19 @@ export const PreprocessingSelect = ({children, preprocess, ...props}) => {
       dispatch(preprocessingActions.setProcess({
         title: props.title,
         column: props.column,
-        preprocess: curProcess
+        preprocess: curProcess,
+        kind: props.kind
       }));
 
       selectedValue.map(value => {
 
         if ( groupOptions.filter( option => option.label == "numeric")[0].options.includes(value) ){
-          console.log("numeric", value);
           numericDisable = true;
         }
         if ( groupOptions.filter( option => option.label == "fillNull")[0].options.includes(value) ){
-          console.log("fillnull", value);
           fillNullDisable = true;
         }
         if ( groupOptions.filter( option => option.label == "category")[0].options.includes(value) ){
-          console.log("category", value);
           categoryDisable = true;
         }
 
