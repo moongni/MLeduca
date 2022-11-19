@@ -24,7 +24,7 @@ export async function trainModel(model, xs, ys, compile, parameter) {
     metrics: ['accuracy']
   })
 
-  console.log("getting train model")
+  console.log("getting train model");
 
   const history = await model.fit(xs, ys, {
     ...parameter,

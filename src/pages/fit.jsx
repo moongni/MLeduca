@@ -43,7 +43,7 @@ function Fit() {
   const layers = useSelector( state => state.setting.layer );
   const xs = useSelector( state => state.train.feature );
   const ys = useSelector( state => state.train.label );
-
+  console.log(layers);
   const initData = {
     'columns': [],
     'data': {},
@@ -60,7 +60,9 @@ function Fit() {
     isEmptyObject(compile.optimizer) || isEmptyStr(compile.loss) ||
     isEmptyObject(xs) || isEmptyObject(ys)
   );
-  
+  useEffect(() => {
+    setModel({});
+  }, [])
   useEffect(() => {
     if (!isEmptyArray(xs.columns)) {
       const newX = getNData(xs.data, nData.trainNData);
@@ -93,6 +95,7 @@ function Fit() {
       var preTrainModel = model;
 
       if (!isEmptyObject(layers) && isEmptyObject(preTrainModel)) {
+        console.log("create model");
         preTrainModel = await createModel(layers);
         setModel(preTrainModel);
       }
@@ -111,16 +114,16 @@ function Fit() {
         
       })
       .then( _ => {
-        setDisabled(false);
-        setLoading(false);
-        
-        alert("complete model fit, and save localstroage://model/recent");
-  
+        alert("모델 훈련 완료, localstroage://model/recent에 저장되었습니다.");
       })
       .catch( respond => {
         alert(respond);
-  
-        window.location.reload();
+        console.log(respond);
+        // window.location.reload();
+      })
+      .finally( _ => {
+        setDisabled(false);
+        setLoading(false);
       })
     })
   }
@@ -151,8 +154,7 @@ function Fit() {
         setLoading={setLoading}/>
       <SettingSelectModal
         modalShow={settingModal}
-        setModalShow={setSettingModal}
-      />
+        setModalShow={setSettingModal}/>
       <div className={mainStyle.container}>
         {isLoading &&
           <div style={style.loadingStyle}>

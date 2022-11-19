@@ -31,6 +31,22 @@ const preprocessingSlice = createSlice({
         loadProcess(state, action) {
             state = action.payload;
         },
+        initOne(state, action) {
+            const { title, initName } = action.payload;
+            
+            if ( initName == "label" || initName == "feature") {
+                state[title] = {
+                    ...state[title],
+                    [initName]: {}
+                }
+            }
+        },
+        initTrainFeature(state, action) {
+            state.train = {
+                ...state.train,
+                ["feature"]: {}
+            }
+        },
         initialize(state, action) {
             state.train = {
                 label: {},

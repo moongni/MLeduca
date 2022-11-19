@@ -19,6 +19,7 @@ export const isEmptyStr = ( param ) => {
 
 export const toOption = ( items ) => {
     const newOptions = [];
+
     if( !isEmptyArray(items) && !isEmpty(items) ){
         items.map(item => newOptions.push({
             label: item,
@@ -30,9 +31,11 @@ export const toOption = ( items ) => {
 
 export const toArray = ( options ) => {
     const newArray = [];
+    
     if( !isEmptyArray(options) && !isEmpty(options) ){
         options.map(option => newArray.push(option.value));
     }
+
     return newArray;
 }
 
@@ -155,7 +158,7 @@ export const getData = async (url, dispatch, actions) => {
 
 export const getDtype = (data) => {
     const df = new dfd.DataFrame(data);
-
+    
     const columns = df.columns;
     const dtype = df.dtypes;
 
@@ -166,7 +169,6 @@ export const getDtype = (data) => {
             ret[columns[i]] = dtype[i];
         }
     }
-
     return ret;
 }
 

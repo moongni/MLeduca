@@ -44,12 +44,12 @@ function Optimizers({ ...props }) {
         event.preventDefault();
         setData()
         .then( _ => {
-            props.setAlectMsg("Optimizer saved");
+            props.setAlectMsg(`Optimizer: ${title} saved`);
             props.setAlectVisiable(true);  
         })
         .catch(response => alert(response));
     };
-
+    
     const handleRemove = () => {
         const removeData = async () => {
             dispatch(settingActions.removeOptimizer())
@@ -102,7 +102,7 @@ function Losses({ ...props }) {
         
         setData()
         .then( _ => {
-            props.setAlectMsg("Loss saved");
+            props.setAlectMsg(`Loss: ${title} saved`);
             props.setAlectVisiable(true);  
         })
         .catch( response => console.log(response));

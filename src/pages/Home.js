@@ -1,4 +1,5 @@
 import React , { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import mainStyle from "../components/Common/component.module.css";
 import Title from "../components/Common/title/title";
 
@@ -12,8 +13,8 @@ function Home() {
     return (
         <div className={mainStyle.container}>
             <Title title="웹앱 사용법" className={mainStyle.centerContainer}/>
-            <div className={mainStyle.centerContainer} style={{"margin":"5rem 0"}}>
-                            
+            <div className={mainStyle.centerContainer} style={{"margin":"3rem 0"}}>
+                <Outlet />
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ const Setting = ({children, ...props}) => {
         if (isAlectVisable) {
             setTimeout(() => {
                 setAlectVisiable(false);
-            }, 1000);
+            }, 1500);
         }
     }, [ isAlectVisable ])
 

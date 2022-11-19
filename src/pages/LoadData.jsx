@@ -155,7 +155,7 @@ export default function LoadData() {
                         style={{"marginRight":"1rem"}}
                         type="button" 
                         onClick={onClickHandler}>
-                        Fetch
+                        불러오기
                     </Button>
                 </div>
                 <DrogDropFile 

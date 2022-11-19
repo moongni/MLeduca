@@ -8,7 +8,8 @@ const MainLayout = () => {
     const [ isDashboardOpen, setDashboard ] = useState(false);
     
     const [ model, setModel ] = useState({});
-    console.log("in mainLayout ",model);    
+    console.log(model);
+    
     useEffect(() => {
         let vh = 0;
         vh = window.innerHeight * 0.01;

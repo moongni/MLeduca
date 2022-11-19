@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import mainStyle from "../components/Common/component.module.css";
 import Title from "../components/Common/title/title";
-import { AiOutlineLineChart } from "react-icons/ai";
 import { Button } from "../components/Common/button/Button";
 import { PredictData } from "../components/Predict/PredictData";
 import { PredictModel } from "../components/Predict/PredictModel";
@@ -142,26 +141,14 @@ const Predict = () => {
     return (
         <>
             <div className={mainStyle.container}>
-                <Title title="예측 데이터 준비" icon={<AiOutlineLineChart/>}/>
+                <Title title="예측 데이터 준비"/>
                 <div className={mainStyle.subContainer}>
                     <PredictData/>
                 </div>
-
-                {!isEmptyArray(rowTestData.columns) &&
-                    <SetColumn
-                    title={"열 선택"}
-                    style={{"padding":"0 1rem"}}
-                    setData={testActions.setFeatureData}
-                    setColumn={testActions.setFeatures}
-                    setLoading={setLoading}
-                    data={rowTestData.data}
-                    dataColumns={rowTestData.columns}
-                    />
-                }
                 <div style={{"display":"flex",
                         "justifyContent":"space-between",
                         "marginRight":"2.5rem"}}>
-                    <Title title="데이터 테이블" icon={<AiOutlineLineChart/>}/>
+                    <Title title="데이터 테이블"/>
                     <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
                         <Inputs
                             kind="input"
@@ -209,6 +196,15 @@ const Predict = () => {
                         </Button>
                     </div>
                 </div>
+                {!isEmptyArray(rowTestData.columns) &&
+                    <SetColumn
+                        title={"열 선택"}
+                        style={{"padding":"0 1rem"}}
+                        setData={testActions.setFeatureData}
+                        setLoading={setLoading}
+                        data={rowTestData.data}
+                        dataColumns={rowTestData.columns}/>
+                }
                 <div className={mainStyle.subContainer}>
                     {contentView({
                         element: viewTestX.columns,
@@ -218,17 +214,12 @@ const Predict = () => {
                                 style={{"maxHeight":"24rem"}}
                                 data={viewTestX}
                             >
-                                <Inputs 
-                                    style={{"width":"100%"}}
-                                    kind="float"
-                                    value={sample}
-                                    setValue={setSample}/>
                             </ArrayTable>
                             <PreprocessingOptions
                                 title="feature"
                                 kind="test"
                                 columns={testX.columns}
-                                preprocess={process}
+                                preprocess={process.feature}
                             />
                             <div style={style.horizonBtnContainer}>
                                 <Button 
@@ -259,7 +250,7 @@ const Predict = () => {
                 </div>
             </div>
             <div className={mainStyle.container}>
-                <Title title="예측 모델 준비" icon={<AiOutlineLineChart/>}/>
+                <Title title="예측 모델 준비"/>
                 <div className={mainStyle.subContainer}>
                     <PredictModel 
                         model={model}

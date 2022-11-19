@@ -26,9 +26,8 @@ const Preprocessing = () => {
 
     const trainX = useSelector( state => state.train.feature );
     const trainY = useSelector( state => state.train.label );
-    
     const process = useSelector( state => state.preprocess.train );
-    
+    console.log("preprocess", process);
     const testX = useSelector( state => state.test.feature );
     const testY = useSelector( state => state.test.label );
 
@@ -169,7 +168,7 @@ const Preprocessing = () => {
 
           const { labelData, featureData } = await preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process);
           
-          if ( splitRatio["train set ratio"] == 1.0 ) {
+          if ( splitRatio["train set ratio"] == 1.0 || splitRatio['train set ratio'] == null ) {
             dispatch(trainActions.setData({
                 title: "feature",
                 data: featureData
@@ -246,46 +245,48 @@ const Preprocessing = () => {
                         <SetColumn 
                             title={"열 선택"}
                             setData={trainActions.setLabelData}
-                            setColumn={trainActions.setLabels}
                             setLoading={setLoading}
                             data={data}
                             dataColumns={dataColumns}
+                            initFunction={() => {
+                                dispatch(preprocessingActions.initOne({
+                                    "title": "train",
+                                    "initName": "label"
+                                }))
+                            }}
                         />
-                        <div style={{"display":"table"}}>
-                            {!isEmptyArray(trainY.columns) &&
-                                <>
-                                    <PreprocessingOptions
-                                        title="label"
-                                        kind="train"
-                                        columns={trainY.columns}
-                                        preprocess={process}
-                                    />
-                                </>
-                            }
-                        </div>
+                        {!isEmptyArray(trainY.columns) &&
+                            <PreprocessingOptions
+                                title="label"
+                                kind="train"
+                                columns={trainY.columns}
+                                preprocess={process.label}
+                            />
+                        }
                     </div>
                     <Title title="특성 설정" style={{"marginTop":"2rem"}}/>
                     <div style={{"padding": "0 1rem"}}>
                         <SetColumn
                             title={"열 선택"}
                             setData={trainActions.setFeatureData}
-                            setColumn={trainActions.setFeatures}
                             setLoading={setLoading}
                             data={data}
                             dataColumns={dataColumns}
+                            initFunction={() => {
+                                dispatch(preprocessingActions.initOne({
+                                    "title": "train",
+                                    "initName": "feature"
+                                }))
+                            }}
                         />
-                        <div style={{"display":"table"}}>
-                            {!isEmptyArray(trainX.columns) &&
-                                <>
-                                    <PreprocessingOptions
-                                        title="feature"
-                                        kind="train"
-                                        columns={trainX.columns}
-                                        preprocess={process}
-                                    />
-                                </>
-                            }
-                        </div>
+                        {!isEmptyArray(trainX.columns) &&
+                            <PreprocessingOptions
+                                title="feature"
+                                kind="train"
+                                columns={trainX.columns}
+                                preprocess={process.feature}
+                            />
+                        }
                     </div>
                     <Title title="훈련셋, 테스트셋 나누기" style={{"marginTop":"2rem"}}/>
                     <div style={{"padding":"0 1rem"}}>

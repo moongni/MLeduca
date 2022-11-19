@@ -1,3 +1,5 @@
+@import "../../App.css";
+
 .container {
     position: fixed;
     display: table;
@@ -15,8 +17,7 @@
     --tw-shadow: var(--tw-shadow-colored);
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
-    --tw-bg-opacity: 1;
-    background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+    background-color: rgb(226 232 240 / var(--bg-opacity));
 
 }
 .open {
@@ -41,8 +42,7 @@
     line-height: 1.75rem/* 28px */;
     font-weight: 600;
     border-bottom-width: 2px;
-    --tw-border-opacity: 1;
-    border-color: rgb(148 163 184 / var(--tw-border-opacity));
+    border-color: rgb(148 163 184 / var(--border-opacity));
 }
 
 .container .modelTrain {
@@ -63,15 +63,13 @@
     font-size: 1.125rem/* 18px */;
     line-height: 1.75rem/* 28px */;
     font-weight: 500;
-    --tw-bg-opacity: 1;
-    background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+    background-color: rgb(134 239 172 / var(--bg-opacity));
     border-radius: 0.5rem;
 
     cursor: pointer;
 }
 .container .modelTrain .div .button:hover{
-    --tw-bg-opacity: 1;
-    background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+    background-color: rgb(74 222 128 / var(--bg-opacity));
 }
 
 .center {

@@ -30,7 +30,7 @@ function Params({ ...props }){
         
         setData()
         .then( _ => {
-            props.setAlectMsg("parameter saved");
+            props.setAlectMsg("Parameter saved");
             props.setAlectVisiable(true);
         })
         .catch( response => alert(response) );

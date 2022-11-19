@@ -10,9 +10,7 @@ const Title = ({icon, style, className, ...props}) => {
 
     return (
         <div className={className} style={{...titleStyle, ...style}}>
-            {icon &&
-                <i style={{"marginRight":"1rem"}}>{icon}</i>
-            }
+            {icon && <i style={{"marginRight":"1rem"}}>{icon}</i>}
             <span>{props.title}</span>
         </div>
     )

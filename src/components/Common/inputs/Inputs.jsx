@@ -165,8 +165,7 @@ const MultiSelectInput = ({ ...props }) => {
             className="w-96"
             onChange={props.setValue}
             labelledBy="Select"
-            >
-        </MultiSelect>
+        />
     )   
 }
 

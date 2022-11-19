@@ -3,6 +3,7 @@ import * as dfd from "danfojs";
 
 export const mkConTensor = (data) => {
   const df = new dfd.DataFrame(data);
+  // console.log(df);
   const tensorData = df.tensor;
   // const tensorData = Object.entries(data).map(items => (
   //   tf.tensor({value:items[1], dtype:"float32"}).reshape([-1, 1])

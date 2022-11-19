@@ -9,7 +9,8 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist-indexeddb-storage';
+// import storage from 'redux-persist-indexeddb-storage';
+import storage from "redux-persist/lib/storage/session";
 import dataSlice from './dataSlice';
 import trainSlice from './trainSlice';
 import testSlice from './testSlice';
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   version: 1,
-  storage: storage('dataDB'),
+  storage: storage,
+  //sotrage: storage("ML_DB")
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
