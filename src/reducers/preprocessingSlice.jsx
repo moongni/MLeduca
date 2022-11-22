@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { isEmpty, selectColumn } from '../components/Common/package';
+import { isEmpty } from '../components/Common/module/checkEmpty';
+import { selectColumn } from '../components/Common/module/package';
 
 const initialState = { 
     train: {

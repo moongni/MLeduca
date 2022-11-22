@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 import { createModel } from "../components/TF/CreateModel";
 import { convertToTensor } from "../components/TF/ConvertToTensor";
 import { trainModel } from "../components/TF/TrainModel";
-import { getNData, getShape, isEmptyArray, isEmptyObject, isEmptyStr } from "../components/Common/package";
-import { Button } from "../components/Common/button/Button";
+import { getNData, getShape, getViewData } from "../components/Common/module/getData"
+import { isEmptyArray, isEmptyObject, isEmptyStr } from "../components/Common/module/checkEmpty"
+import { errorHandler } from "../components/Common/module/errorHandler";
+import { contentView } from "../components/Common/module/package";
 import Title from "../components/Common/title/title";
-import { LayerBoard, SettingBoard } from "../components/ModelDashBoard/Board";
-import { Loader } from "../components/Common/loader/Loader";
-import mainStyle from "../components/Common/component.module.css";
-import { historyActions } from "../reducers/historySlice";
-import { ModelSelectModal, SettingSelectModal } from "../components/Common/modal/modal";
-import { useOutletContext } from "react-router-dom";
 import Inputs from "../components/Common/inputs/Inputs";
-import { contentView } from "../components/Common/package";
 import ArrayTable from "../components/Common/table/ArrayTable";
+import { LayerBoard, SettingBoard } from "../components/ModelDashBoard/Board";
+import { Button } from "../components/Common/button/Button";
+import { Loader } from "../components/Common/loader/Loader";
+import { ModelSelectModal, SettingSelectModal } from "../components/Common/modal/modal";
+import { historyActions } from "../reducers/historySlice";
+import mainStyle from "../components/Common/component.module.css";
 
-export async function run(model, compile, parameter, xs, ys) {
-  const tensorData = convertToTensor(xs,  ys);
+async function run(model, compile, parameter, xs, ys) {
+  const { features, labels } = convertToTensor(xs,  ys);
   console.log('convertToTensor 완료');
-  console.log("tensorData", tensorData);
-
-  const { features, labels } = tensorData;
-  
   
   const { history, trainedModel } = await trainModel(model, features, labels, compile, parameter);
+
   console.log('Done Training');
   console.log("history", history);
   console.log('trainedModel', trainedModel);
-
 
   return { history, trainedModel };
 }
@@ -43,7 +41,7 @@ function Fit() {
   const layers = useSelector( state => state.setting.layer );
   const xs = useSelector( state => state.train.feature );
   const ys = useSelector( state => state.train.label );
-  console.log(layers);
+
   const initData = {
     'columns': [],
     'data': {},
@@ -51,18 +49,26 @@ function Fit() {
   };
   const [ viewTrainX, setViewTrainX ] = useState(initData);
   const [ viewTrainY, setViewTrainY ] = useState(initData);
+
   const [ nData, setNData ] = useState({"trainNData": 5});
+
   const [ modelModal, setModelModal ] = useState(false);
   const [ settingModal, setSettingModal ] = useState(false);
   const [ isLoading, setLoading ] = useState(false);
   const [ disabled, setDisabled] = useState(
-    isEmptyArray(layers) || isEmptyObject(parameter) || 
+    isEmptyArray(layers.info) || isEmptyObject(parameter) || 
     isEmptyObject(compile.optimizer) || isEmptyStr(compile.loss) ||
     isEmptyObject(xs) || isEmptyObject(ys)
   );
+
   useEffect(() => {
-    setModel({});
-  }, [])
+    setDisabled(    
+      isEmptyArray(layers.info) || isEmptyObject(parameter) || 
+      isEmptyObject(compile.optimizer) || isEmptyStr(compile.loss) ||
+      isEmptyObject(xs) || isEmptyObject(ys)
+    )    
+  }, [ layers, parameter, compile])
+  
   useEffect(() => {
     if (!isEmptyArray(xs.columns)) {
       const newX = getNData(xs.data, nData.trainNData);
@@ -85,46 +91,65 @@ function Fit() {
     }
   }, [xs, ys])
 
-  const onClickHandler = () => {
+  const makeModel = async () => {
+    try{
+      var preTrainModel = model;
+  
+      if (!isEmptyObject(preTrainModel) && window.confirm("현재 모델이 존재합니다. 재학습을 진행하시겠습니까?\n 예: 기존 모델 재학습, 아니요: 새로운 모델 생성")){
+        
+      } else {
+        
+        preTrainModel = await createModel(layers);
+
+      }
+  
+      return preTrainModel
+
+    } catch (err) {
+      errorHandler({
+        "message": err.message,
+        "statuscode": null
+      })
+    }
+  }   
+  
+  const onClickHandler = async () => {
     setDisabled(true);
     setLoading(true);
-
     console.log("fit call");
 
-    const makeModel = async () => {
-      var preTrainModel = model;
+    var model = await makeModel();
 
-      if (!isEmptyObject(layers) && isEmptyObject(preTrainModel)) {
-        console.log("create model");
-        preTrainModel = await createModel(layers);
-        setModel(preTrainModel);
-      }
+    run(model, compile, parameter, xs.data, ys.data)
+    .then( async ({ history, trainedModel }) => {
+      const saveResult = await trainedModel.save("localstorage://model/recent");
+
+      dispatch(historyActions.setHist(JSON.stringify(history)));
+
+      console.log(saveResult);
       
-      return preTrainModel;
-    }   
+    })
+    .then( _ => {
+      alert("모델 훈련 완료, localstroage://model/recent에 저장되었습니다.");
+    })
+    .catch( err => {
+      if (err.message.includes("when checking input")) {
+        errorHandler({
+          "message": `레이어의 inputShape과 데이터의 shape이 일치하지 않습니다. \ninputShape: ${model.layers[0].batchInputShape}, dataShape: ${xs.shape}`,
+          "statuscode": null
+        })
 
-    makeModel().then( model => {
-      run(model, compile, parameter, xs.data, ys.data)
-      .then( async ({ history, trainedModel }) => {
-        const saveResult = await trainedModel.save("localstorage://model/recent");
-  
-        dispatch(historyActions.setHist(JSON.stringify(history)));
-  
-        console.log(saveResult);
-        
+        return;
+      }
+
+      errorHandler({
+        "message": err.message,
+        "statuscode": err.status? err.status: null
       })
-      .then( _ => {
-        alert("모델 훈련 완료, localstroage://model/recent에 저장되었습니다.");
-      })
-      .catch( respond => {
-        alert(respond);
-        console.log(respond);
-        // window.location.reload();
-      })
-      .finally( _ => {
-        setDisabled(false);
-        setLoading(false);
-      })
+    })
+    .finally( _ => {
+      setDisabled(false);
+      setLoading(false);
     })
   }
 
@@ -156,11 +181,7 @@ function Fit() {
         modalShow={settingModal}
         setModalShow={setSettingModal}/>
       <div className={mainStyle.container}>
-        {isLoading &&
-          <div style={style.loadingStyle}>
-            <Loader type="spin" color="black" message={"Loading..."} style={{"position":"fixed"}}/>
-          </div>
-        }
+        {isLoading && <Loader type="spin" color="black" message={"Loading..."}/>}
         <div style={{"display":"flex"}}>
           <Title title="모델 정보"/>
           <Button 
@@ -216,30 +237,26 @@ function Fit() {
                 type="button"
                 onClick={() => {
                     try {
-                        if ( nData.trainNData < 1 && nData.trainNData > xs.shape[1] ) {
-                            throw new Error(`0 ~ ${xs.shape[1]}사이의 값을 입력해주세요. 현재 값 : ${nData.trainNData}`);
-                        }
-                        
-                        const newX = getNData(xs.data, nData.trainNData);
-                        const newY = getNData(ys.data, nData.trainNData);
+                      var responseX = getViewData(nData.trainNData, xs);
+                      var responseY = getViewData(nData.trainNData, ys);
 
-                        setViewTrainX({
-                            ['columns']: xs.columns,
-                            ['data']: newX,
-                            ['shape']: getShape(newX)
-                        })
-                        setViewTrainY({
-                            ['columns']: ys.columns,
-                            ['data']: newY,
-                            ['shape']: getShape(newY)
-                        })
+                      if (responseX.isError) {
+                        errorHandler(responseX.errorData)
+                      } else {
+                        setViewTrainX(responseX.data)
+                      }
+
+                      if (responseY.isError) {
+                        errorHandler(responseX.errorData);
+                      } else {
+                        setViewTrainY(responseY.data)
+                      }
 
                     } catch (err) {
-                        if ( err.message === "ParamError: end must be greater than start") {
-                            alert(`데이터 뷰 개수를 입력해주세요`);
-                        } else {
-                            alert(err.message);
-                        }
+                      errorHandler({
+                        "message": err.message,
+                        "statuscode": null
+                      })
                     }
                 }}>
                 적용

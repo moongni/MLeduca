@@ -1,14 +1,12 @@
-import React from "react";
-import { Button } from "../components/Common/button/Button";
-import mainStyle from "../components/Common/component.module.css"
-import Title from "../components/Common/title/title";
-import { FaFileExport } from "react-icons/fa"
-import { useState } from "react";
-import { LocalSave, SaveModal } from "../components/Common/modal/SaveModal";
-import { useSelector } from "react-redux";
-import * as tf from "@tensorflow/tfjs";
+import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { isEmptyObject } from "../components/Common/package";
+import { useSelector } from "react-redux";
+import { isEmptyObject } from "../components/Common/module/checkEmpty";
+import Title from "../components/Common/title/title";
+import { Button } from "../components/Common/button/Button";
+import { LocalSave, SaveModal } from "../components/Common/modal/SaveModal";
+import { FaFileExport } from "react-icons/fa"
+import mainStyle from "../components/Common/component.module.css"
 
 const Download = () => {
     const history = useSelector( state => state.history.info );
@@ -21,9 +19,7 @@ const Download = () => {
         event.preventDefault();
 
         try {
-            
             const saveResults = await model.save(`downloads://${fileName}`);
-
         } catch (err) {
             if (err.name == "TypeError") {
                 alert("model이 정의되지 않았습니다.");
@@ -31,7 +27,7 @@ const Download = () => {
         }
     }
     
-    const locModelSumitHandler = async ( event, model, fileName ) => {
+    const locModelSumitHandler = async ( event, model, fileName     ) => {
         event.preventDefault();
 
         if (isEmptyObject(model)) {
@@ -39,8 +35,9 @@ const Download = () => {
             return 0;
         }
 
-        await model.save(`localstorage://model/${fileName}`).then( saveResults => {
+        model.save(`localstorage://model/${fileName}`).then( saveResults => {
             alert(`localstorage://model/${fileName} 저장완료`);
+            
         })
     }
 
@@ -103,6 +100,7 @@ const Download = () => {
             "lineHeight":"1.75rem",
         }
     }
+    
     return (
         <div className={mainStyle.container}
             style={style.container}>

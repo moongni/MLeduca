@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MultiSelect } from "react-multi-select-component";
-import { isEmpty, isEmptyStr } from "../package";
+import { isEmptyStr } from "../module/checkEmpty";
 import style from './input.module.css'
 
 const Contents = ({...props}) => {
@@ -103,15 +103,11 @@ const IntArrayInput = ({ ...props }) => {
     const [name, setName] = useState("");
 
     // int 배열 변환하여 set
-    useEffect(
-        () => {
+    useEffect(() => {
             let value = string
             value = value.replace("[", "");
             value = value.replace("]", "");
             value = value.split(',').map((item) => {
-                if (item == "null"){
-                    return null
-                }
                 return parseInt(item, 10);
             }).filter(item => (typeof item == "number" || item == null) && !isNaN(item))
             

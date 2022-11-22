@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { isEmptyArray } from "../Common/package";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { isEmptyArray } from "../Common/module/checkEmpty";
+import { toArray, toOption } from "../Common/module/option";
 import { preprocessingActions } from "../../reducers/preprocessingSlice";
-import { toArray, toOption } from "../Common/package";
 import Inputs from "../Common/inputs/Inputs";
 import "../Common/table/scrollStyle.css";
 

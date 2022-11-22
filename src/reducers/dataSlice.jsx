@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDtype, getShape } from "../components/Common/package";
+import { getDtype, getShape } from "../components/Common/module/getData";
+
 const initialState = {
     columns: [],
     data: {},
@@ -22,6 +23,7 @@ const dataSlice = createSlice({
         },
         setData(state, action) {
             state.data = action.payload;
+            state.columns = Object.keys(state.data);
             state.dtype = getDtype(action.payload);
             state.shape = getShape(action.payload);
         },

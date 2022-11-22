@@ -1,15 +1,13 @@
 import * as tf from "@tensorflow/tfjs";
 import * as dfd from "danfojs";
+import { getDtype } from "../Common/module/getData";
 
 export const mkConTensor = (data) => {
-  const df = new dfd.DataFrame(data);
-  // console.log(df);
-  const tensorData = df.tensor;
-  // const tensorData = Object.entries(data).map(items => (
-  //   tf.tensor({value:items[1], dtype:"float32"}).reshape([-1, 1])
-  // ))
-  // return tf.concat(tensorData, 1);
-  return tensorData;
+  const tensorData = Object.entries(data).map((items) => (
+    tf.tensor(items[1]).reshape([-1, 1])
+  ))
+
+  return tf.concat(tensorData, 1);
 }
 
 export function convertToTensor(xs, ys) {

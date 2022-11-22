@@ -1,5 +1,6 @@
 import * as dfd from "danfojs"
-import { isEmpty } from "../Common/package";
+import { isEmpty } from "../Common/module/checkEmpty";
+import { hashMap } from "../Common/module/package";
 
 const preprocessOption = {
   STARDARDSCALE: "stardardScale",
@@ -67,10 +68,7 @@ export async function preprocess(labelData, featureData, process) {
       return dtype == typeof val || isEmpty(val) ? dtype : "object";
     }, typeof data[column][0]);
 
-    const hashmap = data[column].reduce(( acc, val ) => {
-      acc[val] = ( acc[val] || 0 ) + 1;
-      return acc
-    }, {})
+    const hashmap = hashMap(data[column]);
     
     const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
       hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )

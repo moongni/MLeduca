@@ -1,15 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactModal from "react-modal";
+import { useDispatch } from "react-redux";
+import { isEmpty, isEmptyObject, isEmptyStr } from "../module/checkEmpty";
 import { Button } from "../button/Button";
 import * as tf from "@tensorflow/tfjs";
 import Inputs from "../inputs/Inputs";
 import Tabs from "../tab/Tabs";
-import { useDispatch } from "react-redux";
 import { settingActions } from "../../../reducers/settingSlice";
-import { isEmpty, isEmptyObject, isEmptyStr } from "../package";
-import { useRef } from "react";
 import { historyActions } from "../../../reducers/historySlice";
 import { preprocessingActions } from "../../../reducers/preprocessingSlice";
+import { errorHandler } from "../module/errorHandler";
+import Title from "../title/title";
+
+const style = {
+    mainContainer: {
+        "display":"flex",
+        "width":"100%",
+        "justifyContent":"space-between",
+        "padding": "1.5rem 1rem"
+    },
+    span: {
+        "display":"flex", 
+        "alignItems":"center"
+    },
+    btnContainer: {
+        "position":"absolute",
+        "bottom":"0.75rem",
+        "left":"50%",
+        "display":"flex",
+        "transform":"translateX(-50%)",
+        "justifyContent":"center"
+    },
+    btn: {
+        "width":"8rem",
+        "margin":"0.5rem",
+        "height":"2.5rem"
+    },
+    labelStyle: {
+        display: "inline-block",
+        padding: ".5em .75em",
+        color: "#999",
+        fontSize: "inherit",
+        lineHeight: "normal",
+        verticalAlign: "middle",
+        backgroundColor: "#fdfdfd",
+        cursor: "pointer",
+        border: "1px solid #ebebeb",
+        borderBottomColor: "#e2e2e2",
+        borderRadius: ".25em",
+    },
+    nameStyle: {
+        display: "inline-block",
+        padding: ".5em .75em",
+        marginRight: "3px",
+        fontSize: "inherit",
+        fontFamily: "inherit",
+        lineHeight: "normal",
+        verticalAlign: "middle",
+        backgroundColor: "#f5f5f5",
+        border: "1px solid #ebebeb",
+        borderBottomColor: "#e2e2e2",
+        borderRadius: ".25em",
+        WebkitAppearance: "none",
+        MozAppearance: "none",
+        appearance: "none",
+    }
+}
 
 const Modal = ({children, style, ...props}) => {
 
@@ -23,10 +79,14 @@ const Modal = ({children, style, ...props}) => {
                 },
                 content: {
                     position: "fixed",
+                    display:"flex",
+                    flexDirection: "column",
+                    justifyContent:"left",
                     top:"50%",
                     left:"50%",
                     minWidth:"500px",
-                    minHeight:"430px",
+                    minHeight: "450px",
+                    maxHeight: "50%",
                     overflow:"hidden",
                     transform:'translate(-50%, -50%)',
                     color: 'black'
@@ -47,44 +107,55 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
     const [ locValue, setLocValue ] = useState("");
     const [ downValue, setDownValue ] = useState({});
 
-    const loadModel = (url) => {
-        tf.loadLayersModel(url)
-        .then( async ( model ) => {
+    const loadModel = async (url) => {
+        try {
+            var model = await tf.loadLayersModel(url);
+
             dispatch(settingActions.initLayer());
             
             // layer update
             model.layers.map( layer => {
                 if ( layer.constructor.name === "InputLayer" ) {
-
+    
                     dispatch(settingActions.addModel({
                         "shape":layer.batchInputShape
                     }))
-
+    
                 } else if ( layer.constructor.name === "Dense") {
                     const newLayer = {
                         "units":layer.units,
-                        "inputShape":layer.batchInputShape,
+                        "inputShape":layer.batchInputShape.filter( shape => shape != null ),
                         "activation":layer.activation.constructor.name.toLowerCase(),
-                        "bias":layer.bias? true: false
                     }
-
+    
                     dispatch(settingActions.addLayer(newLayer));
-
+    
                 } else {
-                    
-                    alert("신경망 정보를 읽어올 수 없습니다.");
                     dispatch(settingActions.initLayer());
-
+    
+                    throw new Error("신경망 정보를 읽어올 수 없습니다.")
                 }
             })
-
-            if ( typeof props.setModel == "function" ) {
+    
+            if (props.setModel) {
                 props.setModel(model);
                 console.log(model);
             }
-        })
-        .finally( _ => {
-        })
+
+        } catch ( err ) {
+            if ( err.message.includes("modelTopology")) {
+                errorHandler({
+                    "message": "파일을 불러오는데 실패하였습니다.",
+                    "statuscode": 4
+                })
+                return;
+            }
+
+            errorHandler({
+                    "message": err.message,
+                    "statuscode": null
+            })
+        }
     }
 
     const onClickHandler = (event) => {
@@ -92,20 +163,26 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
 
         try {
             if (currentTab == '1') {
-                if (isEmptyStr(locValue)) {
+                if (isEmptyStr(locValue) || locValue == "model List") {
                     throw new Error("불러올 모델을 선택해주세요");
                 }
                 
                 loadModel(locValue);
             } else {
                 if (isEmptyObject(downValue)) {
-                    throw new Error("불러올 모델을 입력해주세요");
+                    throw new Error("모델을 불러와 주세요.");
                 }
                 if (isEmptyObject(downValue.model)) {
                     throw new Error("모델 파일을 불러와주세요");
                 }
                 if (isEmptyObject(downValue.weight)) {
                     throw new Error("가중치 파일을 불러와주세요");
+                }
+                if (downValue.model.type !== "application/json") {
+                    throw new Error(`모델 파일 형식이 잘못되었습니다. \n입력파일: ${downValue.model.type}`);
+                }
+                if (downValue.weight.type !== "application/octet-stream") {
+                    throw new Error(`가중치 파일 형식이 잘못되었습니다. \n입력파일: ${downValue.weight.type}`);
                 }
 
                 loadModel(tf.io.browserFiles([downValue.model, downValue.weight]));
@@ -114,24 +191,10 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
             setModalShow(false);
                 
         } catch ( err ) {
-            console.log(err);
-            alert(err.message);
-        }
-    }
-
-    const style = {
-        btnContainer: {
-            "position":"absolute",
-            "bottom":"0.75rem",
-            "left":"50%",
-            "display":"flex",
-            "transform":"translateX(-50%)",
-            "justifyContent":"center"
-        },
-        btn: {
-            "width":"8rem",
-            "margin":"0.5rem",
-            "height":"2.5rem"
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
         }
     }
 
@@ -213,8 +276,7 @@ const Localstorage = ({ value, setValue, ...props }) => {
 
     return (
         <div style={{"display":"flex",
-                    "paddingBottom":"280px"}}
-        >
+                    "paddingBottom":"280px"}}>
             <Inputs 
                 kind="selectOne"
                 mainTitle="모델 선택"
@@ -241,7 +303,6 @@ const Download = ({ value, setValue, ...props }) => {
         setModelFile(event.target.files[0]);
 
         setModelName(event.target.files[0].name);
-        
     }
 
     const weigthChangeHandler = (event) => {
@@ -257,48 +318,13 @@ const Download = ({ value, setValue, ...props }) => {
         })
 
     }, [ modelFile, weightFile ])
-    
-    const style ={
-        labelStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            color: "#999",
-            fontSize: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#fdfdfd",
-            cursor: "pointer",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-        },
-        nameStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            marginRight: "3px",
-            fontSize: "inherit",
-            fontFamily: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#f5f5f5",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-            WebkitAppearance: "none", /* 네이티브 외형 감추기 */
-            MozAppearance: "none",
-            appearance: "none",
-        }
-    }
 
     return (
         <div style={{"display":"flex",
                     "flexDirection":"column",
                     "paddingBottom":"280px"}}>
-            <div style={{"display":"flex",
-                        "width":"100%",
-                        "justifyContent":"space-between",
-                        "padding": "1.5rem 1rem"}}>
-                <span style={{"display":"flex", "alignItems":"center"}}>모델 불러오기</span>
+            <div style={style.mainContainer}>
+                <span style={style.span}>모델 선택</span>
                 <div>
                     <input className="upload-name" value={isEmptyStr(modelName)? "파일 선택": modelName} disabled="disabled"
                         style={style.nameStyle}/>
@@ -319,11 +345,8 @@ const Download = ({ value, setValue, ...props }) => {
                     </input>
                 </div>
             </div>
-            <div style={{"display":"flex",
-                        "width":"100%",
-                        "justifyContent":"space-between",
-                        "padding": "1.5rem 1rem"}}>
-                <span style={{"display":"flex", "alignItems":"center"}}>가중치 불러오기</span>
+            <div style={style.mainContainer}>
+                <span style={style.span}>가중치 선택</span>
                 <div>
                     <input className="upload-name" value={isEmptyStr(weightName)? "파일 선택": weightName} disabled="disabled"
                         style={style.nameStyle}/>
@@ -359,14 +382,25 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
     const histChangeHandler = (event) => {
         const onReaderLoad = (event) => {
             var obj = JSON.parse(event.target.result);
+
             setHistFile(obj);
         }
+        try {
+            if (event.target.files[0].type !== "application/json") {
+                throw new Error(`json 파일이 아닙니다. \n입력 파일: ${event.target.files[0].type}`);
+            }
 
-        var reader = new FileReader();
-        reader.onload = onReaderLoad;
-        reader.readAsText(event.target.files[0]);
-
-        setHistName(event.target.files[0].name);
+            var reader = new FileReader();
+            reader.onload = onReaderLoad;
+            reader.readAsText(event.target.files[0]);
+    
+            setHistName(event.target.files[0].name);
+        } catch (err) {
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
+        }
     }
 
     const onClickHandler = (event) => {
@@ -374,70 +408,27 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
             if (isEmptyObject(histFile)) {
                 throw new Error("History 파일을 불러와주세요");
             }
-            //check history file
             if (isEmpty(histFile.history)) {
-                throw new Error("잘못된 History 파일 입니다.");
+                throw new Error("파일을 불러오는데 실패하였습니다.");
             }
+
             dispatch(historyActions.setHist(histFile));
     
             setModalShow(false);
         } catch (err) {
-            alert(err.message);
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
         }
     }
-    const style = {
-        btnContainer: {
-            "position":"absolute",
-            "bottom":"0.75rem",
-            "left":"50%",
-            "display":"flex",
-            "transform":"translateX(-50%)",
-            "justifyContent":"center"
-        },
-        btn: {
-            "width":"8rem",
-            "margin":"0.5rem",
-            "height":"2.5rem"
-        },
-        labelStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            color: "#999",
-            fontSize: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#fdfdfd",
-            cursor: "pointer",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-        },
-        nameStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            marginRight: "3px",
-            fontSize: "inherit",
-            fontFamily: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#f5f5f5",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-            WebkitAppearance: "none",
-            MozAppearance: "none",
-            appearance: "none",
-        }
-    }
+
+
     return (
-        <Modal
-        isShow={modalShow}
-        >
-            <div style={{"display":"flex",
-                    "width":"100%",
-                    "justifyContent":"space-between",
-                    "padding": "1.5rem 1rem"}}>
-                <span style={{"display":"flex", "alignItems":"center"}}>History 불러오기</span>
+        <Modal isShow={modalShow}>
+            <Title  title="History 파일 선택" />
+            <div style={style.mainContainer}>
+                <span style={style.span}>History 선택</span>
                 <div>
                     <input className="upload-name" value={isEmptyStr(histName)? "파일 선택": histName} disabled="disabled"
                         style={style.nameStyle}/>
@@ -491,14 +482,26 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
     const settingChangeHandler = (event) => {
         const onReaderLoad = (event) => {
             var obj = JSON.parse(event.target.result);
+            
             setsettingFile(obj);
-        }
-        
-        var reader = new FileReader();
-        reader.onload = onReaderLoad;
-        reader.readAsText(event.target.files[0]);
 
-        setsettingName(event.target.files[0].name);
+        }
+        try {
+            if (event.target.files[0].type !== "application/json") {
+                throw new Error(`json 파일이 아닙니다. \n입력 파일: ${event.target.files[0].type}`);
+            }
+
+            var reader = new FileReader();
+            reader.onload = onReaderLoad;
+            reader.readAsText(event.target.files[0]);
+            
+            setsettingName(event.target.files[0].name);
+        } catch (err) {
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
+        }
     }
 
     const onClickHandler = (event) => {
@@ -507,7 +510,7 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
                 throw new Error("setting 파일을 불러와주세요.");
             }
             if (isEmpty(settingFile.compile) || isEmpty(settingFile.parameter) || isEmpty(settingFile.preprocess)) {
-                throw new Error("잘못된 setting 파일 입니다.");
+                throw new Error("파일을 불러오는데 실패하였습니다.");
             }
 
             dispatch(settingActions.setParam(settingFile.parameter.info));
@@ -518,63 +521,18 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
             setModalShow(false);
             
         } catch (err) {
-            alert(err.message)
-        }
-    }
-    const style = {
-        btnContainer: {
-            "position":"absolute",
-            "bottom":"0.75rem",
-            "left":"50%",
-            "display":"flex",
-            "transform":"translateX(-50%)",
-            "justifyContent":"center"
-        },
-        btn: {
-            "width":"8rem",
-            "margin":"0.5rem",
-            "height":"2.5rem"
-        },
-        labelStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            color: "#999",
-            fontSize: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#fdfdfd",
-            cursor: "pointer",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-        },
-        nameStyle: {
-            display: "inline-block",
-            padding: ".5em .75em",
-            marginRight: "3px",
-            fontSize: "inherit",
-            fontFamily: "inherit",
-            lineHeight: "normal",
-            verticalAlign: "middle",
-            backgroundColor: "#f5f5f5",
-            border: "1px solid #ebebeb",
-            borderBottomColor: "#e2e2e2",
-            borderRadius: ".25em",
-            WebkitAppearance: "none",
-            MozAppearance: "none",
-            appearance: "none",
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
         }
     }
 
     return (
-        <Modal
-        isShow={modalShow}
-        >
-            <div style={{"display":"flex",
-                    "width":"100%",
-                    "justifyContent":"space-between",
-                    "padding": "1.5rem 1rem"}}>
-                <span style={{"display":"flex", "alignItems":"center"}}>Setting 불러오기</span>
+        <Modal isShow={modalShow}>
+            <Title  title="Setting 파일 선택" />
+            <div style={style.mainContainer}>
+                <span style={style.span}>Setting 불러오기</span>
                 <div>
                     <input className="upload-name" value={isEmptyStr(settingName)? "파일 선택": settingName} disabled="disabled"
                         style={style.nameStyle}/>
@@ -615,5 +573,4 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
             </div>
         </Modal>
     )
-
 }

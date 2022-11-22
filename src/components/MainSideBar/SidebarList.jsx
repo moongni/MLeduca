@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { isEmptyArray } from "../Common/package";
+import { isEmptyArray } from "../Common/module/checkEmpty";
 import { Link } from 'react-router-dom';
 import { IoMdAnalytics } from "react-icons/io";
 import { AiFillCaretDown, AiOutlineLineChart, AiOutlineControl } from "react-icons/ai"

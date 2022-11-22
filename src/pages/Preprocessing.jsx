@@ -1,21 +1,85 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { trainActions } from "../reducers/trainSlice";
-import { getNData, getShape, isEmptyArray, selectColumn } from "../components/Common/package"
+import { getNData, getShape, getViewData } from "../components/Common/module/getData"
+import { isEmptyArray } from "../components/Common/module/checkEmpty"
+import { contentView, selectColumn, setDataView } from "../components/Common/module/package";
+import { errorHandler } from "../components/Common/module/errorHandler";
 import SetColumn  from "../components/Preprocessing/SetColumn";
 import ArrayTable from "../components/Common/table/ArrayTable";
-import mainStyle from '../components/Common/component.module.css';
-import { MdOutlineToc } from "react-icons/md"
 import Title from "../components/Common/title/title";
+import Inputs from "../components/Common/inputs/Inputs";
 import { Loader } from "../components/Common/loader/Loader";
 import { Button } from "../components/Common/button/Button";
-import { preprocessingActions } from "../reducers/preprocessingSlice";
 import { preprocess } from "../components/TF/Preprocess";
-import Inputs from "../components/Common/inputs/Inputs";
-import { useEffect } from "react";
 import { PreprocessingOptions } from "../components/Preprocessing/PreprocessingOption";
+import { preprocessingActions } from "../reducers/preprocessingSlice";
 import { testActions } from "../reducers/testSlice";
-import { contentView } from "../components/Common/package";
+import { trainActions } from "../reducers/trainSlice";
+import { MdOutlineToc } from "react-icons/md"
+import mainStyle from '../components/Common/component.module.css';
+
+const splitTrainTest = async (labelData, featureData, trainRatio) => {
+    /* 
+        labelData: {'col name': [data]}
+        featureData: {'col name': [data]}
+        trainRatio: float
+
+        return {
+            trainX: featureData: {'col name': [data]},
+            trainY: labelData: {'col name': [data]},
+            testX: testX: {'col name': [data]},
+            testY: testY: {'col name': [data]}
+        }
+    */
+    const numSample = Object.values(labelData)[0].length;
+
+    if ( numSample != Object.values(featureData)[0].length ) {
+        return {
+            isError: true,
+            errorData: {
+                "message": "데이터의 길이가 다릅니다. 초기화 후 다시 시도 해주세요",
+                "statuscode": 2 
+            }
+        }
+    }
+
+    const features = Object.keys(featureData);
+    const labels = Object.keys(labelData);
+
+    const numTrainSample = Math.round(numSample * trainRatio);
+    
+    const testX = {}
+    const testY = {}
+    
+    for ( const col of features ) {
+        testX[col] = []
+    }
+
+    for ( const col of labels ) {
+        testY[col] = []
+    }
+
+    for ( var i = numSample; i > numTrainSample; i-- ) {
+        var idx = Math.floor(Math.random() * i)
+
+        for ( const col of features ) {
+            testX[col].push(featureData[col].splice(idx, 1)[0]);
+        }
+        for ( const col of labels ) {
+            testY[col].push(labelData[col].splice(idx, 1)[0]);
+        }
+    }
+
+    return {
+        isError: false,
+        data: {
+            trainX: featureData,
+            trainY: labelData,
+            testX: testX,
+            testY: testY
+        }
+    }
+}
 
 const Preprocessing = () => {
     const dispatch = useDispatch();
@@ -27,10 +91,8 @@ const Preprocessing = () => {
     const trainX = useSelector( state => state.train.feature );
     const trainY = useSelector( state => state.train.label );
     const process = useSelector( state => state.preprocess.train );
-    console.log("preprocess", process);
     const testX = useSelector( state => state.test.feature );
     const testY = useSelector( state => state.test.label );
-
     const [ isLoading, setLoading ] = useState(false);
     const [ splitRatio, setSplitRatio ] = useState({});
     const [ nData, setNData ] = useState({"trainNData": 5, "testNData": 5});
@@ -51,7 +113,7 @@ const Preprocessing = () => {
             alert("Please, check ratio of split set (0.0 ~ 1.0 available)");
             setSplitRatio({ "train set ratio" : 1.0 })
         }
-    }, [splitRatio])
+    }, [ splitRatio ])
 
     useEffect(() => {
         if (!isEmptyArray(trainX.columns)) {
@@ -95,125 +157,78 @@ const Preprocessing = () => {
         }
     }, [ testX, testY ])
 
-    const onClickHandler = async () => {
-        const splitTrainTest = async (labelData, featureData, trainRatio) => {
-            /* 
-                labelData: {'col name': [data]}
-                featureData: {'col name': [data]}
-                trainRatio: float
-
-                return {
-                    trainX: featureData: {'col name': [data]},
-                    trainY: labelData: {'col name': [data]},
-                    testX: testX: {'col name': [data]},
-                    testY: testY: {'col name': [data]}
-                }
-            */
-
-            const numSample = Object.values(labelData)[0].length;
-
-            if ( numSample != Object.values(featureData)[0].length ) {
-                throw new Error("data and split have different numbers of examples");
-            }
-
-            const features = Object.keys(featureData);
-            const labels = Object.keys(labelData);
-
-            const numTrainSample = Math.round(numSample * trainRatio);
-            
-            const testX = {}
-            const testY = {}
-            
-            for ( const col of features ) {
-                testX[col] = []
-            }
-
-            for ( const col of labels ) {
-                testY[col] = []
-            }
-
-            for ( var i = numSample; i > numTrainSample; i-- ) {
-                var idx = Math.floor(Math.random() * i)
-
-                for ( const col of features ) {
-                    testX[col].push(featureData[col].splice(idx, 1)[0]);
-                }
-                for ( const col of labels ) {
-                    testY[col].push(labelData[col].splice(idx, 1)[0]);
-                }
-            }
-
-            return {
-                trainX: featureData,
-                trainY: labelData,
-                testX: testX,
-                testY: testY
-            }
-        }
-
-        try {
-          setLoading(true);
-          
-          dispatch(preprocessingActions.updateProcess({
+    const setProcessedData = async () => {
+        dispatch(preprocessingActions.updateProcess({
             title: 'label',
             columns: trainY.columns,
             kind: "train"
-          }));
+        }));
 
-          dispatch(preprocessingActions.updateProcess({
+        dispatch(preprocessingActions.updateProcess({
             title: 'feature',
             columns: trainX.columns,
             kind: "train"
-          }))
+        }))
 
-          const { labelData, featureData } = await preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process);
-          
-          if ( splitRatio["train set ratio"] == 1.0 || splitRatio['train set ratio'] == null ) {
+        const { labelData, featureData } = await preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process);
+        
+        if ( splitRatio["train set ratio"] == 1.0 || splitRatio['train set ratio'] == null ) {
             dispatch(trainActions.setData({
                 title: "feature",
                 data: featureData
-              }))
+                }))
         
             dispatch(trainActions.setData({
                 title: "label",
                 data: labelData
             }))
 
-          } else {
-            const { trainX, trainY, testX, testY } = await splitTrainTest(labelData, featureData, splitRatio["train set ratio"]);
-            
-            dispatch(trainActions.setData({
-                title: "feature",
-                data: trainX
-              }))
+        } else {
+            splitTrainTest(labelData, featureData, splitRatio["train set ratio"])
+            .then( response => {
+                if (response.isError) {
+                    errorHandler(response.errorData);
+                } else {
+                    const { trainX, trainY, testX, testY } = response.data;
+                    
+                    dispatch(trainActions.setData({
+                        title: "feature",
+                        data: trainX
+                        }))
+                
+                    dispatch(trainActions.setData({
+                        title: "label",
+                        data: trainY
+                    }))
         
-            dispatch(trainActions.setData({
-                title: "label",
-                data: trainY
-            }))
-
-            dispatch(testActions.setFeatureData(testX));
-
-            dispatch(testActions.setLabelData(testY));
-
-            dispatch(testActions.setData({
-                ...testX,
-                ...testY
-            }))
-            
-          }
-
-    
-        } catch (err) {
-
-            alert(err);
-
-            setLoading(false);
-
-            console.log(err);
+                    dispatch(testActions.setFeatureData(testX));
+        
+                    dispatch(testActions.setLabelData(testY));
+        
+                    dispatch(testActions.setData({
+                        ...testX,
+                        ...testY
+                    }))
+                }
+            });
         }
+    }
 
-      }
+    const onClickHandler = (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        setProcessedData()
+        .catch( err => {
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
+        })
+        .finally( _ => {
+            setLoading(false);
+        })
+    }
 
     const style = {
         CenterContainer: {
@@ -296,7 +311,7 @@ const Preprocessing = () => {
                             title="train set ratio"
                             min={0.0}
                             max={1.0}
-                            default={1.0}
+                            defaultValue={1.0}
                             step={0.01}
                             value={splitRatio}
                             setValue={setSplitRatio}
@@ -312,6 +327,10 @@ const Preprocessing = () => {
                         onClick={() => {
                             dispatch(trainActions.initialize());
                             dispatch(preprocessingActions.initialize());
+                            setViewTestX(initData);
+                            setViewTestY(initData);
+                            setViewTrainX(initData);
+                            setViewTrainY(initData);
                         }}>
                         초기화
                     </Button>
@@ -319,12 +338,7 @@ const Preprocessing = () => {
                         className="green"
                         style={style.btn}
                         type="button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            
-                            onClickHandler().then( _ => {
-                                setLoading(false);
-                            })}}
+                        onClick={onClickHandler}
                         >
                         적용
                     </Button>
@@ -358,30 +372,26 @@ const Preprocessing = () => {
                             type="button"
                             onClick={() => {
                                 try {
-                                    if ( nData.trainNData < 1 && nData.trainNData > trainX.shape[1] ) {
-                                        throw new Error(`0 ~ ${trainX.shape[1]}사이의 값을 입력해주세요. 현재 값 : ${nData.trainNData}`);
+                                    var responseX = getViewData(nData.trainNData, trainX)
+                                    var responseY = getViewData(nData.trainNData, trainY)
+                                    
+                                    if (responseX.isError){
+                                        errorHandler(responseX.errorData);
+                                    } else {
+                                        setViewTrainX(responseX.data);
                                     }
                                     
-                                    const newX = getNData(trainX.data, nData.trainNData);
-                                    const newY = getNData(trainY.data, nData.trainNData);
-
-                                    setViewTrainX({
-                                        ['columns']: trainX.columns,
-                                        ['data']: newX,
-                                        ['shape']: getShape(newX)
-                                    })
-                                    setViewTrainY({
-                                        ['columns']: trainY.columns,
-                                        ['data']: newY,
-                                        ['shape']: getShape(newY)
-                                    })
+                                    if (responseY.isError) {
+                                        errorHandler(responseY.errorData);
+                                    } else {
+                                        setViewTrainY(responseY.data);
+                                    }
 
                                 } catch (err) {
-                                    if ( err.message === "ParamError: end must be greater than start") {
-                                        alert(`데이터 뷰 개수를 입력해주세요`);
-                                    } else {
-                                        alert(err.message);
-                                    }
+                                    errorHandler({
+                                        "message": err.message,
+                                        "statuscode": null
+                                    })
                                 }
                             }}>
                             적용
@@ -438,33 +448,26 @@ const Preprocessing = () => {
                             type="button"
                             onClick={() => {
                                 try {
-                                    if ( nData.testNData < 1 && nData.testNData > testX.shape[1] ) {
-                                        throw new Error(`0 ~ ${testX.shape[1]}사이의 값을 입력해주세요. 현재 값 : ${nData.testNData}`);
+                                    var responseX = getViewData(nData.testNData, testX)
+                                    var responseY = getViewData(nData.testNData, testY)
+                                    
+                                    if (responseX.isError){
+                                        errorHandler(responseX.errorData);
+                                    } else {
+                                        setViewTestX(responseX.data);
                                     }
                                     
-                                    const newX = getNData(testX.data, nData.testNData);
-                                    const newY = getNData(testY.data, nData.testNData);
-
-                                    setViewTestX({
-                                        ['columns']: testX.columns,
-                                        ['data']: newX,
-                                        ['shape']: getShape(newX)
-                                    })
-                                    setViewTestY({
-                                        ['columns']: testY.columns,
-                                        ['data']: newY,
-                                        ['shape']: getShape(newY)
-                                    })
+                                    if (responseY.isError) {
+                                        errorHandler(responseY.errorData);
+                                    } else {
+                                        setViewTestY(responseY.data);
+                                    }
 
                                 } catch (err) {
-                                    if ( err.message === "ParamError: end must be greater than start") {
-                                        alert(`데이터 뷰 개수를 입력해주세요`);
-                                    } else {
-                                        alert(err.message);
-                                    }
-                                    if ( err.message === "Value Error") {
-                                        alert();
-                                    }
+                                    errorHandler({
+                                        "message": err.message,
+                                        "statuscode": null
+                                    })
                                 }
                             }}>
                             적용

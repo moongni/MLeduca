@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import Tabs from "../../Common/tab/Tabs"
-import data from "../../../data/data.json"
-import { useNav } from "../../Common/singlePageNav/useNav";
-import style from "../../Common/component.module.css";
-import { AiOutlineControl } from "react-icons/ai";
-import Title from "../../Common/title/title";
-import Inputs from "../../Common/inputs/Inputs";
 import { useDispatch, useSelector } from "react-redux";
+import { useNav } from "../../Common/singlePageNav/useNav";
+import { isEmptyArray } from "../../Common/module/checkEmpty";
+import Inputs from "../../Common/inputs/Inputs";
+import Title from "../../Common/title/title";
+import Tabs from "../../Common/tab/Tabs"
 import { LayerList } from "./LayerList";
-import { isEmptyArray } from "../../Common/package";
+import { AdvancedSettingButton, Button } from "../../Common/button/Button";
 import { settingActions } from "../../../reducers/settingSlice";
-import { AdvancedSettingButton, Button} from "../../Common/button/Button";
+import { AiOutlineControl } from "react-icons/ai";
+import data from "../../../data/data.json"
+import style from "../../Common/component.module.css";
 
 function Layers() {
     const dispatch = useDispatch();
@@ -76,12 +76,11 @@ export default Layers
 function Model({icon, disabled, setDisabled, ...props}) {
     const dispatch = useDispatch();
 
-
     const [value, setValue] = useState({});
 
     const handleSubmit = async (event) => {
-        setDisabled(true);
         event.preventDefault();
+        setDisabled(true);
 
         dispatch(settingActions.addModel(value))
         setDisabled(false);        
@@ -94,9 +93,9 @@ function Model({icon, disabled, setDisabled, ...props}) {
                 onSubmit={handleSubmit}
             >
                 {props.info.filter(n => n.name === "mainParams")[0].params
-                    .map(v => (
+                    .map( info => (
                         <Inputs
-                            {...v}
+                            {...info}
                             value={value}
                             setValue={setValue}/>
                 ))}

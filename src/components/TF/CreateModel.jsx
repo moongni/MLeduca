@@ -1,5 +1,4 @@
 import * as tf from "@tensorflow/tfjs";
-import { isEmptyObject } from "../Common/package";
 
 export const createModel = async (layers) => {
   /* 

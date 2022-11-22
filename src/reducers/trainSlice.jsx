@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDtype, getShape } from "../components/Common/package";
+import { getDtype, getShape } from "../components/Common/module/getData";
 
 const initialState = {
     feature: {

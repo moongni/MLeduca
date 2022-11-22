@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import mainStyle from "../components/Common/component.module.css";
+import { preprocess } from "../components/TF/Preprocess";
+import { PredictModel } from "../components/Predict/PredictModel";
+import { isEmpty, isEmptyArray, isEmptyObject } from "../components/Common/module/checkEmpty";
+import { getNData, getShape, getViewData } from "../components/Common/module/getData";
+import { makeRangeArray, contentView, selectColumn } from "../components/Common/module/package";
+import { mkConTensor } from "../components/TF/ConvertToTensor";
 import Title from "../components/Common/title/title";
+import ArrayTable from "../components/Common/table/ArrayTable";
+import Inputs from "../components/Common/inputs/Inputs";
+import SetColumn from "../components/Preprocessing/SetColumn";
 import { Button } from "../components/Common/button/Button";
 import { PredictData } from "../components/Predict/PredictData";
-import { PredictModel } from "../components/Predict/PredictModel";
-import { isEmpty, isEmptyArray, isEmptyObject, getNData, getShape, makeRangeArray } from "../components/Common/package";
-import { mkConTensor } from "../components/TF/ConvertToTensor";
-import { testActions } from "../reducers/testSlice";
-import ArrayTable from "../components/Common/table/ArrayTable";
-import { contentView } from "../components/Common/package";
-import Inputs from "../components/Common/inputs/Inputs";
+import { Loader } from "../components/Common/loader/Loader";
 import { PreprocessingOptions } from "../components/Preprocessing/PreprocessingOption";
 import { preprocessingActions } from "../reducers/preprocessingSlice";
-import SetColumn from "../components/Preprocessing/SetColumn";
-import { selectColumn } from "../components/Common/package";
-import { preprocess } from "../components/TF/Preprocess";
+import { testActions } from "../reducers/testSlice";
+import mainStyle from "../components/Common/component.module.css";
 import * as dfd from "danfojs";
-import { useOutletContext } from "react-router-dom";
+import { errorHandler } from "../components/Common/module/errorHandler";
 
 const Predict = () => {
     const dispatch = useDispatch();
@@ -27,11 +29,10 @@ const Predict = () => {
     const predY = useSelector( state => state.test.predData );
     const process = useSelector( state => state.preprocess.test );
     const yColumn = useSelector( state => state.train.label.columns );
-
     const [ model, setModel ] = useOutletContext();
+    
     const [ disable, setDisable ] = useState(true);
     const [ isLoading, setLoading ] = useState(false);
-    const [ sample, setSample ] = useState({});
     const [ nData, setNData ] = useState({"testNData":5});
 
     const [ viewTestX, setViewTestX ] = useState({
@@ -62,6 +63,12 @@ const Predict = () => {
         }
     }, [ model, testX.data ])
 
+    useEffect(() => {
+        if ( !isEmptyArray(testX.columns) ) {
+            dispatch(testActions.setFeatureData(selectColumn(rowTestData.data, testX.columns)))
+        }
+    }, [ rowTestData ])
+    
     const onClickPredict = async (e) => {
         const arrToObject = async ( data ) => {
             var colName = isEmptyArray(yColumn)? makeRangeArray(0, data[0].length) : yColumn;
@@ -83,35 +90,49 @@ const Predict = () => {
         }
 
         e.preventDefault();
+        setLoading(true);
+        
+        try {
+            var tensorData = mkConTensor(testX.data);
+            var predData = await arrToObject((await model.predict(tensorData)).arraySync()) ;
     
-        var tensorData = mkConTensor(testX.data);
-        var predData = await arrToObject((await model.predict(tensorData)).arraySync()) ;
+            dispatch( testActions.setPredData(predData) );
+        } catch (err) {
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            });
+        }
 
-        dispatch( testActions.setPredData(predData) );
-
+        setLoading(false);
     }
 
     const onClickHandler = async () => {
-        try {
-            setLoading(true);
+        setLoading(true);
 
+        try {
             dispatch(preprocessingActions.updateProcess({
                 title: 'feature',
-                columns: testX.columns,
-                kind: "test"
+                kind: "test",
+                columns: testX.columns
             }))
-
+    
             const cashData = selectColumn(rowTestData.data, testX.columns);
             const dummyData = cashData;
-
+            
             const { labelData, featureData } = await preprocess(dummyData, cashData, process);
-
+            
             dispatch(testActions.setFeatureData(featureData));
             
 
-        } catch (e) {
-            alert(e);
+        } catch (err) {
+            errorHandler({
+                "message": err.message,
+                "statuscode": null
+            })
         }
+
+        setLoading(false);
     }
 
     const style = {
@@ -140,13 +161,14 @@ const Predict = () => {
     
     return (
         <>
+            {isLoading && <Loader type="spin" color="black" message={"Loading..."}/>}
             <div className={mainStyle.container}>
                 <Title title="예측 데이터 준비"/>
                 <div className={mainStyle.subContainer}>
                     <PredictData/>
                 </div>
                 <div style={{"display":"flex",
-                        "justifyContent":"space-between",
+                        "justifyContent":"space-between" ,
                         "marginRight":"2.5rem"}}>
                     <Title title="데이터 테이블"/>
                     <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
@@ -169,27 +191,19 @@ const Predict = () => {
                             type="button"
                             onClick={() => {
                                 try {
-                                    if ( nData.testNData < 1 && nData.testNData > testX.shape[1] ) {
-                                        throw new Error(`0 ~ ${testX.shape[1]}사이의 값을 입력해주세요. 현재 값 : ${nData.testNData}`);
-                                    }
-                                    
-                                    const newX = getNData(testX.data, nData.testNData);
+                                    var response = getViewData(nData.testNData, testX);
 
-                                    setViewTestX({
-                                        ['columns']: testX.columns,
-                                        ['data']: newX,
-                                        ['shape']: getShape(newX)
-                                    })
+                                    if (response.isError) {
+                                        errorHandler(response.errorData);
+                                    } else {
+                                        setViewTestX(response.data);
+                                    }
 
                                 } catch (err) {
-                                    if ( err.message === "ParamError: end must be greater than start") {
-                                        alert(`데이터 뷰 개수를 입력해주세요`);
-                                    } else {
-                                        alert(err.message);
-                                    }
-                                    if ( err.message === "Value Error") {
-                                        alert();
-                                    }
+                                    errorHandler({
+                                        "message": err.message,
+                                        "statuscode": null
+                                    })
                                 }
                             }}>
                             적용
@@ -229,6 +243,11 @@ const Predict = () => {
                                     onClick={() => {
                                         dispatch(testActions.initialize());
                                         dispatch(preprocessingActions.initialize());
+                                        setViewTestX({
+                                            'columns': [],
+                                            'data': {},
+                                            'shape': []
+                                        });
                                     }}
                                 >
                                     초기화
@@ -237,8 +256,7 @@ const Predict = () => {
                                     className="green"
                                     style={style.btn}
                                     type="button"
-                                    onClick={() => {
-                                        onClickHandler().then( _ => setLoading(false))}}
+                                    onClick={onClickHandler}
                                     >
                                     적용
                                 </Button>
@@ -261,7 +279,7 @@ const Predict = () => {
                     style={{"width":"100px"}}
                     type="button"
                     disabled={disable}
-                    onClick={(e) => onClickPredict(e)}
+                    onClick={onClickPredict}
                 >
                     예측
                 </Button>
@@ -286,8 +304,11 @@ const Predict = () => {
 
                                             dfd.toCSV(df, {download: true});
                                         
-                                        } catch (e) {
-                                            alert(e);
+                                        } catch (err) {
+                                            errorHandler({
+                                                "message": err.message,
+                                                "statuscode": null
+                                            })
                                         }
                                     }}/>
                                 <Button
@@ -298,10 +319,11 @@ const Predict = () => {
                                             var df = new dfd.DataFrame(predY.data);
 
                                             dfd.toJSON(df, {download: true});
-                                        } catch (e) {
-
-                                            alert(e);
-
+                                        } catch (err) {
+                                            errorHandler({
+                                                "message": err.message,
+                                                "statuscode": null
+                                            })
                                         }
                                     }}/>
                             </div>

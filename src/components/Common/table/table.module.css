@@ -6,12 +6,10 @@
     /* border-width: 1px;
     border-color: var(--tw-shadow-color); */
 }
-
 .theadTr {
     border-bottom-width: 2px;
     border-color: rgb(253 224 71 / var(--border-opacity));
 }
-
 .th {
     position: sticky;
     top: 0;
@@ -23,13 +21,10 @@
     background-color: var(--bg-color);
 }
 .tbodyTr{
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    margin: 0 0.25rem;
+    padding: 0.5rem 0;
     border-bottom-width: 2px;
     border-color: rgb(241 245 249 / var(--border-opacity));
-    --background-hover-color: rgb(241 245 249 / var(--bg-opacity))
 }
 .tbodyTr:hover{
     background-color: var(--background-hover-color);
@@ -57,4 +52,29 @@
 }
 .tbodyTr .removeTd:hover {
     color: red;
+}
+.addTd {
+    left: 50%;
+    align-items: center;
+    font-size: 1.25rem;
+    word-break: keep-all;
+}
+.addTd:hover {
+    color: green;
+}
+.input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    margin-right: 0.5rem;
+    letter-spacing: 0.1em;
+    border-color: rgb(241 245 249 / var(--border-opacity));
+    background-color: var(--bg-color);
+}
+.input:focus {
+    outline: none;
+}
+.input:focus, .input:hover {
+    background-color: var(--background-hover-color);
 }

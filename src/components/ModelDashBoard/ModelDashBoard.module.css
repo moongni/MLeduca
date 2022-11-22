@@ -18,7 +18,7 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
     background-color: rgb(226 232 240 / var(--bg-opacity));
-
+    z-index: 20;
 }
 .open {
     width: 16.25rem;

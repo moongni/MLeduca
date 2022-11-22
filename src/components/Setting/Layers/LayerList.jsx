@@ -55,8 +55,7 @@ export const LayerList = ({style, data, isModel, ...props}) => {
                                 )
                             )}
                             {props.isHandleRemove &&
-                                <td 
-                                    className={[tableStyle.td, tableStyle.removeTd].join(' ')}
+                                <td className={[tableStyle.td, tableStyle.removeTd].join(' ')}
                                     onClick={()=>props.handleRemove(d.idx)}>
                                     <AiOutlineDelete/>
                                 </td>

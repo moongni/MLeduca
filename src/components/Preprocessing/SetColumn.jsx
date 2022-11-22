@@ -1,32 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Inputs from "../Common/inputs/Inputs";
-import { toArray, toOption, selectColumn } from "../Common/package";
 import { Button } from "../Common/button/Button";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { toArray, toOption } from "../Common/module/option";
+import { selectColumn } from "../Common/module/package";
 
 const SetColumn = ({ setData, setLoading, data, dataColumns, initFunction, style, ...props }) => {
     const dispatch = useDispatch();
     
     const [ selectedValue, setSelectedValue ] = useState([]);
 
-    const onClickHandler = async () => {
-        try {
+    const onClickHandler = () => {
+        if (setLoading) {
             setLoading(true);
-            
+        }
+
+        try {
             if (initFunction) {
                 initFunction();
             }
-
-            const newCol = toArray(selectedValue);
-            const newData = selectColumn(data, newCol);
             
-            dispatch(setData(newData));
-        
+            const selectData = async () => {
+                const newCol = toArray(selectedValue);
+                const newData = selectColumn(data, newCol);
+                
+                dispatch(setData(newData));
+            }
+            
+            selectData()
+            .finally( _ => {
+                setLoading(false);
+            })
+
         } catch (err) {
+            
+            setLoading(false);
 
             alert(err);
+
             console.log(err);
+
         }
 
     }
@@ -53,13 +66,7 @@ const SetColumn = ({ setData, setLoading, data, dataColumns, initFunction, style
                 className="right"
                 style={{"margin":"0 40px", "wordBreak":"keep-all"}} 
                 type="button" 
-                onClick={(e) => {
-                    onClickHandler()
-                    .finally( _ => {
-                        setLoading(false)
-                    });
-                }}
-            >
+                onClick={onClickHandler}>
                 적용
             </Button>
         </div>

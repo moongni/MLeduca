@@ -5,7 +5,7 @@ import React, {
 import style from './drogDropFile.module.css';
 
 export const DrogDropFile = ({children, readFile, ...props}) => {
-    const [dragActive, setDragActive] = useState(false);
+    const [ dragActive, setDragActive ] = useState(false);
     const inputRef = useRef(null);
 
     const handleDrag = useCallback((e) => {

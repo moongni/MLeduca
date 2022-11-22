@@ -1,90 +1,7 @@
 import * as dfd from "danfojs";
+import { isEmptyStr } from "./checkEmpty";
 
-export const isEmptyObject = ( param ) => {
-    return Object.keys(param).length === 0 && param.constructor === Object;
-}
-
-export const isEmptyArray = ( param ) => {
-
-    return Array.isArray(param) && !param.length
-}
-
-export const isEmpty = ( param ) => {
-    return typeof param === "undefined" || param === null;
-}
-
-export const isEmptyStr = ( param ) => {
-    return isEmpty(param) || param === "";
-}
-
-export const toOption = ( items ) => {
-    const newOptions = [];
-
-    if( !isEmptyArray(items) && !isEmpty(items) ){
-        items.map(item => newOptions.push({
-            label: item,
-            value: item
-        }))
-    }
-    return newOptions
-}
-
-export const toArray = ( options ) => {
-    const newArray = [];
-    
-    if( !isEmptyArray(options) && !isEmpty(options) ){
-        options.map(option => newArray.push(option.value));
-    }
-
-    return newArray;
-}
-
-export const makeRangeArray = ( start=0, end ) => {
-    var num = end - start
-    let newArray = new Array(num);
-    for (var i = 0; i < num; i ++) {
-        newArray[i] = start;
-        start++;
-    }
-
-    return newArray;
-}
-
-export const selectColumn = ( data, columns ) => {
-    const newData = new Object();
-
-    columns.map(column => {
-        newData[column] = data[column]; 
-    })
-
-    return newData;
-}
-
-export const contentView = ({ element, children, checkFunction }) => {
-    const style = {
-        center: {
-            "width": "100%",
-            "padding": "10px",
-            "textAlign": "center",
-            "fontSize": "1.25rem",
-            "lineHeight": "1.75rem",
-            "opacity": "0.6",
-        }
-    }
-    
-    if ( checkFunction( element ) ){
-        return (
-            <div style={style.center}>
-                <span >No Data</span>
-            </div>
-        )
-    } else {
-        return children
-    }
-    
-}
-
-export const getData = async (url, dispatch, actions) => {
+export const getData = async (url) => {
     /* 
         parameter
             url: ""
@@ -95,24 +12,31 @@ export const getData = async (url, dispatch, actions) => {
         return
             none
     */
+    if (isEmptyStr(url)){
+        return {
+            isError: true,
+            errorData: {
+                message: "Url을 입력해주세요",
+                statuscode: 0
+            }
+        }
+    }
 
-    try {
-        dispatch(actions.initialize());
-        
-        // const dataResponse = await fetch(url);
-        
+    const response = await fetch(url)
+
+    if (response.ok) {
         let newData = {};
-
-        var splitUrl = url.split("/")
+    
+        var splitUrl = url.split("/");
         var splitFileName = splitUrl[splitUrl.length - 1].split('.');
         var fileExtension = splitFileName[1];
-        
+    
         switch (fileExtension){
             case "json":
                 // const jsonData = await dataResponse.json();
                 const jsonDf = await dfd.readJSON(url);
                 newData = dfd.toJSON(jsonDf, { format: 'row' });
-
+    
                 // dispatch(actions.setColumns(Object.keys(jsonData[0])));
                 // Object.keys(jsonData[0]).map(column => {
                 //     const newColumn = {
@@ -123,8 +47,8 @@ export const getData = async (url, dispatch, actions) => {
                 break;
             case "csv":
                 const csvDf = await dfd.readCSV(url);
-                newData = dfd.toJSON(csvDf, { format: 'row' })
-
+                newData = dfd.toJSON(csvDf, { format: 'row' });
+                break;
                 // const rows = csvData.split((/\r?\n|\r/));
                 // const features = rows.shift().split(',');
                 // dispatch(actions.setColumns(features));
@@ -134,7 +58,7 @@ export const getData = async (url, dispatch, actions) => {
                 // features.map(feature => {
                 //     newData[feature] = [];
                 // })
-
+    
                 // rows.forEach(row => {
                 //     const values = row.split(sep);
                 //     features.forEach((value, key) => {
@@ -142,18 +66,30 @@ export const getData = async (url, dispatch, actions) => {
                 //     })
                 // })
                 // dispatch(actions.setData(newData));
+            default:
+                return {
+                    isError: true,
+                    errorData: {
+                        message: "파일 형식이 맞지 않습니다. json, csv 파일만 지원합니다.",
+                        statuscode: 1
+                    }
+                }
         }
-        
-        dispatch(actions.setColumns(Object.keys(newData)));
 
-        dispatch(actions.setData(newData));
-
-    } catch (e) {
-
-        alert(e);
-        
+        return {
+            isError: false,
+            data: newData
+        }
+    
+    } else {
+        return {
+            isError: true,
+            errorData: {
+                message: "Unknown",
+                statuscode: response.status
+            }
+        }
     }
-
 }
 
 export const getDtype = (data) => {
@@ -173,7 +109,7 @@ export const getDtype = (data) => {
 }
 
 export const getShape = (data) => {
-    return new dfd.DataFrame(data).shape.reverse();
+    return new dfd.DataFrame(data).shape;
 }
 
 export const getNData = (data, nData) => {
@@ -185,3 +121,26 @@ export const getNData = (data, nData) => {
 
     return newData;
 }
+
+export const getViewData = ({ nData, data }) => {
+    if (nData < 1 && nData > data.shape[1]) {
+        return {
+            isError: true,
+            errorData: {
+                message: `0 ~ ${data.shape[1]}사이의 값을 입력해주세요. 현재 값 : ${nData}`,
+                statuscode: 3
+            }
+        }
+    }
+
+    const newData = getNData(data.data, nData);
+
+    return {
+        isError: false,
+        data: {
+            ['columns']: data.columns,
+            ['data']: newData,
+            ['shape']: getShape(newData)
+        }
+    }
+} 

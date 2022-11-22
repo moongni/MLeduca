@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDtype, getShape } from "../components/Common/package";
+import { getDtype, getShape } from "../components/Common/module/getData";
+import { isEmptyArray } from "../components/Common/module/checkEmpty";
 
 const initialState = {
     rowData: {
@@ -42,8 +43,31 @@ const testSlice = createSlice({
                 ...action.payload
             }
 
+            state.rowData.columns = Object.keys(state.rowData.data);
             state.rowData.dtype = getDtype(state.rowData.data);
             state.rowData.shape = getShape(state.rowData.data);
+        },
+        addSample(state, action) {
+            if ( !isEmptyArray(state.rowData.columns) ) {
+                if( state.rowData.columns.length !== Object.keys(action.payload).length) {
+                    throw new Error("저장된 열의 크기와 다릅니다.");
+                } else {
+                    state.rowData.columns.map((column, i) => {
+                        state.rowData.data[column].push(action.payload[i]);
+                    })
+                }
+            } else {
+                var newData = new Object();
+                
+                for (const [ key, value ] of Object.entries(action.payload)) {
+                    newData[key] = [value]
+                }
+
+                state.rowData.data = newData
+                state.rowData.columns = Object.keys(state.rowData.data);
+                state.rowData.dtype = getDtype(state.rowData.data);
+                state.rowData.shape = getShape(state.rowData.data);
+            }
         },
         setData(state, action) {
             state.rowData.data = action.payload;

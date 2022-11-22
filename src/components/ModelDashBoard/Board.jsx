@@ -1,12 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { isEmptyObject, isEmptyStr, isEmptyArray } from "../Common/package";
+import { isEmptyObject, isEmptyStr, isEmptyArray } from "../Common/module/checkEmpty";
 import Title from "../Common/title/title";
-import mainStyle from "../Common/component.module.css";
-import boardStyle from "./ModelDashBoard.module.css";
 import { LayerList } from "../Setting/Layers/LayerList";
-import { contentView } from "../Common/package";
+import { contentView } from "../Common/module/package";
+import boardStyle from "./ModelDashBoard.module.css";
+import mainStyle from "../Common/component.module.css";
+import { useState } from "react";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export const SideCompileBoard = ({children, className, style, ...props}) => {
     const compile = useSelector( state => state.setting.compile );
@@ -198,6 +202,8 @@ const ParamBoard = ({ style }) => {
 }
 
 export const SettingBoard = () => {
+    const childRef = useRef(null);
+
     const style = {
         mainStyle: {
             "display":"inline-block",
@@ -210,11 +216,13 @@ export const SettingBoard = () => {
             "minHeight":"130px",
             "alignItems":"center"
         },
-
+        content: {
+            "display": "flex"
+        }
     }
 
     return (
-        <div style={{"display":"table", "justifyContent":"start"}}>
+        <div style={{"display":"table", "justifyContent":"start", "maxWidth":"inherit", "overflow":"hidden"}}>
             <OptimizerBoard style={style}/>
             <LossBoard style={style}/>
             <ParamBoard style={style}/>

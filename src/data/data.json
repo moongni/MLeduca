@@ -352,21 +352,24 @@
       "info": [
         {
           "name": "mainParams",
-          "params": [
+          "params": [            
+            {
+            "kind":"array",
+            "title":"inputShape",
+            "type":"text",
+            "placeholder":"[...]",
+            "defaultValue": [1],
+            "required": true
+            }, 
             {
               "kind":"input",
               "title":"units",
               "type": "number",
+              "placeholder": "정수만 입력",
               "min":1,
-              "defaultValue":1,
-              "step":1
-            }, 
-            {
-              "kind":"array",
-              "title":"inputShape",
-              "type":"text",
-              "placeholder":"[ , ...]",
-              "defaultValue":[1]
+              "step":1,
+              "defaultValue": 1,
+              "required": true
             }, 
             {
               "kind":"select",
@@ -376,24 +379,24 @@
                 "sigmoid","softmax","softplus","softsign","tanh",
                 "swish","mish"
               ],
-              "defaultValue":"linear"
+              "defaultValue": "linear"
             }
           ]
         },
         {
           "name": "subParams",
-          "params": [
+          "params": [            
+
             {
               "kind":"bool",
               "title":"useBias",
-              "list": ["true", "false"],
-              "defaultValue":true
+              "list": ["true", "false"]
             },
             {
               "kind":"array",
               "title":"batchInputShape",
               "type":"text",
-              "placeholder":"[null, 1]"
+              "placeholder":"[null, ...]"
             },
             { "kind":"select",
               "title":"kerneldefaultializer",

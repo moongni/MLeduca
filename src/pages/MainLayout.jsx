@@ -8,7 +8,6 @@ const MainLayout = () => {
     const [ isDashboardOpen, setDashboard ] = useState(false);
     
     const [ model, setModel ] = useState({});
-    console.log(model);
     
     useEffect(() => {
         let vh = 0;
@@ -20,6 +19,7 @@ const MainLayout = () => {
         main: {
             position: "relative",
             padding: "5rem 1rem 1rem 1rem",
+            marginLeft: "78px",
             minWidth: "700px",
             backgroundColor:"rgb(241 245 249)",
             transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -39,8 +39,7 @@ const MainLayout = () => {
             <ModelDashBoard
                 isDashboardOpen={isDashboardOpen}
             />
-            <div className={`${isOpen? 'ml-[16.25rem]': 'ml-[4.875rem]'} ${isDashboardOpen? 'mr-[16.25rem]' : '' }`}
-                style={styles.main}>
+            <div style={styles.main}>
                 <Outlet context={[model, setModel]}/>
             </div>
 

@@ -7,4 +7,5 @@
     --shadow: var(--shadow-colored);
     --border-opacity: 1;
     --border-color: rgb(202, 202, 209);
+    --background-hover-color: rgb(241 245 249 / var(--bg-opacity))
 }

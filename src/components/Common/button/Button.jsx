@@ -1,7 +1,7 @@
 import React from "react";
 import btnStyle from './button.module.css';
 import { AiOutlineDown } from "react-icons/ai";
-import { isEmptyStr } from "../package";
+import { isEmptyStr } from "../module/checkEmpty";
 
 export const Button = ({children, className, style, ...props}) => {
     let styleArray = []
