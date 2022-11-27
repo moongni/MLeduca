@@ -29,7 +29,7 @@ Node.js 14.16.1 이후의 버전으로 다운받습니다.
 
 ### `웹 앱 다운로드`
 
-빌드된 웹앱을 다운받습니다. 
+웹앱의 소스코드를 다운받습니다. 
 
 `git clone https://github.com/moongni/ServerlessWebAppForMachineLearningEducation.git`
 
@@ -41,8 +41,6 @@ Node.js 14.16.1 이후의 버전으로 다운받습니다.
 npm install
 npm start
 ```
-
-빌드가 완료되면 앱을 시작합니다.
 
 앱을 실행하면 브라우저에서 [http://localhost:3000](http://localhost:3000) 에서 앱을 실행할 수 있습니다.
 
