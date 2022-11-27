@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { createModel } from "../components/TF/CreateModel";
 import { convertToTensor } from "../components/TF/ConvertToTensor";
 import { trainModel } from "../components/TF/TrainModel";
-import { getNData, getShape, getViewData } from "../components/Common/module/getData"
+import { updateViewData } from "../components/Common/module/getData"
 import { isEmptyArray, isEmptyObject, isEmptyStr } from "../components/Common/module/checkEmpty"
 import { errorHandler } from "../components/Common/module/errorHandler";
 import { contentView } from "../components/Common/module/package";
@@ -31,7 +31,7 @@ async function run(model, compile, parameter, xs, ys) {
   return { history, trainedModel };
 }
 
-function Fit() {
+const Fit = () => {
   const dispatch = useDispatch();
   
   const [ model, setModel ] = useOutletContext();
@@ -50,7 +50,7 @@ function Fit() {
   const [ viewTrainX, setViewTrainX ] = useState(initData);
   const [ viewTrainY, setViewTrainY ] = useState(initData);
 
-  const [ nData, setNData ] = useState({"trainNData": 5});
+  const [ nData, setNData ] = useState(5);
 
   const [ modelModal, setModelModal ] = useState(false);
   const [ settingModal, setSettingModal ] = useState(false);
@@ -67,67 +67,53 @@ function Fit() {
       isEmptyObject(compile.optimizer) || isEmptyStr(compile.loss) ||
       isEmptyObject(xs) || isEmptyObject(ys)
     )    
-  }, [ layers, parameter, compile])
+  }, [ layers, parameter, compile ])
   
+  // 데이터 뷰 초기화
   useEffect(() => {
-    if (!isEmptyArray(xs.columns)) {
-      const newX = getNData(xs.data, nData.trainNData);
-
-      setViewTrainX({
-        'columns': xs.columns,
-        'data': newX,
-        'shape': getShape(newX)
-      })
-    }
-
-    if (!isEmptyArray(ys.columns)) {
-      const newY = getNData(ys.data, nData.trainNData);
-
-      setViewTrainY({
-        'columns': ys.columns,
-        'data': newY,
-        'shape': getShape(newY)
-      })
-    }
+    updateViewData(xs, setViewTrainX, nData);
+    updateViewData(ys, setViewTrainY, nData);
   }, [xs, ys])
 
-  const makeModel = async () => {
+  // 모델 생성 함수
+  async function makeModel() {
     try{
       var preTrainModel = model;
   
       if (!isEmptyObject(preTrainModel) && window.confirm("현재 모델이 존재합니다. 재학습을 진행하시겠습니까?\n 예: 기존 모델 재학습, 아니요: 새로운 모델 생성")){
-        
       } else {
-        
         preTrainModel = await createModel(layers);
-
       }
   
       return preTrainModel
 
     } catch (err) {
       errorHandler({
-        "message": err.message,
-        "statuscode": null
+        "message": `모델 생성에 실패하였습니다.\n${err.message}`,
+        "statuscode": err.status? err.status: null
       })
     }
   }   
   
+  // 훈련 버튼 함수
   const onClickHandler = async () => {
     setDisabled(true);
     setLoading(true);
+
     console.log("fit call");
 
     var model = await makeModel();
 
     run(model, compile, parameter, xs.data, ys.data)
+    // 훈련 완료 모델 및 히스토리 저장
     .then( async ({ history, trainedModel }) => {
-      const saveResult = await trainedModel.save("localstorage://model/recent");
+      setModel(trainedModel);
 
+      const saveResult = await trainedModel.save("localstorage://model/recent");
+      
       dispatch(historyActions.setHist(JSON.stringify(history)));
 
       console.log(saveResult);
-      
     })
     .then( _ => {
       alert("모델 훈련 완료, localstroage://model/recent에 저장되었습니다.");
@@ -136,9 +122,8 @@ function Fit() {
       if (err.message.includes("when checking input")) {
         errorHandler({
           "message": `레이어의 inputShape과 데이터의 shape이 일치하지 않습니다. \ninputShape: ${model.layers[0].batchInputShape}, dataShape: ${xs.shape}`,
-          "statuscode": null
+          "statuscode": err.status? err.status: null
         })
-
         return;
       }
 
@@ -217,7 +202,7 @@ function Fit() {
                     "justifyContent":"space-between",
                     "marginRight":"2.5rem"}}>
           <Title title="훈련 셋"/>
-          <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
+          <div style={{"display":"flex"}}>
             <Inputs
                 kind="input"
                 type="number"
@@ -227,37 +212,17 @@ function Fit() {
                 defaultValue={5}
                 step={1}
                 min={1}
-                max={xs.shape[1]}
+                max={xs.shape[0]}
                 required={true}
                 value={nData}
-                setValue={setNData}/>
+                setValue={setNData}
+                isValue={true}/>
             <Button
-                className="right"
-                style={{"marginRight":"1rem", "wordBreak":"keep-all"}}
+                className="right dataView"
                 type="button"
                 onClick={() => {
-                    try {
-                      var responseX = getViewData(nData.trainNData, xs);
-                      var responseY = getViewData(nData.trainNData, ys);
-
-                      if (responseX.isError) {
-                        errorHandler(responseX.errorData)
-                      } else {
-                        setViewTrainX(responseX.data)
-                      }
-
-                      if (responseY.isError) {
-                        errorHandler(responseX.errorData);
-                      } else {
-                        setViewTrainY(responseY.data)
-                      }
-
-                    } catch (err) {
-                      errorHandler({
-                        "message": err.message,
-                        "statuscode": null
-                      })
-                    }
+                  updateViewData(xs, setViewTrainX, nData)
+                  updateViewData(ys, setViewTrainY, nData)
                 }}>
                 적용
             </Button>
@@ -273,6 +238,7 @@ function Fit() {
                       children: <ArrayTable
                                   style={{"height":"24rem"}}
                                   data={viewTrainY}
+                                  totalShape={ys.shape}
                                   />,
                       checkFunction: isEmptyArray
                   })}
@@ -285,6 +251,7 @@ function Fit() {
                       children: <ArrayTable
                                   style={{"height":"24rem"}}
                                   data={viewTrainX}
+                                  totalShape={xs.shape}
                                 />,
                       checkFunction: isEmptyArray
                   })}

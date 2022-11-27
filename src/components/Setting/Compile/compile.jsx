@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "./Box";
 import data from "../../../data/data.json"
 import { useNav } from "../../Common/singlePageNav/useNav";
 import style from "../../Common/component.module.css";
 import Title from "../../Common/title/title";
 import { AiOutlineControl } from "react-icons/ai";
-import { BsQuestion } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Button } from "../../Common/button/Button";
 import { settingActions } from "../../../reducers/settingSlice";
+import { errorHandler } from "../../Common/module/errorHandler";
 
 const Compile = ({ ...props }) => {
     const compileRef = useNav("Compile");
@@ -26,12 +26,12 @@ const Compile = ({ ...props }) => {
 
 export default Compile
 
-
 function Optimizers({ ...props }) {
     const dispatch = useDispatch();
 
     const optimizers = data.Compile.filter(v => v.title === "optimizer")[0].info;
-
+    
+    // 최적화 선택 함수
     const selectHandler = (event, title, value) => {
         const setData = async () => {
             const data = {
@@ -42,14 +42,19 @@ function Optimizers({ ...props }) {
         }
 
         event.preventDefault();
+
         setData()
         .then( _ => {
             props.setAlectMsg(`Optimizer: ${title} saved`);
             props.setAlectVisiable(true);  
         })
-        .catch(response => alert(response));
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));    
     };
     
+    // 최적화 초기화 함수
     const handleRemove = () => {
         const removeData = async () => {
             dispatch(settingActions.removeOptimizer())
@@ -59,17 +64,21 @@ function Optimizers({ ...props }) {
         .then( _ => {
             props.setAlectMsg("Optimizer removed");
             props.setAlectVisiable(true);
-        }).catch(response => alert(response));
+        }).catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
     }
+
     return (
         <div>
             <div style={{"display":"flex", "justifyContent":"space-between"}}>
-                <Title title="Optimizer"    />
+                <Title title="최적화 함수"    />
                 <Button
-                    className="right red"
+                className="right"
                     style={{"width":"4rem"}}
                     type="button"
-                    onClick={() => handleRemove()}>
+                    onClick={handleRemove}>
                         초기화
                 </Button>
 
@@ -93,6 +102,7 @@ function Losses({ ...props }) {
 
     const losses = data.Compile.filter(v => v.title === "loss")[0].info;
 
+    // 손실 함수 선택 함수
     const selectHandler = (event, title, value) => {
         const setData = async () => {
             dispatch(settingActions.setLoss(title));
@@ -105,9 +115,13 @@ function Losses({ ...props }) {
             props.setAlectMsg(`Loss: ${title} saved`);
             props.setAlectVisiable(true);  
         })
-        .catch( response => console.log(response));
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
     };
 
+    // 손실 함수 초기화 함수
     const handleRemove = () => {
         const removeData = async () => {
             dispatch(settingActions.removeLoss());
@@ -118,17 +132,21 @@ function Losses({ ...props }) {
             props.setAlectMsg("Loss removed");
             props.setAlectVisiable(true);
         })
-        .catch(response => alert(response))
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
     }
+    
     return (
         <div>
             <div style={{"display":"flex", "justifyContent":"space-between"}}>
                 <Title title="손실 함수" />
                 <Button
-                    className="right red"
+                    className="right"
                     style={{"width":"4rem"}}
                     type="button"
-                    onClick={() => handleRemove()}>
+                    onClick={handleRemove}>
                         초기화
                 </Button>
             </div>

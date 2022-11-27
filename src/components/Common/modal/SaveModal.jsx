@@ -174,13 +174,14 @@ export const ChartModal = ({ modalShow, setModalShow, columns, rowData, viewOpti
 
     const [ tempOptions, setTempOptions ] = useState(viewOptions);
 
+    // 열 이름 목록 업데이트
     useEffect(() => {
         if (!isEmptyArray(columnValue)) {
             setColumn(toArray(columnValue)[0]);
         }
-
     }, [ columnValue ])
 
+    // 조건 목록 업데이트
     useEffect(() => {
         if (column) {
             var newOptions = toOption(Object.keys(hashMap(rowData[column])))
@@ -189,6 +190,7 @@ export const ChartModal = ({ modalShow, setModalShow, columns, rowData, viewOpti
         }    
     }, [ column ])
 
+    // 조건 추가 버튼 함수
     const onAddClick = () => {
         if (!isEmptyStr(column) && !isEmptyArray(splitValue)){
             setTempOptions( preValue => 
@@ -201,13 +203,12 @@ export const ChartModal = ({ modalShow, setModalShow, columns, rowData, viewOpti
             alert("열과 조건을 모두 입력해주세요.");
         }
     }
+    
+    // 조건 삭제 함수
     const handleRemove = (idx) => {
         setTempOptions( preValue => (
             preValue.filter(( _, index) => index != idx)
         ))
-    }
-
-    const onClickHandler = () => {
     }
 
     const tableStyle = {

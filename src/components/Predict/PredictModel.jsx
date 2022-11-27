@@ -2,26 +2,12 @@ import React, { useState, useEffect} from "react";
 import Title from "../Common/title/title";
 import { ModelSelectModal } from "../Common/modal/modal";
 import { isEmptyObject, isEmptyStr } from "../Common/module/checkEmpty";
-import * as tf from "@tensorflow/tfjs";
 
 export const PredictModel = ({ model, setModel, ...props }) => {
     const [ modalShow, setModalShow ] = useState(false);
     const [ modelName, setModelName ] = useState("");
 
     useEffect(() => {
-        // const initLoad = async () => {
-        //     const modelList = await tf.io.listModels();
-
-        //     if ( Object.keys(modelList).includes("localstorage://model/recent") ) {
-        //         const model = await tf.loadLayersModel("localstorage://model/recent");
-                
-        //         setModel(model);
-        //         setModelUrl("localstorage://model/recent");
-        //     }
-
-        // }
-        
-        // initLoad();
         if (!isEmptyObject(model)) {
             setModelName(model.constructor.name);
         }

@@ -5,8 +5,9 @@ import React, {
 import style from './drogDropFile.module.css';
 
 export const DrogDropFile = ({children, readFile, ...props}) => {
-    const [ dragActive, setDragActive ] = useState(false);
     const inputRef = useRef(null);
+
+    const [ dragActive, setDragActive ] = useState(false);
 
     const handleDrag = useCallback((e) => {
         e.preventDefault();
@@ -17,7 +18,7 @@ export const DrogDropFile = ({children, readFile, ...props}) => {
         } else if (e.type === "dragleave") {
             setDragActive(false);
         }}
-
+        
     , []);
 
     const handleDrop = (e) => {
@@ -30,7 +31,6 @@ export const DrogDropFile = ({children, readFile, ...props}) => {
             var file = e.dataTransfer.files[0];
             readFile(file, file.type);
         }
-
     };
 
     const handleChange = (e) => {

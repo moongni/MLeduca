@@ -67,11 +67,6 @@ export async function preprocess(labelData, featureData, process) {
     const dataType = data[column].reduce(( dtype, val ) => {
       return dtype == typeof val || isEmpty(val) ? dtype : "object";
     }, typeof data[column][0]);
-
-    const hashmap = hashMap(data[column]);
-    
-    const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
-      hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )
     
     var convertType = {
       number(item) {
@@ -86,8 +81,16 @@ export async function preprocess(labelData, featureData, process) {
       object(item) {
         return item
       }
-      
     }
+
+    const hashmap = hashMap(data[column]);
+    
+    const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
+      hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )
+
+    console.log(dataFrame);
+    console.log(convertType[dataType](mostFreVal));
+
     dataFrame[column] = dataFrame[column].fillNa(convertType[dataType](mostFreVal)).values;
   }
 
@@ -111,7 +114,7 @@ export async function preprocess(labelData, featureData, process) {
     const encode = new dfd.LabelEncoder();
 
     encode.fit(dataFrame[column]);
-
+    
     dataFrame[column] = encode.transform(dataFrame[column].values);
   }
 

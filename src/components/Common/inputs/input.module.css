@@ -23,7 +23,6 @@
 .select {
     margin-right: 2.5rem;
     cursor: pointer;
-    /* background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-down-32.png') no-repeat right; */
     background-image: url("/public/img/down-arrow.png");
     background-repeat: no-repeat;
     background-size: contain;

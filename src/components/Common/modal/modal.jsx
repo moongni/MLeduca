@@ -107,7 +107,8 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
     const [ locValue, setLocValue ] = useState("");
     const [ downValue, setDownValue ] = useState({});
 
-    const loadModel = async (url) => {
+    // 모델 불러오기 함수
+    async function loadModel(url) {
         try {
             var model = await tf.loadLayersModel(url);
 
@@ -136,7 +137,8 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
                     throw new Error("신경망 정보를 읽어올 수 없습니다.")
                 }
             })
-    
+            
+            // 모델 설정
             if (props.setModel) {
                 props.setModel(model);
                 console.log(model);
@@ -146,18 +148,19 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
             if ( err.message.includes("modelTopology")) {
                 errorHandler({
                     "message": "파일을 불러오는데 실패하였습니다.",
-                    "statuscode": 4
+                    "statuscode": 2
                 })
                 return;
             }
 
             errorHandler({
                     "message": err.message,
-                    "statuscode": null
+                    "statuscode": err.status? err.status: null
             })
         }
     }
 
+    // 저장 버튼 함수
     const onClickHandler = (event) => {
         event.preventDefault();
 
@@ -193,7 +196,7 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
         } catch ( err ) {
             errorHandler({
                 "message": err.message,
-                "statuscode": null
+                "statuscode": err.status? err.status: null
             })
         }
     }
@@ -262,6 +265,7 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
 const Localstorage = ({ value, setValue, ...props }) => {
     const [ modelList, setModelList ] = useState([]);
 
+    // 모델 목록 업데이트
     useEffect(() => {
         const modelList = async () => {
             const ret = await tf.io.listModels();
@@ -278,14 +282,14 @@ const Localstorage = ({ value, setValue, ...props }) => {
         <div style={{"display":"flex",
                     "paddingBottom":"280px"}}>
             <Inputs 
-                kind="selectOne"
+                kind="select"
                 mainTitle="모델 선택"
                 style={{"marginLeft":"1.5rem"}}
                 value={value}
                 setValue={setValue}
                 defaultName="model List"
                 list={modelList}
-            />
+                isValue={true}/>
         </div>
     )
 }
@@ -316,7 +320,6 @@ const Download = ({ value, setValue, ...props }) => {
             "model": modelFile,
             "weight": weightFile
         })
-
     }, [ modelFile, weightFile ])
 
     return (
@@ -385,6 +388,7 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
 
             setHistFile(obj);
         }
+
         try {
             if (event.target.files[0].type !== "application/json") {
                 throw new Error(`json 파일이 아닙니다. \n입력 파일: ${event.target.files[0].type}`);
@@ -398,12 +402,13 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
         } catch (err) {
             errorHandler({
                 "message": err.message,
-                "statuscode": null
+                "statuscode": err.status? err.status: null
             })
         }
     }
 
-    const onClickHandler = (event) => {
+    // 저장 버튼 함수
+    const onClickHandler = () => {
         try {
             if (isEmptyObject(histFile)) {
                 throw new Error("History 파일을 불러와주세요");
@@ -418,7 +423,7 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
         } catch (err) {
             errorHandler({
                 "message": err.message,
-                "statuscode": null
+                "statuscode": err.status? err.status: null
             })
         }
     }
@@ -455,15 +460,14 @@ export const HistorySelectModal = ({ modalShow, setModalShow, ...props }) => {
                     className="red"
                     style={style.btn}
                     type="button"
-                    onClick={() => {
-                        setModalShow(false)}}>
+                    onClick={() => setModalShow(false)}>
                     close
                 </Button>
                 <Button
                     className="green"
                     style={style.btn}
                     type="button"
-                    onClick={(e) => onClickHandler(e)}>
+                    onClick={onClickHandler}>
                     save
                 </Button>
             </div>
@@ -486,6 +490,7 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
             setsettingFile(obj);
 
         }
+
         try {
             if (event.target.files[0].type !== "application/json") {
                 throw new Error(`json 파일이 아닙니다. \n입력 파일: ${event.target.files[0].type}`);
@@ -499,12 +504,13 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
         } catch (err) {
             errorHandler({
                 "message": err.message,
-                "statuscode": null
+                "statuscode": err.status? err.status: null
             })
         }
     }
 
-    const onClickHandler = (event) => {
+    // 저장 버튼 함수
+    const onClickHandler = () => {
         try {
             if (isEmptyObject(settingFile)) {
                 throw new Error("setting 파일을 불러와주세요.");
@@ -523,7 +529,7 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
         } catch (err) {
             errorHandler({
                 "message": err.message,
-                "statuscode": null
+                "statuscode": err.status? err.status: null
             })
         }
     }
@@ -537,9 +543,7 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
                     <input className="upload-name" value={isEmptyStr(settingName)? "파일 선택": settingName} disabled="disabled"
                         style={style.nameStyle}/>
                     <label  style={style.labelStyle}
-                            onClick={() => {
-                                settingInput.current.click();
-                            }}
+                            onClick={() => {settingInput.current.click();}}
                     >
                         업로드
                     </label>
@@ -559,15 +563,14 @@ export const SettingSelectModal = ({ modalShow, setModalShow, ...props }) => {
                     className="red"
                     style={style.btn}
                     type="button"
-                    onClick={() => {
-                        setModalShow(false)}}>
+                    onClick={() => setModalShow(false)}>
                     close
                 </Button>
                 <Button
                     className="green"
                     style={style.btn}
                     type="button"
-                    onClick={(e) => onClickHandler(e)}>
+                    onClick={onClickHandler}>
                     save
                 </Button>
             </div>

@@ -5,7 +5,7 @@ import { AdvancedSettingButton } from "../../Common/button/Button";
 import { BsQuestion } from "react-icons/bs";
 import boxStyle from "./box.module.css";
 
-function Box({style, ...props}){
+function Box({style, info, selectHandler, ...props}){
     const [ value, setValue ] = useState({});
     const [ isSubOpen, setSubOpen ] = useState(false);
     const [ hovering, setHovering ] = useState(false);
@@ -24,9 +24,9 @@ function Box({style, ...props}){
         <div className={boxStyle.container}>
             <div className={boxStyle.subContainer}>
                 <div style={{"display":"flex"}}>
-                    <button onClick={(event)=> props.selectHandler(event, props.info.title, value)}>
+                    <button onClick={ event => selectHandler(event, info.title, value)}>
                         <h2 className={boxStyle.header}>
-                            {props.info.title}
+                            {info.title}
                         </h2>
                     </button>
                     <i className={boxStyle.i}
@@ -37,16 +37,16 @@ function Box({style, ...props}){
                             <div className={boxStyle.iTooltip}
                                 onMouseLeave={handleMouseOut}
                                 onMouseEnter={handleMouseOver}>
-                                <h3 className={boxStyle.h3}>{props.info.description.header}</h3>
+                                <h3 className={boxStyle.h3}>{info.description.header}</h3>
                                 <span className={boxStyle.span}>
-                                    {props.info.description.content}
+                                    {info.description.content}
                                 </span>
-                                <a className={boxStyle.a} href={props.info.description.link} target="_blank">[소스보기]</a>
+                                <a className={boxStyle.a} href={info.description.link} target="_blank">[소스보기]</a>
                             </div>
                         }
                     </i>
                 </div>
-            {props.info.params &&
+            {info.params &&
                 <AdvancedSettingButton 
                 type="button" 
                 value={isSubOpen}
@@ -54,8 +54,8 @@ function Box({style, ...props}){
             }
             </div>
             <div className={`${isSubOpen? "" : boxStyle.isSubOpen}`}>
-                {props.info.params &&
-                    props.info.params.map(param => (
+                {info.params &&
+                    info.params.map(param => (
                         <Inputs 
                             {...param}
                             style={{"paddingLeft":"10px"}}

@@ -53,10 +53,9 @@ const Setting = ({children, ...props}) => {
                 </div>
             </NavProvider>
             <Alect 
-                    message={alectMsg}
-                    value={isAlectVisable}
-                    setValue={setAlectVisiable}
-                />
+                message={alectMsg}
+                value={isAlectVisable}
+                setValue={setAlectVisiable}/>
         </div>
     )
 }

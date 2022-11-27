@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getNData, getShape, getViewData } from "../components/Common/module/getData"
+import { updateViewData } from "../components/Common/module/getData"
 import { isEmptyArray } from "../components/Common/module/checkEmpty"
-import { contentView, selectColumn, setDataView } from "../components/Common/module/package";
+import { contentView, selectColumn } from "../components/Common/module/package";
 import { errorHandler } from "../components/Common/module/errorHandler";
 import SetColumn  from "../components/Preprocessing/SetColumn";
 import ArrayTable from "../components/Common/table/ArrayTable";
@@ -17,20 +17,17 @@ import { testActions } from "../reducers/testSlice";
 import { trainActions } from "../reducers/trainSlice";
 import { MdOutlineToc } from "react-icons/md"
 import mainStyle from '../components/Common/component.module.css';
+import dataViewStyle from "../components/Common/dataView.module.css";
 
 const splitTrainTest = async (labelData, featureData, trainRatio) => {
     /* 
-        labelData: {'col name': [data]}
-        featureData: {'col name': [data]}
-        trainRatio: float
+        labelData: Object
+        featureData: Object
+        trainRatio: Number
 
-        return {
-            trainX: featureData: {'col name': [data]},
-            trainY: labelData: {'col name': [data]},
-            testX: testX: {'col name': [data]},
-            testY: testY: {'col name': [data]}
-        }
+        return Object
     */
+
     const numSample = Object.values(labelData)[0].length;
 
     if ( numSample != Object.values(featureData)[0].length ) {
@@ -51,14 +48,15 @@ const splitTrainTest = async (labelData, featureData, trainRatio) => {
     const testX = {}
     const testY = {}
     
+    // testX, testY 초기화
     for ( const col of features ) {
         testX[col] = []
     }
-
     for ( const col of labels ) {
         testY[col] = []
     }
 
+    // 랜덤으로 testX, testY 추가
     for ( var i = numSample; i > numTrainSample; i-- ) {
         var idx = Math.floor(Math.random() * i)
 
@@ -84,7 +82,6 @@ const splitTrainTest = async (labelData, featureData, trainRatio) => {
 const Preprocessing = () => {
     const dispatch = useDispatch();
 
-    // redux persist load 
     const data = useSelector( state => state.data.data );
     const dataColumns = useSelector( state => state.data.columns );
 
@@ -93,8 +90,9 @@ const Preprocessing = () => {
     const process = useSelector( state => state.preprocess.train );
     const testX = useSelector( state => state.test.feature );
     const testY = useSelector( state => state.test.label );
+
     const [ isLoading, setLoading ] = useState(false);
-    const [ splitRatio, setSplitRatio ] = useState({});
+    const [ splitRatio, setSplitRatio ] = useState();
     const [ nData, setNData ] = useState({"trainNData": 5, "testNData": 5});
     
     const initData = {
@@ -107,87 +105,59 @@ const Preprocessing = () => {
     const [ viewTestX, setViewTestX ] = useState(initData);
     const [ viewTestY, setViewTestY ] = useState(initData);
     
-    // validation split ratio
+    // splitRatio 값 검증
     useEffect(() => {
-        if (splitRatio["train set ratio"] < 0.0 || splitRatio["train set ratio"] > 1.0) {
+        if (splitRatio < 0.0 || splitRatio > 1.0) {
             alert("Please, check ratio of split set (0.0 ~ 1.0 available)");
-            setSplitRatio({ "train set ratio" : 1.0 })
+            setSplitRatio(1.0)
         }
     }, [ splitRatio ])
 
+    // 데이터 뷰 초기화
     useEffect(() => {
-        if (!isEmptyArray(trainX.columns)) {
-            const newX = getNData(trainX.data, nData.trainNData);
-            
-            setViewTrainX({
-                'columns': trainX.columns,
-                'data': newX,
-                'shape': getShape(newX)
-            });
-        }
-        if (!isEmptyArray(trainY.columns)) {
-            const newY = getNData(trainY.data, nData.trainNData);
-
-            setViewTrainY({
-                'columns': trainY.columns,
-                'data': newY,
-                'shape': getShape(newY)
-            });
-        }
+        updateViewData(trainX, setViewTrainX, nData.trainNData);
+        updateViewData(trainY, setViewTrainY, nData.trainNData);
     },[ trainX, trainY ])
 
     useEffect(() => {
-        if (!isEmptyArray(testX.columns)) {
-            const newX = getNData(testX.data, nData.trainNData);
-            
-            setViewTestX({
-                'columns': testX.columns,
-                'data': newX,
-                'shape': getShape(newX)
-            });
-        }
-        if (!isEmptyArray(testY.columns)) {
-            const newY = getNData(testY.data, nData.trainNData);
-
-            setViewTestY({
-                'columns': testY.columns,
-                'data': newY,
-                'shape': getShape(newY)
-            });
-        }
+        updateViewData(testX, setViewTestX, nData.testNData);
+        updateViewData(testY, setViewTestY, nData.testNData);
     }, [ testX, testY ])
 
-    const setProcessedData = async () => {
-        dispatch(preprocessingActions.updateProcess({
-            title: 'label',
-            columns: trainY.columns,
-            kind: "train"
-        }));
-
-        dispatch(preprocessingActions.updateProcess({
-            title: 'feature',
-            columns: trainX.columns,
-            kind: "train"
-        }))
-
-        const { labelData, featureData } = await preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process);
-        
-        if ( splitRatio["train set ratio"] == 1.0 || splitRatio['train set ratio'] == null ) {
-            dispatch(trainActions.setData({
-                title: "feature",
-                data: featureData
-                }))
-        
-            dispatch(trainActions.setData({
-                title: "label",
-                data: labelData
+    // 전처리 훈련 셋을 나눠 저장하는 함수
+    async function setProcessedData() {
+        try {
+            dispatch(preprocessingActions.updateProcess({
+                title: 'label',
+                columns: trainY.columns,
+                kind: "train"
+            }));
+    
+            dispatch(preprocessingActions.updateProcess({
+                title: 'feature',
+                columns: trainX.columns,
+                kind: "train"
             }))
-
-        } else {
-            splitTrainTest(labelData, featureData, splitRatio["train set ratio"])
-            .then( response => {
+    
+            // 전처리 모듈 실행
+            const { labelData, featureData } = preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process)
+            
+            // 훈련 셋 비율에 따라 데이터 저장
+            if ( splitRatio == 1.0 || splitRatio == null) {
+                dispatch(trainActions.setData({
+                    title: "feature",
+                    data: featureData
+                    }))
+            
+                dispatch(trainActions.setData({
+                    title: "label",
+                    data: labelData
+                }))
+            } else {
+                var response = await splitTrainTest(labelData, featureData, splitRatio);
+    
                 if (response.isError) {
-                    errorHandler(response.errorData);
+                    return response;
                 } else {
                     const { trainX, trainY, testX, testY } = response.data;
                     
@@ -210,24 +180,35 @@ const Preprocessing = () => {
                         ...testY
                     }))
                 }
-            });
+            }
+    
+            return {
+                isError: false
+            }
+
+        } catch (err) {
+            return {
+                isError: true,
+                errorData: {
+                    message: err.message,
+                    statuscode: err.status? err.status: null
+                }
+            };
         }
     }
 
+    // 전처리 적용 버튼 함수
     const onClickHandler = (e) => {
         e.preventDefault();
         setLoading(true);
 
         setProcessedData()
-        .catch( err => {
-            errorHandler({
-                "message": err.message,
-                "statuscode": null
-            })
+        .then( respose => {
+            if ( respose.isError ) {
+                errorHandler(respose.errorData);
+            }
         })
-        .finally( _ => {
-            setLoading(false);
-        })
+        .finally( _ => setLoading(false))
     }
 
     const style = {
@@ -242,6 +223,15 @@ const Preprocessing = () => {
             "width":"8rem",
             "margin":"0.5rem",
             "height":"2.5rem"
+        },
+        tableContainer: {
+            "display":"flex",
+            "justifyContent":"space-between",
+            "marginRight":"2.5rem"
+        },
+        smallTitle: {
+            "fontSize":"1.25rem", 
+            "margin": "0.5rem 0"
         }
     }
 
@@ -249,11 +239,7 @@ const Preprocessing = () => {
         <>
             { isLoading && <Loader type="spin" color="black" message="Loading"/>}
             <div className={mainStyle.container}>
-                <Title
-                    title="전처리 설정"
-                    icon={<MdOutlineToc/>}
-                    style={style.CenterContainer}
-                />
+                <Title title="전처리 설정" icon={<MdOutlineToc/>} style={style.CenterContainer}/>
                 <div className={mainStyle.subContainer}>
                     <Title title={"라벨 설정"} />
                     <div style={{"padding": "0 1rem"}}>
@@ -316,7 +302,7 @@ const Preprocessing = () => {
                             value={splitRatio}
                             setValue={setSplitRatio}
                             placeholder="0.0 ~ 1.0 train set ratio"
-                        />
+                            isValue={true}/>
                     </div>
                 </div>
                 <div style={style.CenterContainer}>
@@ -348,11 +334,9 @@ const Preprocessing = () => {
                 <Title title="데이터 테이블"
                     icon={<MdOutlineToc/>}
                     style={style.CenterContainer}/>
-                <div style={{"display":"flex",
-                        "justifyContent":"space-between",
-                        "marginRight":"2.5rem"}}>
+                <div style={style.tableContainer}>
                     <Title title="훈련 셋" />
-                    <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
+                    <div style={{"display":"flex"}}>
                         <Inputs
                             kind="input"
                             type="number"
@@ -362,37 +346,16 @@ const Preprocessing = () => {
                             defaultValue={5}
                             step={1}
                             min={1}
-                            max={trainX.shape[1]}
+                            max={trainX.shape[0]}
                             required={true}
                             value={nData}
                             setValue={setNData}/>
                         <Button
-                            className="right"
-                            style={{"marginRight":"1rem", "wordBreak":"keep-all"}}
+                            className="right dataView"
                             type="button"
                             onClick={() => {
-                                try {
-                                    var responseX = getViewData(nData.trainNData, trainX)
-                                    var responseY = getViewData(nData.trainNData, trainY)
-                                    
-                                    if (responseX.isError){
-                                        errorHandler(responseX.errorData);
-                                    } else {
-                                        setViewTrainX(responseX.data);
-                                    }
-                                    
-                                    if (responseY.isError) {
-                                        errorHandler(responseY.errorData);
-                                    } else {
-                                        setViewTrainY(responseY.data);
-                                    }
-
-                                } catch (err) {
-                                    errorHandler({
-                                        "message": err.message,
-                                        "statuscode": null
-                                    })
-                                }
+                                updateViewData(trainX, setViewTrainX, nData.trainNData)
+                                updateViewData(trainY, setViewTrainY, nData.trainNData)
                             }}>
                             적용
                         </Button>
@@ -400,35 +363,35 @@ const Preprocessing = () => {
                 </div>
                 <div className={mainStyle.subContainer}>
                     <Title title="라벨 데이터 테이블"
-                        style={{"fontSize":"1.25rem", "margin": "0.5rem 0"}}/>
+                        style={style.smallTitle}/>
                     <div className={mainStyle.subContainer}>
                         {contentView({
                             element: viewTrainY.columns,
                             children: <ArrayTable
                                         style={{"height":"24rem"}}
                                         data={viewTrainY}
+                                        totalShape={trainY.shape}
                                         />,
                             checkFunction: isEmptyArray
                         })}
                     </div>
                         <Title title="특성 데이터 테이블"
-                            style={{"fontSize":"1.25rem", "margin": "0.5rem 0"}}/>
+                            style={style.smallTitle}/>
                         <div className={mainStyle.subContainer}>
                             {contentView({
                                 element: viewTrainX.columns,
                                 children: <ArrayTable
                                             style={{"height":"24rem"}}
                                             data={viewTrainX}
+                                            totalShape={trainX.shape}
                                           />,
                                 checkFunction: isEmptyArray
                             })}
                         </div>
                 </div>
-                <div style={{"display":"flex",
-                        "justifyContent":"space-between",
-                        "marginRight":"2.5rem"}}>
+                <div style={style.tableContainer}>
                     <Title title="테스트 셋"/>
-                    <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
+                    <div style={{"display":"flex"}}>
                         <Inputs
                             kind="input"
                             type="number"
@@ -438,37 +401,16 @@ const Preprocessing = () => {
                             defaultValue={5}
                             step={1}
                             min={1}
-                            max={testX.shape[1]}
+                            max={testX.shape[0]}
                             required={true}
                             value={nData}
                             setValue={setNData}/>
                         <Button
-                            className="right"
-                            style={{"marginRight":"1rem", "wordBreak":"keep-all"}}
+                            className="right dataView"
                             type="button"
                             onClick={() => {
-                                try {
-                                    var responseX = getViewData(nData.testNData, testX)
-                                    var responseY = getViewData(nData.testNData, testY)
-                                    
-                                    if (responseX.isError){
-                                        errorHandler(responseX.errorData);
-                                    } else {
-                                        setViewTestX(responseX.data);
-                                    }
-                                    
-                                    if (responseY.isError) {
-                                        errorHandler(responseY.errorData);
-                                    } else {
-                                        setViewTestY(responseY.data);
-                                    }
-
-                                } catch (err) {
-                                    errorHandler({
-                                        "message": err.message,
-                                        "statuscode": null
-                                    })
-                                }
+                                updateViewData(testX, setViewTestX, nData.testNData)
+                                updateViewData(testY, setViewTestY, nData.testNData)
                             }}>
                             적용
                         </Button>
@@ -476,25 +418,27 @@ const Preprocessing = () => {
                 </div>
                 <div className={mainStyle.subContainer}>
                         <Title title="라벨 데이터 테이블"
-                            style={{"fontSize":"1.25rem", "margin": "0.5rem 0"}}/>
+                            style={style.smallTitle}/>
                         <div className={mainStyle.subContainer}>
                             {contentView({
                                 element: viewTestY.columns,
                                 children: <ArrayTable
                                             style={{"height":"24rem"}}
                                             data={viewTestY}
+                                            totalShape={testY.shape}
                                           />,
                                 checkFunction: isEmptyArray
                             })}
                         </div>
                         <Title title="특성 데이터 테이블"
-                            style={{"fontSize":"1.25rem", "margin": "0.5rem 0"}}/>
+                            style={style.smallTitle}/>
                         <div className={mainStyle.subContainer}>
                             {contentView({
                                 element: viewTestY.columns,
                                 children: <ArrayTable
                                             style={{"height":"24rem"}}
                                             data={viewTestX}
+                                            totalShape={testX.shape}
                                           />,
                                 checkFunction: isEmptyArray
                             })}

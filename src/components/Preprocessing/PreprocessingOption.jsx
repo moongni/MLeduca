@@ -7,7 +7,6 @@ import Inputs from "../Common/inputs/Inputs";
 import "../Common/table/scrollStyle.css";
 
 export const PreprocessingOptions = ({children, preprocess, ...props}) => {
-
   const style = {
     divStyle: {
       paddingRight: "6.80rem",
@@ -39,10 +38,12 @@ const PreprocessingInputs = ({ children, preprocess, ...props }) => {
 
   const [ selectedValue, setSeletedValue ] = useState([]);
 
+  // 전처리 목록 배열 => 옵션
   useEffect(()=> {
     setSeletedValue(toOption(preprocess))
   }, [])
   
+  // 선택된 옵션 => 배열 저장
   useEffect(() => {
     var curProcess = toArray(selectedValue);
     

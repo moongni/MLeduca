@@ -16,12 +16,12 @@ const LoadDataDoc = () => {
             <div className={pageStyle.headline}/>
             <div className={pageStyle.contentContainer}>
                 <img className={pageStyle.img} src="/img/pages/loadData/dataview.png" alt="" />
-                데이터 뷰의 열은 각 특성을 보여주며 열은 데이터 입니다. 불러온 데이터는 웹 브라우저 indexedDB 내의 저장되며 그 형태는 아래와 같습니다.
+                데이터 뷰의 열은 각 특성을 보여주며 행은 데이터 샘플입니다. 불러온 데이터는 웹 브라우저 sessionstorage 내의 저장되며 그 형태는 아래와 같습니다.
                 <pre>
-                    data: column : Array,
-                          data : Object,
-                          shape: Array,
-                          dtype: Object
+                    column : Array,
+                    data : Object,
+                    shape: Array,
+                    dtype: Object
                 </pre>
             </div>
             <div className={pageStyle.headline}/>

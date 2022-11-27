@@ -49,11 +49,16 @@
 }
 
 .underline {
-    border-bottom: solid 2px rgb(203 213 225 / var(--bg-opacity));
+    border-bottom: solid 2px var(--border-color);
 }
 
 .inCenter {
     width: 8rem;
     margin: 0.5rem;
     height: 2.5rem;
+}
+
+.dataView {
+    margin-right:1rem; 
+    word-break:keep-all;
 }

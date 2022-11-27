@@ -59,7 +59,7 @@ const ArrayTable = ({children, style, data, ...props}) => {
                     </div>
                     {!isEmptyArray(data.shape) &&
                         <div style={{"display":"flex"}}>
-                            <p style={{"marginLeft":"auto"}}>shape: {data.shape.join(" x ")}</p>
+                            <p style={{"marginLeft":"auto"}}>shape: {data.shape.join(" x ")} {props.totalShape? ` / ${props.totalShape.join(" x ")}`: ""}</p>
                         </div>
                     }
                 </>

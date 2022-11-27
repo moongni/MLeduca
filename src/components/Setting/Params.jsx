@@ -1,60 +1,67 @@
 import React, { useState } from "react";
-import Inputs from "../Common/inputs/Inputs";
-import data from "../../data/data.json"
 import { useDispatch } from "react-redux";
 import { useNav } from "../Common/singlePageNav/useNav"
-import mainStyle from "../Common/component.module.css";
+import { errorHandler } from "../Common/module/errorHandler";
+import Inputs from "../Common/inputs/Inputs";
 import Title from "../Common/title/title";
-import { AiOutlineControl } from "react-icons/ai";
 import { Button } from "../Common/button/Button";
 import { settingActions } from "../../reducers/settingSlice";
+import { AiOutlineControl } from "react-icons/ai";
+import mainStyle from "../Common/component.module.css";
+import data from "../../data/data.json"
 
 function Params({ ...props }){
     const dispatch = useDispatch();
 
-    const dataForInputs = data.Parameters
+    const paramRef = useNav('Param');
     
     const [ value, setValue ] = useState({});
     const [ disabled, setDisabled ] = useState(false);
-
-    const paramRef = useNav('Param');
-
-    const handleSubmit = async (event) => {
+    
+    const dataForInputs = data.Parameters
+    
+    // 파라미터 적용 함수
+    const handleSubmit = (event) => {
         const setData = async () => {
             dispatch(settingActions.setParam(value));
         }
         
-        setDisabled(true);
-
         event.preventDefault();
+        setDisabled(true);
         
         setData()
         .then( _ => {
             props.setAlectMsg("Parameter saved");
             props.setAlectVisiable(true);
         })
-        .catch( response => alert(response) );
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
         
         setDisabled(false);
     }
 
-    const handleRemove = async () => {
-        setDisabled(true);
-        
+    // 파라미터 초기화 함수
+    const handleRemove = () => {
         const setData = async () => {
             dispatch(settingActions.removeParam());
         }
+        
+        setDisabled(true);
         
         setData()
         .then( _ => {
             props.setAlectMsg("parameter removed");
             props.setAlectVisiable(true);
         })
-        .catch( response => alert(response));
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
         
         setDisabled(false);
     }
-
 
     return (
         <div 
@@ -62,7 +69,16 @@ function Params({ ...props }){
             ref={paramRef}
             id="paramContainer"
         >
-            <Title title="파라미터 설정" icon={<AiOutlineControl/>}/>
+            <div style={{"display":"flex", "justifyContent":"space-between"}}>
+                <Title title="파라미터 설정" icon={<AiOutlineControl/>}/>
+                <Button
+                    className="right"
+                    style={{"width":"4rem"}}
+                    type="button"
+                    onClick={handleRemove}>
+                        초기화
+                </Button>
+            </div>
             <form 
                 className={mainStyle.subContainer}
                 onSubmit={handleSubmit}
@@ -76,14 +92,9 @@ function Params({ ...props }){
                 ))}
                 <div className={mainStyle.centerContainer}>
                     <Button
-                        className="red inCenter"
-                        type="button"
-                        onClick={() => handleRemove()}>
-                        초기화
-                    </Button>
-                    <Button
                         className="green inCenter"
                         type="submit"
+                        style={{"width":"20%"}}
                         disabled={disabled}>
                         적용
                     </Button>

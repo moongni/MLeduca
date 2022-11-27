@@ -4,42 +4,33 @@ import Inputs from "../Common/inputs/Inputs";
 import { Button } from "../Common/button/Button";
 import { toArray, toOption } from "../Common/module/option";
 import { selectColumn } from "../Common/module/package";
+import { errorHandler } from "../Common/module/errorHandler";
 
-const SetColumn = ({ setData, setLoading, data, dataColumns, initFunction, style, ...props }) => {
+const SetColumn = ({ setData, data, dataColumns, initFunction, style, ...props }) => {
     const dispatch = useDispatch();
     
     const [ selectedValue, setSelectedValue ] = useState([]);
 
     const onClickHandler = () => {
-        if (setLoading) {
-            setLoading(true);
-        }
+        props.setLoading(true);
 
         try {
             if (initFunction) {
                 initFunction();
             }
             
-            const selectData = async () => {
-                const newCol = toArray(selectedValue);
-                const newData = selectColumn(data, newCol);
-                
-                dispatch(setData(newData));
-            }
+            const newCol = toArray(selectedValue);
+            const newData = selectColumn(data, newCol);
             
-            selectData()
-            .finally( _ => {
-                setLoading(false);
-            })
+            dispatch(setData(newData));
 
+            props.setLoading(false);
+            
         } catch (err) {
-            
-            setLoading(false);
-
-            alert(err);
-
-            console.log(err);
-
+            errorHandler({
+                message: err.message,
+                statuscode: err.statuscode? err.statuscode: null
+            })
         }
 
     }

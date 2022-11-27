@@ -60,10 +60,8 @@ export const PredictData = ({children, style, className, ...props}) => {
 const CustomInput = ({children, className, style, ...props}) => {
     const dispatch = useDispatch();
 
-    const firstLayer = useSelector( state => state.setting.layer ).info[0];
-    
     const [ sample, setSample ] = useState({});
-    const [ inputShape, setInputShape ] = useState({});
+    const [ inputShape, setInputShape ] = useState();
     const [ rangeArray, setRangeArray ] = useState([]);
     const [ hovering, setHovering ] = useState(false);
 
@@ -108,6 +106,7 @@ const CustomInput = ({children, className, style, ...props}) => {
     const addData = () => {
         try {
             var temp = new Object();
+
             Object.entries(sample).map(value => {
                 temp[value[0]] = [value[1]]
             })
@@ -117,9 +116,11 @@ const CustomInput = ({children, className, style, ...props}) => {
             })
     
             dispatch(testActions.addSample(newSample));
-        } catch(e) {
-            alert(e);
-            console.log(e);
+        } catch(err) {
+            errorHandler({
+                message: err.message,
+                statuscode: err.statuscode? err.statuscode: null
+            })
         }
     }
 
@@ -138,12 +139,13 @@ const CustomInput = ({children, className, style, ...props}) => {
                     min={1}
                     step={1}
                     value={inputShape}
-                    setValue={setInputShape}/>
+                    setValue={setInputShape}
+                    isValue={true}/>
                 <Button
                     className="right"
                     type="button"
                     onClick={() => {
-                            setRangeArray(makeRangeArray(0, parseInt(inputShape['inputShape'])))
+                            setRangeArray(makeRangeArray(0, parseInt(inputShape)))
                         }}>
                     적용
                 </Button>
@@ -212,7 +214,7 @@ const CustomInput = ({children, className, style, ...props}) => {
 const FileInput = ({children, className, ...props}) => {
     const dispatch = useDispatch();
 
-    const [ url, setUrl ] = useState('');
+    const [ url, setUrl ] = useState("");
     const [ isLoading, setLoading ] = useState(false);
 
     const onClickHandler = () => {
@@ -297,6 +299,7 @@ const FileInput = ({children, className, ...props}) => {
                     placeholder="Url 입력"
                     value={url}
                     setValue={setUrl}
+                    isValue={true}
                 />
                 <Button 
                     className="right"

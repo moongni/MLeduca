@@ -84,6 +84,7 @@ const Analytic = () => {
         }
     }
 
+    // 히스토리 데이터 뷰 업데이트
     useEffect(() => {
         if ( !isEmptyObject(history) && 
              !isEmptyArray(history.history.loss) &&
@@ -95,23 +96,24 @@ const Analytic = () => {
                         label: "loss",
                         data: history.history.loss,
                         fill: false,
-                        backgroundColor: "rgba(78, 115, 223, 0.05)",
-                        borderColor: "rgba(78, 115, 223, 1)",
-                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                        pointBorderColor: "rgba(78, 115, 223, 1)",
-                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                    },
-                    {
-                        label: "accuracy",
-                        data: history.history.acc,
-                        fill: false,
                         backgroundColor: "rgba(255, 99, 71, 0.05)",
                         borderColor: "rgba(255, 99, 71, 1)",
                         pointBackgroundColor: "rgba(255, 99, 71, 1)",
                         pointBorderColor: "rgba(255, 99, 71, 1)",
                         pointHoverBackgroundColor: "rgba(255, 99, 71, 1)",
                         pointHoverBorderColor: "rgba(255, 99, 71, 1)",
+                    },
+                    {
+                        label: "accuracy",
+                        data: history.history.acc,
+                        fill: false,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+
                     }
                 ]
             });
@@ -119,16 +121,6 @@ const Analytic = () => {
     }, [ history ])
 
     const style = {
-        loadingStyle: {
-            "position":"fixed",
-            "top":"0",
-            "left":"0",
-            "width":"100vw",
-            "height":"100vw",
-            "backgroundColor":"gray",
-            "opacity":"0.3",
-            "zIndex":"100"
-        },
         btn: {
             "alignText":"center",
             "marginLeft":"auto"
@@ -148,15 +140,7 @@ const Analytic = () => {
             <HistorySelectModal
                 modalShow={historyModal}
                 setModalShow={setHistoryModal}/>
-            {isLoading &&
-                <div style={style.loadingStyle}>
-                    <Loader 
-                        type="spin" 
-                        color="black" 
-                        message={"training..."}
-                        style={{"position":"fixed"}}/>
-                </div>
-            }
+            {isLoading && <Loader type="spin" color="black" message={"training..."} style={{"position":"fixed"}}/>}
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
                     <Title title="모델 정보"/>
@@ -194,7 +178,7 @@ const Analytic = () => {
             </div>
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="History"/>
+                    <Title title="히스토리 뷰"/>
                     <Button 
                         className="right"
                         type="button"
@@ -215,7 +199,7 @@ const Analytic = () => {
             </div>
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="Data Set"/>
+                    <Title title="데이터 시각화"/>
                     <Button 
                         className="right"
                         type="button"
@@ -224,7 +208,7 @@ const Analytic = () => {
                             setChartModal(true);
                         }}
                         >
-                        차트 데이터 설정
+                        데이터 조건 설정
                     </Button>
                 </div>
                 <PlotData
@@ -257,6 +241,7 @@ const PlotData = ({setPlotData, setOption, modalShow, setModalShow, ...props}) =
     const [ yTick, setYTick ] = useState("");
     const [ viewOptions, setViewOptions ] = useState([]);
 
+    // 플롯 데이터 뷰 업데이트
     useEffect( () => {
         if ( !isEmptyStr(xTick) && !isEmptyStr(yTick) ){
             setOption({
@@ -293,12 +278,12 @@ const PlotData = ({setPlotData, setOption, modalShow, setModalShow, ...props}) =
                 });
             } else {
                 var newDatasets = []
-
+                
                 for ( const [ idx, option ] of viewOptions.entries() ) {
                     var idxArray = []
-
+                    
                     rowData[option.column].map(( value, index ) => {
-                        if (option.options.includes(value)) {
+                        if (option.options.includes(`${value}`)) {
                             idxArray.push(index);
                         }                        
                     })
@@ -336,21 +321,23 @@ const PlotData = ({setPlotData, setOption, modalShow, setModalShow, ...props}) =
             <div style={{"display":"flex"}}>
                 <Inputs
                     title="x-ticks"
-                    kind="selectOne"
+                    kind="select"
                     value={xTick}
                     setValue={setXTick}
                     default={""}
                     defaultName={"select x-ticks"}
                     list={columns}
+                    isValue={true}
                 />
                 <Inputs
                     title="y-ticks"
-                    kind="selectOne"
+                    kind="select"
                     value={yTick}
                     setValue={setYTick}
                     default={""}
                     defaultName={"select y-ticks"}
                     list={columns}
+                    isValue={true}
                 />
             </div>
         </>

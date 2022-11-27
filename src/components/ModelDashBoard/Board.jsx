@@ -7,10 +7,6 @@ import { LayerList } from "../Setting/Layers/LayerList";
 import { contentView } from "../Common/module/package";
 import boardStyle from "./ModelDashBoard.module.css";
 import mainStyle from "../Common/component.module.css";
-import { useState } from "react";
-import { useRef } from "react";
-import { useEffect } from "react";
-import { useLayoutEffect } from "react";
 
 export const SideCompileBoard = ({children, className, style, ...props}) => {
     const compile = useSelector( state => state.setting.compile );
@@ -29,7 +25,7 @@ export const SideCompileBoard = ({children, className, style, ...props}) => {
                                     Object.entries(setting[1].value).map(item => (
                                         <p style={{"wordBreak":"break-all",
                                                 "paddingLeft":"2rem"}}>
-                                            {item[0]}&nbsp; &nbsp;{item[1]}
+                                            {item[0]}&nbsp; &nbsp;{String(item[1])}
                                         </p>
                                 ))}
                             </li>  
@@ -106,11 +102,9 @@ export const SideLayerBoard = ({children, className, style, ...props}) => {
                             <p style={{"wordBreak":"break-all"}}>
                                 {layer.idx} Layer
                             </p>
-                            {Object.entries(layer.info).map(item => {
-                                    return (
-                                        <p style={{"wordBreak":"break-all"}}>{item[0]}&nbsp; &nbsp;{item[1]}</p>
-                                    )
-                                })
+                            {Object.entries(layer.info).map(item => 
+                                    <p style={{"wordBreak":"break-all"}}>{item[0]}&nbsp; &nbsp;{String(item[1])}</p>
+                                )
                             }
                         </li>
                     )
@@ -169,7 +163,7 @@ export const SideParamBoard = ({children, className, style, ...props}) => {
                 {!isEmptyObject(parameter) &&
                     Object.entries(parameter).map(setting => (
                         <li style={{"paddingLeft":"0.5rem"}}>
-                            <p style={{"wordBreak":"break-all"}}>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p>
+                            <p style={{"wordBreak":"break-all"}}>{setting[0]}:&nbsp; &nbsp;{String(setting[1])}</p>
                         </li>
                 ))}
             </Link>
@@ -202,8 +196,6 @@ const ParamBoard = ({ style }) => {
 }
 
 export const SettingBoard = () => {
-    const childRef = useRef(null);
-
     const style = {
         mainStyle: {
             "display":"inline-block",

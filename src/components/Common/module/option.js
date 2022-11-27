@@ -1,6 +1,6 @@
 import { isEmptyArray, isEmpty } from "./checkEmpty";
 
-export const toOption = ( items ) => {
+export function toOption(items) {
     const newOptions = [];
 
     if( !isEmptyArray(items) && !isEmpty(items) ){
@@ -12,7 +12,7 @@ export const toOption = ( items ) => {
     return newOptions
 }
 
-export const toArray = ( options ) => {
+export function toArray(options) {
     const newArray = [];
     
     if( !isEmptyArray(options) && !isEmpty(options) ){

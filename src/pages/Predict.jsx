@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { preprocess } from "../components/TF/Preprocess";
 import { PredictModel } from "../components/Predict/PredictModel";
 import { isEmpty, isEmptyArray, isEmptyObject } from "../components/Common/module/checkEmpty";
-import { getNData, getShape, getViewData } from "../components/Common/module/getData";
+import { updateViewData } from "../components/Common/module/getData";
 import { makeRangeArray, contentView, selectColumn } from "../components/Common/module/package";
-import { mkConTensor } from "../components/TF/ConvertToTensor";
+import { objectToTensor } from "../components/TF/ConvertToTensor";
 import Title from "../components/Common/title/title";
 import ArrayTable from "../components/Common/table/ArrayTable";
 import Inputs from "../components/Common/inputs/Inputs";
@@ -21,58 +21,60 @@ import mainStyle from "../components/Common/component.module.css";
 import * as dfd from "danfojs";
 import { errorHandler } from "../components/Common/module/errorHandler";
 
+
 const Predict = () => {
     const dispatch = useDispatch();
 
-    const rowTestData = useSelector( state => state.test.rowData );
+    const rowData = useSelector( state => state.test.rowData );
     const testX = useSelector( state => state.test.feature );
     const predY = useSelector( state => state.test.predData );
     const process = useSelector( state => state.preprocess.test );
     const yColumn = useSelector( state => state.train.label.columns );
+
     const [ model, setModel ] = useOutletContext();
     
     const [ disable, setDisable ] = useState(true);
     const [ isLoading, setLoading ] = useState(false);
-    const [ nData, setNData ] = useState({"testNData":5});
+    const [ nData, setNData ] = useState({"testNData":5, "predNData":5});
 
-    const [ viewTestX, setViewTestX ] = useState({
+    const initData = {
         'columns': [],
         'data': {},
         'shape': []
-    });
+    };
+    const [ viewTestX, setViewTestX ] = useState(initData);
+    const [ viewPredY, setViewPredY ] = useState(initData)
+
+    useEffect(() => {
+        // 버튼 활성화 조건
+        if ( !isEmptyObject(model) && !isEmptyObject(testX.data) ) {
+            setDisable(false);
+        } else {
+            setDisable(true);
+        }
+
+        // 데이터 뷰 초기화
+        updateViewData(testX, setViewTestX, nData.testNData);
+
+    }, [ model, testX.data ])
     
     useEffect(() => {
-        if ( !isEmptyObject(model) && !isEmptyObject(testX.data) ) {
-            
-            setDisable(false);
-            
-        } else {
-            
-            setDisable(true);
+        // 데이터 뷰 초기화
+        updateViewData(predY, setViewPredY, nData.predNData);
+    }, [ predY ])
 
-        }
-
-        if (!isEmptyArray(testX.columns)) {
-            const newData = getNData(testX.data, nData.testNData)
-
-            setViewTestX({
-                'columns': testX.columns,
-                'data': newData,
-                'shape': getShape(newData)
-            })
-        }
-    }, [ model, testX.data ])
-
+    // 새로운 데이터 입력시 데이터 업데이트
     useEffect(() => {
         if ( !isEmptyArray(testX.columns) ) {
-            dispatch(testActions.setFeatureData(selectColumn(rowTestData.data, testX.columns)))
+            dispatch(testActions.setFeatureData(selectColumn(rowData.data, testX.columns)))
         }
-    }, [ rowTestData ])
+    }, [ rowData ])
     
-    const onClickPredict = async (e) => {
+    // 예측 진행 함수
+    async function predict(model, testX) {
         const arrToObject = async ( data ) => {
-            var colName = isEmptyArray(yColumn)? makeRangeArray(0, data[0].length) : yColumn;
-
+            var colName = isEmpty(yColumn) || isEmptyArray(yColumn)? makeRangeArray(0, data[0].length) : yColumn;
+            
             var ret = data.reduce(( acc, val ) => {
                 if ( !isEmptyArray(val) ) {
                     val.map(( value, idx ) => {
@@ -85,18 +87,25 @@ const Predict = () => {
                 }
                 return acc;
             }, {})
-
+    
             return ret;
         }
-
+    
+        var tensorData = objectToTensor(testX);
+        var predData = await arrToObject((await model.predict(tensorData)).arraySync());
+    
+        return predData;
+    }
+    
+    // 예측 버튼 함수
+    const onClickPredict = async (e) => {
         e.preventDefault();
         setLoading(true);
         
         try {
-            var tensorData = mkConTensor(testX.data);
-            var predData = await arrToObject((await model.predict(tensorData)).arraySync()) ;
+            var predData = await predict(model, testX.data);
     
-            dispatch( testActions.setPredData(predData) );
+            dispatch(testActions.setPredData(predData));
         } catch (err) {
             errorHandler({
                 "message": err.message,
@@ -107,6 +116,7 @@ const Predict = () => {
         setLoading(false);
     }
 
+    // 전처리 적용 함수
     const onClickHandler = async () => {
         setLoading(true);
 
@@ -116,8 +126,9 @@ const Predict = () => {
                 kind: "test",
                 columns: testX.columns
             }))
-    
-            const cashData = selectColumn(rowTestData.data, testX.columns);
+            
+            // 라벨 셋이 필요 없기 때문에 복사한 데이터 사용
+            const cashData = selectColumn(rowData.data, testX.columns);
             const dummyData = cashData;
             
             const { labelData, featureData } = await preprocess(dummyData, cashData, process);
@@ -171,7 +182,7 @@ const Predict = () => {
                         "justifyContent":"space-between" ,
                         "marginRight":"2.5rem"}}>
                     <Title title="데이터 테이블"/>
-                    <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
+                    <div style={{"display":"flex"}}>
                         <Inputs
                             kind="input"
                             type="number"
@@ -181,43 +192,26 @@ const Predict = () => {
                             defaultValue={5}
                             step={1}
                             min={1}
-                            max={testX.shape[1]}
+                            max={testX.shape[0]}
                             required={true}
                             value={nData}
                             setValue={setNData}/>
                         <Button
-                            className="right"
-                            style={{"marginRight":"1rem", "wordBreak":"keep-all"}}
+                            className="right dataView"
                             type="button"
-                            onClick={() => {
-                                try {
-                                    var response = getViewData(nData.testNData, testX);
-
-                                    if (response.isError) {
-                                        errorHandler(response.errorData);
-                                    } else {
-                                        setViewTestX(response.data);
-                                    }
-
-                                } catch (err) {
-                                    errorHandler({
-                                        "message": err.message,
-                                        "statuscode": null
-                                    })
-                                }
-                            }}>
+                            onClick={() => updateViewData(testX, setViewTestX, nData.testNData)}>
                             적용
                         </Button>
                     </div>
                 </div>
-                {!isEmptyArray(rowTestData.columns) &&
+                {!isEmptyArray(rowData.columns) &&
                     <SetColumn
                         title={"열 선택"}
                         style={{"padding":"0 1rem"}}
                         setData={testActions.setFeatureData}
                         setLoading={setLoading}
-                        data={rowTestData.data}
-                        dataColumns={rowTestData.columns}/>
+                        data={rowData.data}
+                        dataColumns={rowData.columns}/>
                 }
                 <div className={mainStyle.subContainer}>
                     {contentView({
@@ -227,8 +221,7 @@ const Predict = () => {
                             <ArrayTable 
                                 style={{"maxHeight":"24rem"}}
                                 data={viewTestX}
-                            >
-                            </ArrayTable>
+                                totalShape={testX.shape}/>
                             <PreprocessingOptions
                                 title="feature"
                                 kind="test"
@@ -286,13 +279,39 @@ const Predict = () => {
             </div>
             {!isEmptyArray(predY.columns) &&
                 <div className={mainStyle.container}>
-                    <Title title="예측 결과 데이터 테이블"/>
+                    <div style={{"display":"flex",
+                        "justifyContent":"space-between" ,
+                        "marginRight":"2.5rem"}}>
+                        <Title title="예측 결과 데이터 테이블"/>
+                        <div style={{"display":"flex"}}>
+                            <Inputs
+                                kind="input"
+                                type="number"
+                                mainTitle="데이터 뷰 개수"
+                                title="predNData"
+                                placeholder="정수만 입력"
+                                defaultValue={5}
+                                step={1}
+                                min={1}
+                                max={predY.shape[0]}
+                                required={true}
+                                value={nData}
+                                setValue={setNData}/>
+                            <Button
+                                className="right dataView"
+                                type="button"
+                                onClick={() => updateViewData(predY, setViewPredY, nData.predNData)}>
+                                적용
+                            </Button>
+                        </div>
+                    </div>
                     <div className={mainStyle.subContainer}
                         style={{"display":"flex"}}>
                             <div style={{"width":"100%"}}>
                                 <ArrayTable
                                     style={{"height":'24rem'}}
-                                    data={predY}/>
+                                    data={viewPredY}
+                                    totalShape={predY.shape}/>
                             </div>
                             <div style={style.verticalBtnContainer}>
                                 <Button

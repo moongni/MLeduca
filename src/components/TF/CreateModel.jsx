@@ -76,6 +76,6 @@ export const createOptimizer = (optimizer) => {
       var centered = optimizer.value.centered;
       return tf.train.rmsprop(decay, momentum, epsilon, centered);
     default:
-      throw new Error(`ValueError optimizer 생성 오류 ${optimizer.title}`);
+      throw new Error(`Optimizer 생성에 실패하였습니다. 다시 시도해주세요.\n현재 옵티마이저: ${optimizer.title}`);
   }
 }

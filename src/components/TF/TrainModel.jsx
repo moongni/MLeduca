@@ -1,4 +1,3 @@
-import * as tf from "@tensorflow/tfjs";
 import { createOptimizer } from "./CreateModel"; 
 
 export async function trainModel(model, xs, ys, compile, parameter) {
@@ -16,16 +15,16 @@ export async function trainModel(model, xs, ys, compile, parameter) {
         trainedModel: tf.model or tf.sequential
       }
   */
-  console.log("set model compile");
-  
+ 
+ console.log("set model compile");
   model.compile({
     optimizer: createOptimizer(compile.optimizer),
     loss: compile.loss,
     metrics: ['accuracy']
   })
 
+  
   console.log("getting train model");
-
   const history = await model.fit(xs, ys, {
     ...parameter,
     shuffle: true,

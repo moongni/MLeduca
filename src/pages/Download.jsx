@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isEmptyObject } from "../components/Common/module/checkEmpty";
 import Title from "../components/Common/title/title";
 import { Button } from "../components/Common/button/Button";
 import { LocalSave, SaveModal } from "../components/Common/modal/SaveModal";
 import { FaFileExport } from "react-icons/fa"
 import mainStyle from "../components/Common/component.module.css"
+import { errorHandler } from "../components/Common/module/errorHandler";
+import { ModelSelectModal } from "../components/Common/modal/modal";
 
 const Download = () => {
     const history = useSelector( state => state.history.info );
@@ -14,37 +15,60 @@ const Download = () => {
     const setting = useSelector( state => state.setting );
 
     const [ model, setModel ] = useOutletContext();
+    const [ modelModal, setModelModal ] = useState(false);
 
+    // 모델 파일 저장 함수
     const modelSubmitHandler = async ( event, model, fileName ) => {
         event.preventDefault();
 
         try {
             const saveResults = await model.save(`downloads://${fileName}`);
+
         } catch (err) {
             if (err.name == "TypeError") {
-                alert("model이 정의되지 않았습니다.");
+                errorHandler({
+                    message: "모델이 정의되지 않았습니다.",
+                    statuscode: 2
+                })
+                return;
             }
+
+            errorHandler({
+                message: err.message,
+                statuscode: err.status? err.status: null
+            })
         }
     }
     
-    const locModelSumitHandler = async ( event, model, fileName     ) => {
+    // 모델 파일 localstorage 저장 함수
+    const locModelSumitHandler = ( event, model, fileName ) => {
         event.preventDefault();
 
-        if (isEmptyObject(model)) {
-            alert("model이 정의되지 않았습니다.");
-            return 0;
-        }
-
-        model.save(`localstorage://model/${fileName}`).then( saveResults => {
+        model.save(`localstorage://model/${fileName}`)
+        .then( saveResults => {
             alert(`localstorage://model/${fileName} 저장완료`);
-            
+        })
+        .catch( err => {
+            if (err.name == "TypeError") {
+                errorHandler({
+                    message: "모델이 정의되지 않았습니다.",
+                    statuscode: 2
+                })
+                return;
+            }
+
+            errorHandler({
+                message: err.message,
+                statuscode: err.status? err.status: null
+            })
         })
     }
 
+    // json 파일 저장 함수
     const jsonSubmitHandler = ( event, data, fileName ) => {
         event.preventDefault();
 
-        const exportAsFile = ( data, filename ) => {
+        const exportAsFile = async ( data, filename ) => {
             const jsonString = `data:text/json;chartset=utf-8,${encodeURIComponent(
                 JSON.stringify(data)
             )}`;
@@ -56,6 +80,12 @@ const Download = () => {
         }
     
         exportAsFile(data, fileName)
+        .catch( err => {
+            errorHandler({
+                message: "저장에 실패하였습니다.",
+                statuscode: err.status? err.status: null
+            })
+        })
     }
 
     const dataArr = [
@@ -104,10 +134,22 @@ const Download = () => {
     return (
         <div className={mainStyle.container}
             style={style.container}>
-            <Title title="Download" icon={<FaFileExport/>}/>
+            <ModelSelectModal
+                modalShow={modelModal}
+                setModalShow={setModelModal}
+                setModel={setModel}/>
+            <div style={{"display":"flex", "justifyContent":"space-between", "alignItems":"center"}}>
+                <Title title="Download" icon={<FaFileExport/>}/>
+                <Button 
+                    className="right"
+                    type="button"
+                    style={style.btn}
+                    onClick={() => setModelModal(true)}>
+                    모델 선택
+                </Button>
+            </div>
             <div className={mainStyle.subContainer}
-                style={style.subContainer}
-            >
+                style={style.subContainer}>
                 {dataArr.map(data => <DownloadList {...data}/>)}
             </div>
         </div>

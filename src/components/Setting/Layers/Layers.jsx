@@ -14,28 +14,32 @@ import style from "../../Common/component.module.css";
 
 function Layers() {
     const dispatch = useDispatch();
+    
+    const layers = useSelector(state => state.setting.layer);
+
+    const layerRef = useNav("Layer");
 
     const [ currentTab, setCurrentTab ] = useState('1');
     const [ disabled, setDisabled ] = useState(false);
 
-    const layers = useSelector(state => state.setting.layer);
-    const layerRef = useNav("Layer");
-
+    // 탭 매뉴에 따라 렌더링
     function tapContent(currentTab) {
         const curContent = data.Layers.filter(tab => `${tab.id}` == currentTab)
         switch (curContent[0].title) {
             case "Sequence":
-                return <Sequence info={curContent[0].info} icon={<AiOutlineControl/>} disabled={disabled} setDisabled={setDisabled}/>                
+                return <Sequence info={curContent[0].info} disabled={disabled} setDisabled={setDisabled}/>                
             case "Model":
-                return <Model info={curContent[0].info} icon={<AiOutlineControl/>} disabled={disabled} setDisabled={setDisabled}/>
+                return <Model info={curContent[0].info} disabled={disabled} setDisabled={setDisabled}/>
         }
     }
 
-
-    const handleRemove = async (idx) => {
+    // 레이어 제거 함수
+    const handleRemove = (idx) => {
         setDisabled(true);
+
         dispatch(settingActions.removeLayer(idx))
         dispatch(settingActions.reIndexing())
+
         setDisabled(false);
     }
     
@@ -73,97 +77,97 @@ function Layers() {
 
 export default Layers
 
-function Model({icon, disabled, setDisabled, ...props}) {
+function Model({ disabled, setDisabled, ...props }) {
     const dispatch = useDispatch();
 
     const [value, setValue] = useState({});
 
-    const handleSubmit = async (event) => {
+    // 레이어 추가 함수
+    const handleSubmit = (event) => {
         event.preventDefault();
         setDisabled(true);
 
         dispatch(settingActions.addModel(value))
+
         setDisabled(false);        
     }
 
     return (
-        <div>
-            <form
-                className={style.subContainer}
-                onSubmit={handleSubmit}
-            >
-                {props.info.filter(n => n.name === "mainParams")[0].params
-                    .map( info => (
-                        <Inputs
-                            {...info}
-                            value={value}
-                            setValue={setValue}/>
-                ))}
-                <Button
-                    className="green center"
-                    style={{"width":"100%", "marginTop":"1.25rem"}}
-                    type="submit"
-                    disabled={disabled}>
-                    Add Layer
-                </Button>
-            </form>
-        </div>
+        <form
+            className={style.subContainer}
+            onSubmit={handleSubmit}
+        >
+            {props.info.filter(n => n.name === "mainParams")[0].params
+                .map( info => (
+                    <Inputs
+                        {...info}
+                        value={value}
+                        setValue={setValue}/>
+            ))}
+            <Button
+                className="green center"
+                style={{"width":"100%", "marginTop":"1.25rem"}}
+                type="submit"
+                disabled={disabled}>
+                레이어 추가
+            </Button>
+        </form>
     )
 }
 
 
-function Sequence({icon, disabled, setDisabled, ...props}) {
+function Sequence({ disabled, setDisabled, ...props }) {
     const dispatch = useDispatch();
 
     const [ isSubOpen, setSubOpen ] = useState(false);
     const [ value, setValue ] = useState({});
 
-    const handleSubmit = async (event) =>{
-        setDisabled(true);
+    // 레이어 추가 함수
+    const handleSubmit = (event) =>{
         event.preventDefault();
+        setDisabled(true);
+
         dispatch(settingActions.addLayer(value));
+        
         setDisabled(false);
     }
 
     return(
-        <div >
-            <form
-                className={style.subContainer} 
-                onSubmit={handleSubmit}
-            >
-                {props.info.filter((n)=> n.name === "mainParams")[0].params
-                    .map(v => (
-                        <Inputs 
-                            {...v}
-                            value={value}
-                            setValue={setValue}/>
-                ))}
-                <AdvancedSettingButton
-                    style={{"marginTop":"1rem",
-                            "marginBottom":"1rem"}}
-                    value={isSubOpen}
-                    setValue={setSubOpen}
-                />
-                {isSubOpen &&
-                    <>
-                        {props.info.filter((n)=>n.name === "subParams")[0].params
-                            .map(v => (
-                                <Inputs 
-                                    {...v}
-                                    value={value}
-                                    setValue={setValue}
-                                />
-                        ))}
-                    </>
-                }
-                <Button
-                    className="green center"
-                    style={{"width":"100%"}}
-                    type="submit"
-                    disabled={disabled}>
-                    Add Layer
-                </Button>
-            </form>
-        </div>
+        <form
+            className={style.subContainer} 
+            onSubmit={handleSubmit}
+        >
+            {props.info.filter((n)=> n.name === "mainParams")[0].params
+                .map(v => (
+                    <Inputs 
+                        {...v}
+                        value={value}
+                        setValue={setValue}/>
+            ))}
+            <AdvancedSettingButton
+                style={{"margin":"1rem 0"}}
+                value={isSubOpen}
+                setValue={setSubOpen}
+            />
+            {isSubOpen &&
+                <>
+                    {props.info.filter((n)=>n.name === "subParams")[0].params
+                        .map(v => (
+                            <Inputs 
+                                {...v}
+                                value={value}
+                                setValue={setValue}
+                            />
+                    ))}
+                </>
+            }
+            <Button
+                className="green center"
+                style={{"width":"100%", "marginTop":"3rem"}}
+                type="submit"
+                disabled={disabled}>
+                레이어 추가
+            </Button>
+        </form>
     )
 }

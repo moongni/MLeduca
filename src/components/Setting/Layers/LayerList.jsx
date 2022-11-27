@@ -3,12 +3,7 @@ import "../../Common/table/scrollStyle.css";
 import tableStyle from "../../Common/table/table.module.css";
 import { AiOutlineDelete } from "react-icons/ai";
 
-export const LayerList = ({style, data, isModel, ...props}) => {
-    const lengthArray = data.map(d => Object.keys(d.info).length);
-    const maxLengthIndex = lengthArray.indexOf(Math.max(...lengthArray));
-    const columns = data[maxLengthIndex].idx == "input"? 
-        [] : [...Object.keys(data[maxLengthIndex].info)];
-
+export const LayerList = ({style, data, isModel, handleRemove, ...props}) => {
     const [hovering, setHovering] = useState(false);
     
     const handleMouseOver = useCallback(() => {
@@ -20,6 +15,14 @@ export const LayerList = ({style, data, isModel, ...props}) => {
         !!hovering &&
         setHovering(false);
     }, [hovering]);
+    
+    const lengthArray = data.map(d => Object.keys(d.info).length);
+    
+    const maxLengthIndex = lengthArray.indexOf(Math.max(...lengthArray));
+    
+    const columns = data[maxLengthIndex].idx == "input"? 
+        [] : [...Object.keys(data[maxLengthIndex].info)];
+
     
     return (
         <div 
@@ -56,7 +59,7 @@ export const LayerList = ({style, data, isModel, ...props}) => {
                             )}
                             {props.isHandleRemove &&
                                 <td className={[tableStyle.td, tableStyle.removeTd].join(' ')}
-                                    onClick={()=>props.handleRemove(d.idx)}>
+                                    onClick={() => handleRemove(d.idx)}>
                                     <AiOutlineDelete/>
                                 </td>
                             }

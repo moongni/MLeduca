@@ -21,7 +21,6 @@
 }
 
 .subContainer {
-    /* min-height: 100%; */
     padding: 1.25rem;
     margin: 1.25rem 0;
     background-color: var(--bg-color);
@@ -36,6 +35,10 @@
     display: flex;
     transform: translateX(-50%);
     justify-content: center;
+}
+.flexContainer {
+    display: flex;
+    margin: 0 2.5rem ;
 }
 .btn {
     width: 8rem;

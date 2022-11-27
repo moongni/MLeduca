@@ -1,8 +1,6 @@
 import * as tf from "@tensorflow/tfjs";
-import * as dfd from "danfojs";
-import { getDtype } from "../Common/module/getData";
 
-export const mkConTensor = (data) => {
+export const objectToTensor = (data) => {
   const tensorData = Object.entries(data).map((items) => (
     tf.tensor(items[1]).reshape([-1, 1])
   ))
@@ -15,8 +13,8 @@ export function convertToTensor(xs, ys) {
   
     return tf.tidy(() => {
       // 텐서로 데이터 변환
-      const inputTensor = mkConTensor(xs);
-      const labelTensor = mkConTensor(ys);
+      const inputTensor = objectToTensor(xs);
+      const labelTensor = objectToTensor(ys);
   
       return {
         features: inputTensor,

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getData, getNData, getShape, getViewData } from "../components/Common/module/getData"
-import { isEmptyStr, isEmptyArray } from "../components/Common/module/checkEmpty"
+import { getData, updateViewData } from "../components/Common/module/getData"
+import { isEmptyArray } from "../components/Common/module/checkEmpty"
 import { contentView } from "../components/Common/module/package"
+import { errorHandler } from "../components/Common/module/errorHandler";
 import Inputs from "../components/Common/inputs/Inputs";
 import ArrayTable from "../components/Common/table/ArrayTable";
 import Title from "../components/Common/title/title";
@@ -16,34 +17,27 @@ import { dataActions } from "../reducers/dataSlice";
 import { FiDatabase } from "react-icons/fi";
 import style from "../components/Common/component.module.css";
 import * as dfd from "danfojs";
-import { errorHandler } from "../components/Common/module/errorHandler";
 
-export default function LoadData() {
+const LoadData = () => {
     const dispatch = useDispatch();
 
     const data = useSelector( state => state.data );
 
     const [ url, setUrl ] = useState("");
     const [ isLoading, setLoading ] = useState(false);
-    const [ nData, setNData ] = useState({"nData": 5});
+    const [ nData, setNData ] = useState(5);
     const [ viewData, setViewData ] = useState({
         'columns': [],
         'data': {},
         'shape': []
     });
     
+    // 데이터 뷰 초기화
     useEffect(() => {
-        if (!isEmptyArray(data.columns)) {
-            const newData = getNData(data.data, nData.nData);
-    
-            setViewData({
-                'columns': data.columns,
-                'data': newData,
-                'shape': getShape(newData)
-            })
-        }
+        updateViewData(data, setViewData, nData);
     }, [ data ])
 
+    // url 불러오기 함수
     const onClickHandler = () => {
         setLoading(true);
         
@@ -51,6 +45,11 @@ export default function LoadData() {
         dispatch(testActions.initialize());
         dispatch(preprocessingActions.initialize());
         dispatch(dataActions.initialize());
+        setViewData({
+            'columns': [],
+            'data': {},
+            'shape': []
+        });
 
         getData(url)
         .then( response => {
@@ -63,7 +62,7 @@ export default function LoadData() {
         .catch( err => {
             errorHandler({
                 message: err.message,
-                statuscode: null
+                statuscode: err.status? err.status: null
             })
         })
         .finally( _ => {
@@ -71,6 +70,7 @@ export default function LoadData() {
         })
     }
 
+    // 파일 불러오기 함수
     const readFile = (file, type) => {
         setLoading(true);
 
@@ -116,26 +116,24 @@ export default function LoadData() {
             setLoading(false);
             errorHandler({
                 message: err.message,
-                statuscode: null
+                statuscode: err.status? err.status: null
             })
         }
     }
 
     return (
         <div className={style.container}>
+            { isLoading && <Loader type="spin" color="black" message={"Load Data"}/>}
             <Title title="데이터 적재" icon={<FiDatabase/>}/>
             <div className={style.subContainer}>
-                { isLoading && <Loader type="spin" color="black" message={"Load Data"}/>}
-                <div style={{"display":"flex",
-                            "marginRight":"2.5rem",
-                            "marginLeft":"2.5rem"}}>
+                <div className={style.flexContainer}>
                     <Inputs 
                         kind="text"
                         title="Url로 불러오기"
                         placeholder="Url 입력"
                         value={url}
                         setValue={setUrl}
-                    />
+                        isValue={true}/>
                     <Button
                         className="right"
                         style={{"marginRight":"1rem"}}
@@ -152,8 +150,8 @@ export default function LoadData() {
             <div style={{"display":"flex",
                         "justifyContent":"space-between",
                         "marginRight":"2.5rem"}}>
-                <Title title="데이터 테이블" />
-                <div style={{"display":"flex", "marginLeft":"2.5rem"}}>
+                <Title title="데이터 테이블"  icon={<FiDatabase/>}/>
+                <div style={{"display":"flex"}}>
                     <Inputs
                         kind="input"
                         type="number"
@@ -163,30 +161,15 @@ export default function LoadData() {
                         defaultValue={5}
                         step={1}
                         min={1}
-                        max={data.shape[1]}
+                        max={data.shape[0]}
                         required={true}
                         value={nData}
-                        setValue={setNData}/>
+                        setValue={setNData}
+                        isValue={true}/>
                     <Button
-                        className="right"
-                        style={{"marginRight":"1rem", "wordBreak":"keep-all"}}
+                        className="right dataView"
                         type="button"
-                        onClick={() => {
-                            try {
-                                var response = getViewData(nData.nData, data)
-
-                                if (response.isError) {
-                                    errorHandler(response.errorData);
-                                } else {
-                                    setViewData(response.data);
-                                }
-                            } catch (err) {
-                                errorHandler({
-                                    "message": err.message,
-                                    "statuscode": null
-                                })
-                            }
-                        }}>
+                        onClick={() => updateViewData(data, setViewData, nData)}>
                         적용
                     </Button>
                 </div>
@@ -196,10 +179,13 @@ export default function LoadData() {
                     element: viewData.columns,
                     children: <ArrayTable 
                                 style={{"height":"24rem"}}
-                                data={viewData}/>,
+                                data={viewData}
+                                totalShape={data.shape}/>,
                     checkFunction: isEmptyArray
                 })}
             </div>
         </div>
     );
 }
+
+export default LoadData;
