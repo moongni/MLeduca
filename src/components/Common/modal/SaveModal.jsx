@@ -72,6 +72,7 @@ export const SaveModal = ({ modalShow, setModalShow, data, ...props }) => {
                     setValue={setFileName}
                     placeholder="write file name"
                     required={true}
+                    isValue={true}
                     />
                 <div style={style.btnContainer}> 
                     <Button
@@ -130,6 +131,7 @@ export const LocalSave = ({ modalShow, setModalShow, data, ...props }) => {
                     setValue={setFileName}
                     placeholder="write file name"
                     required={true}
+                    isValue={true}
                     />
                 <div style={style.btnContainer}> 
                     <Button

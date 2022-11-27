@@ -119,14 +119,6 @@ const Fit = () => {
       alert("모델 훈련 완료, localstroage://model/recent에 저장되었습니다.");
     })
     .catch( err => {
-      if (err.message.includes("when checking input")) {
-        errorHandler({
-          "message": `레이어의 inputShape과 데이터의 shape이 일치하지 않습니다. \ninputShape: ${model.layers[0].batchInputShape}, dataShape: ${xs.shape}`,
-          "statuscode": err.status? err.status: null
-        })
-        return;
-      }
-
       errorHandler({
         "message": err.message,
         "statuscode": err.status? err.status: null
@@ -173,10 +165,7 @@ const Fit = () => {
               className="right"
               type="button"
               style={style.btn}
-              onClick={() => {
-                setModelModal(true);
-              }}
-              >
+              onClick={() => setModelModal(true)}>
               모델 선택
           </Button>
         </div>
@@ -189,9 +178,7 @@ const Fit = () => {
               className="right"
               type="button"
               style={style.btn}
-              onClick={() => {
-                  setSettingModal(true);
-              }}>
+              onClick={() => setSettingModal(true)}>
               설정 선택
           </Button>
         </div>
@@ -263,7 +250,7 @@ const Fit = () => {
           type="button"
           disabled={disabled}
           onClick={onClickHandler}>
-            fit
+            학습
         </Button>
       </div>
     </>

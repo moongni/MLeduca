@@ -115,28 +115,29 @@ export const ModelSelectModal = ({ modalShow, setModalShow, ...props }) => {
             dispatch(settingActions.initLayer());
             
             // layer update
-            model.layers.map( layer => {
-                if ( layer.constructor.name === "InputLayer" ) {
-    
-                    dispatch(settingActions.addModel({
-                        "shape":layer.batchInputShape
-                    }))
-    
-                } else if ( layer.constructor.name === "Dense") {
-                    const newLayer = {
-                        "units":layer.units,
-                        "inputShape":layer.batchInputShape.filter( shape => shape != null ),
-                        "activation":layer.activation.constructor.name.toLowerCase(),
+            try {
+                model.layers.map( layer => {
+                    if ( layer.constructor.name === "InputLayer" ) {
+        
+                        dispatch(settingActions.addModel({
+                            "shape":layer.batchInputShape
+                        }))
+        
+                    } else {
+                        const newLayer = {
+                            "units":layer.units,
+                            "inputShape":layer.batchInputShape.filter( shape => shape != null ),
+                            "activation":layer.activation.constructor.name.toLowerCase(),
+                        }
+        
+                        dispatch(settingActions.addLayer(newLayer));
                     }
-    
-                    dispatch(settingActions.addLayer(newLayer));
-    
-                } else {
-                    dispatch(settingActions.initLayer());
-    
-                    throw new Error("신경망 정보를 읽어올 수 없습니다.")
-                }
-            })
+                })
+            } catch (err) {
+                dispatch(settingActions.initLayer());
+                
+                throw new Error("신경망 정보를 읽어올 수 없습니다.")
+            }
             
             // 모델 설정
             if (props.setModel) {
