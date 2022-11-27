@@ -15,25 +15,31 @@
 - 분석: 데이터 산점도, 학습 결과 시각화
 - 다운로드: 모델 및 설정 파일 다운로드 
 
-## Requirements
+## 사용
 
-### Node.js 설치
+도메인으로 접근하여 사용하려면 아래의 링크를 통해 접근할 수 있습니다.
+
+[Serverless Web App For Machine Learning Education](https://moongni.github.io/webappforMLEDU)
+
+## 소스코드 사용
+### Requirements
+
+#### Node.js 설치
 이 웹앱은 Node.js를 기반으로 React.js 프레임워크를 사용하여 만들었습니다.
 
 Node.js 14.16.1 이후의 버전으로 다운받습니다.
 
 [Node.js 다운로드 페이지](https://nodejs.org/en/download/)
 
-[Node.js github](https://github.com/nodejs/node)
+Node.js에 더 자세한 내용은 [Node.js github](https://github.com/nodejs/node)를 참조해주세요.
 
-
-### 웹 앱 다운로드
+#### 웹 앱 다운로드
 
 웹앱의 소스코드를 다운받습니다. 
 
-`git clone https://github.com/moongni/ServerlessWebAppForMachineLearningEducation.git`
+```git clone https://github.com/moongni/ServerlessWebAppForMachineLearningEducation.git```
 
-### 앱 실행
+#### 앱 실행
 
 다운로드한 웹앱 디렉토리에서 cmd 또는 터미널에서 아래의 명령어를 실행합니다.
 
