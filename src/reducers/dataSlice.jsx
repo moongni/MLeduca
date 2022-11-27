@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getDtype, getShape } from "../components/Common/module/getData";
 
 const initialState = {
     columns: [],
-    info: {},
+    data: {},
+    shape: [],
+    dtype: {}
 }
 
 const dataSlice = createSlice({
@@ -11,13 +14,18 @@ const dataSlice = createSlice({
 
     reducers: {
         addData(state, action) {
-            state.info = {
-                ...state.info,
+            state.data = {
+                ...state.data,
                 ...action.payload
             };
+            state.dtype = getDtype(state.data);
+            state.shape = getShape(state.data);
         },
         setData(state, action) {
-            state.info = action.payload;
+            state.data = action.payload;
+            state.columns = Object.keys(state.data);
+            state.dtype = getDtype(action.payload);
+            state.shape = getShape(action.payload);
         },
         setColumns(state, action){
             state.columns = action.payload;
@@ -25,11 +33,11 @@ const dataSlice = createSlice({
         // addData(state,action) {
         //     const { columns , samples } = action.payload;
         //     state.columns = columns;
-        //     state.info = samples;
+        //     state.data = samples;
         // },
         initialize(state, action){
             state.columns = []
-            state.info = {}
+            state.data = {}
         }
     }
 })

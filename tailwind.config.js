@@ -25,6 +25,9 @@ module.exports = {
       },
       maxHeigth: {
         '448px':"28rem",
+      },
+      flexGrow: {
+        '2': 2
       }
     },
   },

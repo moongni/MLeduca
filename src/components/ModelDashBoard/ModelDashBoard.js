@@ -11,8 +11,7 @@ export const ModelDashBoard = (props) => {
     }
 
     return (
-        <div className={[`${props.isDashboardOpen? style.open:style.close}`, style.container].join(' ')}
-        >
+        <div className={[`${props.isDashboardOpen? style.open:style.close}`, style.container].join(' ')}>
             <div className={style.modelInfo}>
                 <h1 className={style.h1}>Model Info</h1>
                 <div style={{"marginLeft": "1rem"}}>
@@ -29,8 +28,8 @@ export const ModelDashBoard = (props) => {
             </div>
             <div className={style.modelTrain}>
                 <div className={style.div}>
-                    <Link to='/tfjs_test/'>
-                    <button className={style.button}>fit</button>
+                    <Link to='/fit/'>
+                        <button className={style.button}>학습 페이지로 이동</button>
                     </Link>
                 </div>
             </div>

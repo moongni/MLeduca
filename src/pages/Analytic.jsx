@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isEmptyObject, isEmptyStr, isEmptyArray } from "../components/Common/package";
-import { ModelSelectModal, HistorySelectModal } from "../components/Common/modal/CommonModal";
+import { isEmptyObject, isEmptyStr, isEmptyArray } from "../components/Common/module/checkEmpty";
+import { contentView } from "../components/Common/module/package";
+import { ModelSelectModal, SettingSelectModal, HistorySelectModal } from "../components/Common/modal/modal";
+import { ChartModal } from "../components/Common/modal/SaveModal";
 import Title from "../components/Common/title/title";
 import { LayerBoard, SettingBoard } from "../components/ModelDashBoard/Board";
 import { Loader } from "../components/Common/loader/Loader";
 import mainStyle from "../components/Common/component.module.css";
+import { Button } from "../components/Common/button/Button";
+import Inputs from "../components/Common/inputs/Inputs";
 import { Bubble, Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -16,10 +21,8 @@ import {
     Title as TitleJS,
     Tooltip,
     Legend,
+    Colors
   } from 'chart.js';
-import { Button } from "../components/Common/button/Button";
-import Inputs from "../components/Common/inputs/Inputs";
-import { useCallback } from "react";
 
 ChartJS.register(
     CategoryScale,
@@ -28,16 +31,20 @@ ChartJS.register(
     LineElement,
     TitleJS,
     Tooltip,
-    Legend
+    Legend,
+    Colors
   );
 
 const Analytic = () => {
     const history = useSelector( state => state.history.info );
+    
+    const [ model, setModel ] = useOutletContext();
 
     const [ isLoading, setLoading ] = useState(false);
     const [ modelModal, setModelModal ] = useState(false);
+    const [ settingModal, setSettingModal ] = useState(false);
     const [ historyModal, setHistoryModal ] = useState(false);
-    const [ modelUrl, setModelUrl ] = useState("");
+    const [ chartModal, setChartModal ] = useState(false);
 
     const [ histData, setHistData ] = useState({
         datasets: []
@@ -57,7 +64,7 @@ const Analytic = () => {
         plugins: {
             title: {
                 display: true,
-                text: "Loss by Epochs"
+                text: "History by Epochs"
             }
         },
         scales: {
@@ -65,10 +72,6 @@ const Analytic = () => {
                 type: 'linear',
                 display: true,
                 position: 'left',
-                title: {
-                    display: true,
-                    text: "loss"
-                }
             },
             x: {
                 type: 'linear',
@@ -81,14 +84,28 @@ const Analytic = () => {
         }
     }
 
+    // 히스토리 데이터 뷰 업데이트
     useEffect(() => {
-        if ( !isEmptyObject(history) ) {
+        if ( !isEmptyObject(history) && 
+             !isEmptyArray(history.history.loss) &&
+             !isEmptyArray(history.history.acc) ) {
             setHistData({
                 labels: history.epoch,
                 datasets: [
                     {
-                        label: "History" + "1",
+                        label: "loss",
                         data: history.history.loss,
+                        fill: false,
+                        backgroundColor: "rgba(255, 99, 71, 0.05)",
+                        borderColor: "rgba(255, 99, 71, 1)",
+                        pointBackgroundColor: "rgba(255, 99, 71, 1)",
+                        pointBorderColor: "rgba(255, 99, 71, 1)",
+                        pointHoverBackgroundColor: "rgba(255, 99, 71, 1)",
+                        pointHoverBorderColor: "rgba(255, 99, 71, 1)",
+                    },
+                    {
+                        label: "accuracy",
+                        data: history.history.acc,
                         fill: false,
                         backgroundColor: "rgba(78, 115, 223, 0.05)",
                         borderColor: "rgba(78, 115, 223, 1)",
@@ -96,6 +113,7 @@ const Analytic = () => {
                         pointBorderColor: "rgba(78, 115, 223, 1)",
                         pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
                         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+
                     }
                 ]
             });
@@ -103,68 +121,29 @@ const Analytic = () => {
     }, [ history ])
 
     const style = {
-        loadingStyle: {
-            "position":"fixed",
-            "top":"0",
-            "left":"0",
-            "width":"100vw",
-            "height":"100vw",
-            "backgroundColor":"gray",
-            "opacity":"0.3",
-            "zIndex":"100"
-        },
         btn: {
             "alignText":"center",
             "marginLeft":"auto"
         }
     }
 
-    const content = useCallback(({ element, children, checkFunction }) => {
-        const style = {
-            center: {
-                "width": "100%",
-                "padding": "10px",
-                "textAlign": "center",
-                "fontSize": "1.25rem",
-                "lineHeight": "1.75rem",
-                "opacity": "0.6",
-            }
-        }
-
-        if ( checkFunction( element ) ){
-            return (
-                <div style={style.center}>
-                    <span >No Data</span>
-                </div>
-            )
-        } else {
-            return children
-        }
-
-    })
-
     return (
         <>
             <ModelSelectModal
                 modalShow={modelModal}
                 setModalShow={setModelModal}
-                setModelUrl={setModelUrl}
-                setLoading={setLoading}/>
+                setLoading={setLoading}
+                setModel={setModel}/>
+            <SettingSelectModal
+                modalShow={settingModal}
+                setModalShow={setSettingModal}/>
             <HistorySelectModal
                 modalShow={historyModal}
                 setModalShow={setHistoryModal}/>
-            {isLoading &&
-                <div style={style.loadingStyle}>
-                    <Loader 
-                        type="spin" 
-                        color="black" 
-                        message={"training..."}
-                        style={{"position":"fixed"}}/>
-                </div>
-            }
+            {isLoading && <Loader type="spin" color="black" message={"training..."} style={{"position":"fixed"}}/>}
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="Model Info"/>
+                    <Title title="모델 정보"/>
                     <Button 
                         className="right"
                         type="button"
@@ -173,7 +152,7 @@ const Analytic = () => {
                             setModelModal(true);
                         }}
                         >
-                        Model Select
+                        모델 선택
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
@@ -182,24 +161,24 @@ const Analytic = () => {
             </div>
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="Setting Info"/>
+                    <Title title="설정 정보"/>
                     <Button
                         className="right"
                         type="button"
                         style={style.btn}
                         onClick={() => {
-                            
+                            setSettingModal(true);
                         }}>
-                        Setting Select
+                        설정 선택
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
-                    <SettingBoard/>
+                    <SettingBoard />
                 </div>
             </div>
             <div className={mainStyle.container}>
                 <div style={{"display":"flex"}}>
-                    <Title title="History"/>
+                    <Title title="히스토리 뷰"/>
                     <Button 
                         className="right"
                         type="button"
@@ -208,23 +187,38 @@ const Analytic = () => {
                             setHistoryModal(true);
                         }}
                         >
-                        History Select
+                        History 선택
                     </Button>
                 </div>
                 <div className={mainStyle.subContainer}>
-                    {content({
+                    {contentView({
                         element: histData.datasets, 
                         children:<Line options={histOpt} data={histData}/>, 
                         checkFunction: isEmptyArray})}
                 </div>
             </div>
             <div className={mainStyle.container}>
-                <Title title="Data Set"/>
+                <div style={{"display":"flex"}}>
+                    <Title title="데이터 시각화"/>
+                    <Button 
+                        className="right"
+                        type="button"
+                        style={style.btn}
+                        onClick={() => {
+                            setChartModal(true);
+                        }}
+                        >
+                        데이터 조건 설정
+                    </Button>
+                </div>
                 <PlotData
                     setPlotData={setPlotData}
-                    setOption={setPlotOpt}/>
+                    setOption={setPlotOpt}
+                    modalShow={chartModal}
+                    setModalShow={setChartModal}
+                    />
                 <div className={mainStyle.subContainer}>
-                    {content({
+                    {contentView({
                         element: plotData.datasets, 
                         children: <Bubble options={plotOpt} data={plotData}/>,
                         checkFunction: isEmptyArray})}
@@ -234,18 +228,20 @@ const Analytic = () => {
     )
 }
 
-const PlotData = ({setPlotData, setOption, ...props}) => {
-    const train = useSelector( state => state.train );
+const PlotData = ({setPlotData, setOption, modalShow, setModalShow, ...props}) => {
+    const trainSet = useSelector( state => state.train );
 
-    const columns = train.label.concat(train.feature);
+    const columns = trainSet.label.columns.concat(trainSet.feature.columns);
     const rowData = {
-        ...train.x,
-        ...train.y
+        ...trainSet.feature.data,
+        ...trainSet.label.data
     }
 
     const [ xTick, setXTick ] = useState("");
     const [ yTick, setYTick ] = useState("");
-    
+    const [ viewOptions, setViewOptions ] = useState([]);
+
+    // 플롯 데이터 뷰 업데이트
     useEffect( () => {
         if ( !isEmptyStr(xTick) && !isEmptyStr(yTick) ){
             setOption({
@@ -264,54 +260,84 @@ const PlotData = ({setPlotData, setOption, ...props}) => {
                     }
                 }
             })
-            setPlotData({                    
-                datasets: [
-                    {
-                        label: "Data",
-                        data: Array.from(rowData[xTick], 
+            
+            if (isEmptyArray(viewOptions)) {
+                setPlotData({                    
+                    datasets: [
+                        {
+                            label: "Data",
+                            data: Array.from(rowData[xTick], 
+                                ( element, index ) => ({
+                                    x: rowData[xTick][index],
+                                    y: rowData[yTick][index],
+                                    r: 5
+                                })),
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        },
+                    ]
+                });
+            } else {
+                var newDatasets = []
+                
+                for ( const [ idx, option ] of viewOptions.entries() ) {
+                    var idxArray = []
+                    
+                    rowData[option.column].map(( value, index ) => {
+                        if (option.options.includes(`${value}`)) {
+                            idxArray.push(index);
+                        }                        
+                    })
+
+                    newDatasets.push({
+                        label: `${option.column} - ${option.options}`,
+                        data: Array.from(idxArray, 
                             ( element, index ) => ({
-                                x: rowData[xTick][index],
-                                y: rowData[yTick][index],
+                                x: rowData[xTick][element],
+                                y: rowData[yTick][element],
                                 r: 5
                             })),
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    },
-                    // {
-                    //     label: yTick,
-                    //     data: Array.from(rowData[yTick],
-                    //         ( element, index )=> ({
-                    //             x: rowData[xTick][index],
-                    //             y: element,
-                    //             r: 5
-                    //         })),
-                    //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                    // }
-                ]
-            });
+                    })
+
+                }
+
+                setPlotData({
+                    datasets: newDatasets
+                });
+            }
         }
 
-    }, [ xTick, yTick ])
+    }, [ xTick, yTick, viewOptions ])
 
     return (
         <>
+            <ChartModal
+                modalShow={modalShow}
+                setModalShow={setModalShow}
+                columns={columns}
+                rowData={rowData}
+                viewOptions={viewOptions}
+                setViewOptions={setViewOptions}
+            />
             <div style={{"display":"flex"}}>
                 <Inputs
                     title="x-ticks"
-                    kind="selectOne"
+                    kind="select"
                     value={xTick}
                     setValue={setXTick}
                     default={""}
                     defaultName={"select x-ticks"}
                     list={columns}
+                    isValue={true}
                 />
                 <Inputs
                     title="y-ticks"
-                    kind="selectOne"
+                    kind="select"
                     value={yTick}
                     setValue={setYTick}
                     default={""}
                     defaultName={"select y-ticks"}
                     list={columns}
+                    isValue={true}
                 />
             </div>
         </>

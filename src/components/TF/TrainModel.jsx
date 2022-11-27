@@ -1,29 +1,33 @@
-import * as tf from "@tensorflow/tfjs";
-import { metrics } from "@tensorflow/tfjs";
-import * as tfvis from "@tensorflow/tfjs-vis";
-import { createLoss, createOptimizer } from "./CreateModel"; 
+import { createOptimizer } from "./CreateModel"; 
 
-export async function trainModel(model, inputs, labels, compile, parameter) {
-  console.log("set model compile");
-  const optimizer = createOptimizer(compile.optimizer);
+export async function trainModel(model, xs, ys, compile, parameter) {
+  /* 
+    parameter:
+      model: tf.model or tf.sequential
+      xs: tf.tensor
+      ys: tf.tensor
+      compile: { optimizer: {}, loss: "" }
+      parameter: { epoch: number, batchSize: number }
 
+    return:
+      { 
+        history: tf history object,
+        trainedModel: tf.model or tf.sequential
+      }
+  */
+ 
+ console.log("set model compile");
   model.compile({
-    optimizer: optimizer,
-    loss: "categoricalHinge"
+    optimizer: createOptimizer(compile.optimizer),
+    loss: compile.loss,
+    metrics: ['accuracy']
   })
 
-  console.log("getting train model")
-  const history = await model.fit(inputs, labels, {
+  
+  console.log("getting train model");
+  const history = await model.fit(xs, ys, {
     ...parameter,
-    // batchSize:parameter.filter(param => param.title == "batchSize")[0].name,
-    // epochs:parameter.filter(param => param.title == "epochs")[0].name,
     shuffle: true,
-    // callbacks:{onEpochEnd: (epoch, logs) => console.log(logs.loss)}
-    // callbacks: tfvis.show.fitCallbacks(
-    //   { name: 'Training Performance'},
-    //   ['loss', 'mse'],
-    //   { height: 200, callbacks: ['onEpochEnd']}
-    // )
   });
 
   return {

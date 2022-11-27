@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getDtype, getShape } from "../components/Common/module/getData";
 
 const initialState = {
-    feature: [],
-    x: {},
-    label: [],
-    y: {},
+    feature: {
+        data: {},
+        columns: [],
+        shape: [],
+        dtype: {}
+    },
+    label: {
+        data: {},
+        columns: [],
+        shape: [],
+        dtype: {}
+    }
 }
 
 const trainSlice = createSlice({
@@ -13,34 +22,53 @@ const trainSlice = createSlice({
 
     reducers: {
         setLabelData(state, action){
-            state.y = action.payload;
+            state.label.data = action.payload;
+            state.label.columns = Object.keys(action.payload);
+            state.label.dtype = getDtype(action.payload);
+            state.label.shape = getShape(action.payload);
         },
         setLabels(state, action){
-            state.label = action.payload
-        },
-        setFeatures(state, action){
-            state.feature = action.payload;
+            state.label.columns = action.payload;
         },
         setFeatureData(state, action) {
-            state.x = action.payload;
+            state.feature.data = action.payload;
+            state.feature.columns = Object.keys(action.payload);
+            state.feature.dtype = getDtype(action.payload);
+            state.feature.shape = getShape(action.payload);
         },  
+        setFeatures(state, action){
+            state.feature.columns = action.payload;
+        },
         setData(state, action){
             const { title, data } = action.payload;
+            const dtype = getDtype(data);
+            const shape = getShape(data);
+
             if (title == "label") {
-                state.label = Object.keys(data);
-                state.y = data;
+                state.label.data = data;
+                state.label.columns = Object.keys(data);
+                state.label.dtype = dtype;
+                state.label.shape = shape;
             } else if (title == "feature") {
-                state.feature = Object.keys(data);
-                state.x = data;
-            } else {
-                console.log("wrong title");
+                state.feature.data = data;
+                state.feature.columns = Object.keys(data);
+                state.feature.dtype = dtype;
+                state.feature.shape = shape;
             }
         },
         initialize(state, action){
-            state.label = [];
-            state.feature = [];
-            state.x = {};
-            state.y = {};
+            state.feature = {
+                data: {},
+                columns: [],
+                shape: [],
+                dtype: {}
+            }
+            state.label = {
+                data: {},
+                columns: [],
+                shape: [],
+                dtype: {}
+            }
         }
     }
 })

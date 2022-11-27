@@ -1,6 +1,6 @@
 import * as dfd from "danfojs"
-import { isEmptyObject, selectColumn } from "../Common/package";
-import { isEmpty } from "../Common/package";
+import { isEmpty } from "../Common/module/checkEmpty";
+import { hashMap } from "../Common/module/package";
 
 const preprocessOption = {
   STARDARDSCALE: "stardardScale",
@@ -67,14 +67,6 @@ export async function preprocess(labelData, featureData, process) {
     const dataType = data[column].reduce(( dtype, val ) => {
       return dtype == typeof val || isEmpty(val) ? dtype : "object";
     }, typeof data[column][0]);
-
-    const hashmap = data[column].reduce(( acc, val ) => {
-      acc[val] = ( acc[val] || 0 ) + 1;
-      return acc
-    }, {})
-    
-    const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
-      hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )
     
     var convertType = {
       number(item) {
@@ -89,8 +81,16 @@ export async function preprocess(labelData, featureData, process) {
       object(item) {
         return item
       }
-      
     }
+
+    const hashmap = hashMap(data[column]);
+    
+    const mostFreVal = Object.keys(hashmap).reduce(( a, b ) => 
+      hashmap[a] > hashmap[b] && !isEmpty(a) ? a : b )
+
+    console.log(dataFrame);
+    console.log(convertType[dataType](mostFreVal));
+
     dataFrame[column] = dataFrame[column].fillNa(convertType[dataType](mostFreVal)).values;
   }
 
@@ -114,7 +114,7 @@ export async function preprocess(labelData, featureData, process) {
     const encode = new dfd.LabelEncoder();
 
     encode.fit(dataFrame[column]);
-
+    
     dataFrame[column] = encode.transform(dataFrame[column].values);
   }
 
@@ -196,9 +196,9 @@ export async function preprocess(labelData, featureData, process) {
   const feature_data = dfd.toJSON(feature_df, {
     format: "row"
   })
-  
+
   return {
     "labelData": label_data,
-    "featureData": feature_data
+    "featureData": feature_data,
   }
 }

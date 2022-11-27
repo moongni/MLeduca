@@ -11,12 +11,12 @@ export const MainSidebar = (props) => {
         <div >
             <div className={`${props.isOpen? "sidebar": "sidebar close"} container`}
             >
-                <Link className="logo-details" to='/'>
+                <Link className="logo-details" to='/docs'>
                     <i ><RiComputerLine/></i>
                     <span className='logo_name'>Deep learning</span>
                 </Link>
                 <ul className='nav-links'>
-                    { sidebars.sidebarLinkName
+                    {sidebars.sidebarLinkName
                         .map(sidebar => (
                             <SidebarList {...sidebar}/>
                     ))}

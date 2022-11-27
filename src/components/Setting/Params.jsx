@@ -1,109 +1,105 @@
 import React, { useState } from "react";
-import Inputs from "../Common/inputs/Inputs";
-import data from "../../data/data.json"
-import { useDispatch, useSelector } from "react-redux";
-import { paramActions } from "../../reducers/paramSlice";
+import { useDispatch } from "react-redux";
 import { useNav } from "../Common/singlePageNav/useNav"
-import style from "../Common/component.module.css";
+import { errorHandler } from "../Common/module/errorHandler";
+import Inputs from "../Common/inputs/Inputs";
 import Title from "../Common/title/title";
-import { AiOutlineControl } from "react-icons/ai";
 import { Button } from "../Common/button/Button";
-import Alect from "../Common/alert/Alert";
+import { settingActions } from "../../reducers/settingSlice";
+import { AiOutlineControl } from "react-icons/ai";
+import mainStyle from "../Common/component.module.css";
+import data from "../../data/data.json"
 
-function Params(){
+function Params({ ...props }){
     const dispatch = useDispatch();
 
-    const dataForInputs = data.Parameters
-    const [value, setValue] = useState({});
-    const [disabled, setDisabled] = useState(false);
-
-    const [ isAlectVisable, setAlectVisiable ] = useState(false);
-    const [ message, setMessage ] = useState("");
-
-    const handleSubmit = async (event) => {
-        setDisabled(true);
-        event.preventDefault();
-        const setData = async () => {
-            dispatch(paramActions.setParam(value));
-        }
-        setData()
-        .then( _ => {
-            setAlectVisiable(true);
-            setMessage("parameter saved");
-            setTimeout(() => {
-                setAlectVisiable(false);
-            }, 1000);
-        })
-        .catch( response => console.log(response));
-        setDisabled(false);
-    }
-
-    const handleRemove = async () => {
-        setDisabled(true);
-        const setData = async () => {
-            dispatch(paramActions.removeParam());
-        }
-        setData()
-        .then( _ => {
-            setAlectVisiable(true);
-            setMessage("parameter removed");
-            setTimeout(() => {
-                setAlectVisiable(false);
-            }, 1000);
-        })
-        .catch( response => console.log(response));
-        setDisabled(false);
-    }
-
     const paramRef = useNav('Param');
+    
+    const [ value, setValue ] = useState({});
+    const [ disabled, setDisabled ] = useState(false);
+    
+    const dataForInputs = data.Parameters
+    
+    // 파라미터 적용 함수
+    const handleSubmit = (event) => {
+        const setData = async () => {
+            dispatch(settingActions.setParam(value));
+        }
+        
+        event.preventDefault();
+        setDisabled(true);
+        
+        setData()
+        .then( _ => {
+            props.setAlectMsg("Parameter saved");
+            props.setAlectVisiable(true);
+        })
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
+        
+        setDisabled(false);
+    }
+
+    // 파라미터 초기화 함수
+    const handleRemove = () => {
+        const setData = async () => {
+            dispatch(settingActions.removeParam());
+        }
+        
+        setDisabled(true);
+        
+        setData()
+        .then( _ => {
+            props.setAlectMsg("parameter removed");
+            props.setAlectVisiable(true);
+        })
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
+        
+        setDisabled(false);
+    }
 
     return (
         <div 
-            className={style.container}
+            className={mainStyle.container}
             ref={paramRef}
             id="paramContainer"
         >
-            <Title title="Parameter" icon={<AiOutlineControl/>}/>
+            <div style={{"display":"flex", "justifyContent":"space-between"}}>
+                <Title title="파라미터 설정" icon={<AiOutlineControl/>}/>
+                <Button
+                    className="right"
+                    style={{"width":"4rem"}}
+                    type="button"
+                    onClick={handleRemove}>
+                        초기화
+                </Button>
+            </div>
             <form 
-                className={style.subContainer}
+                className={mainStyle.subContainer}
                 onSubmit={handleSubmit}
             >
                 {dataForInputs.map(
-                        param => (
-                            <Inputs 
-                                {...param}
-                                value={value}
-                                setValue={setValue}/>
+                    param => (
+                        <Inputs 
+                            {...param}
+                            value={value}
+                            setValue={setValue}/>
                 ))}
-                <div style={{"position":"relative",
-                            "left":"50%",
-                            "display":"flex",
-                            "transform":"translateX(-50%)",
-                            "justifyContent":"center"}}
-                >
+                <div className={mainStyle.centerContainer}>
                     <Button
-                        className="red"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
-                        type="button"
-                        onClick={() => handleRemove()}>
-                        Reset
-                    </Button>
-                    <Button
-                        className="green"
-                        style={{"width":"8rem",
-                                "margin":"0.5rem",
-                                "height":"2.5rem"}}
+                        className="green inCenter"
                         type="submit"
+                        style={{"width":"20%"}}
                         disabled={disabled}>
-                        set Param
+                        적용
                     </Button>
                 </div>
             </form>
-            <Alect
-                message={message}
-                value={isAlectVisable}/>
         </div>
     )
 }

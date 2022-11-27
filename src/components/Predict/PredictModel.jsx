@@ -1,29 +1,17 @@
 import React, { useState, useEffect} from "react";
 import Title from "../Common/title/title";
-import { ModelSelectModal } from "../Common/modal/CommonModal";
-import { isEmptyStr } from "../Common/package";
-import * as tf from "@tensorflow/tfjs";
+import { ModelSelectModal } from "../Common/modal/modal";
+import { isEmptyObject, isEmptyStr } from "../Common/module/checkEmpty";
 
-export const PredictModel = ({ setModel, ...props }) => {
+export const PredictModel = ({ model, setModel, ...props }) => {
     const [ modalShow, setModalShow ] = useState(false);
-    const [ modelUrl, setModelUrl ] = useState("");
+    const [ modelName, setModelName ] = useState("");
 
     useEffect(() => {
-        const initLoad = async () => {
-            const modelList = await tf.io.listModels();
-
-            if ( Object.keys(modelList).includes("localstorage://model/recent") ) {
-                const model = await tf.loadLayersModel("localstorage://model/recent");
-                
-                setModel(model);
-                setModelUrl("localstorage://model/recent");
-            }
-
+        if (!isEmptyObject(model)) {
+            setModelName(model.constructor.name);
         }
-        
-        initLoad();
-
-    }, [])
+    }, [ model ])
 
     const style = {
         container: {
@@ -45,17 +33,17 @@ export const PredictModel = ({ setModel, ...props }) => {
             <ModelSelectModal
                 modalShow={modalShow}
                 setModalShow={setModalShow}
-                setModelUrl={setModelUrl}
                 setModel={setModel}/>
             <div>
                 <Title 
-                    title="Selected Model"
+                    title="선택된 모델"
                     style={{display:"inline-block",
-                            width:"200px"}}
+                            width:"200px",
+                            "fontSize":"1.25rem",}}
                 />
                 <div style={style.container}
                     onClick={() => setModalShow(true)}>
-                    <span>{!isEmptyStr(modelUrl)? modelUrl: "No Model Data"}</span>
+                    <span>{!isEmptyStr(modelName)? modelName: "No Model Data"}</span>
                 </div>
             </div>
         </>   

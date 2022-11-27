@@ -1,15 +1,13 @@
+@import "../../App.css";
+
 .container {
     width: 100%;
     min-height: 100%;
     padding: 1.25rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
-    --tw-bg-opacity: 1;
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity));
-    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), -2px -1px 6px -4px var(--tw-shadow-color);
-    box-shadow: var(--tw-shadow);
-    --tw-shadow-color: #94a3b8;
-    --tw-shadow: var(--tw-shadow-colored);
+    background-color: var(--bg-color);
+    box-shadow: var(--shadow);
 }
 
 .title {
@@ -23,23 +21,24 @@
 }
 
 .subContainer {
-    /* min-height: 100%; */
     padding: 1.25rem;
     margin: 1.25rem 0;
-    --tw-bg-opacity: 1;
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity));
-    --tw-shadow-color: rgb(203 213 225 / var(--tw-bg-opacity));
+    background-color: var(--bg-color);
     border-radius: 1rem;
     border-width: 1px;
-    border-color: var(--tw-shadow-color);
+    border-color: var(--border-color);
 }
 
-.btnContainer {
+.centerContainer {
     position: relative;
     left: 50%;
     display: flex;
     transform: translateX(-50%);
     justify-content: center;
+}
+.flexContainer {
+    display: flex;
+    margin: 0 2.5rem ;
 }
 .btn {
     width: 8rem;
