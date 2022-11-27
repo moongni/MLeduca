@@ -17,7 +17,6 @@ import { testActions } from "../reducers/testSlice";
 import { trainActions } from "../reducers/trainSlice";
 import { MdOutlineToc } from "react-icons/md"
 import mainStyle from '../components/Common/component.module.css';
-import dataViewStyle from "../components/Common/dataView.module.css";
 
 const splitTrainTest = async (labelData, featureData, trainRatio) => {
     /* 
@@ -140,8 +139,8 @@ const Preprocessing = () => {
             }))
     
             // 전처리 모듈 실행
-            const { labelData, featureData } = preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process)
-            
+            const { labelData, featureData } = await preprocess(selectColumn(data, trainY.columns), selectColumn(data, trainX.columns), process);
+
             // 훈련 셋 비율에 따라 데이터 저장
             if ( splitRatio == 1.0 || splitRatio == null) {
                 dispatch(trainActions.setData({
@@ -187,6 +186,7 @@ const Preprocessing = () => {
             }
 
         } catch (err) {
+            console.log(err);
             return {
                 isError: true,
                 errorData: {
