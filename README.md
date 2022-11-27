@@ -17,7 +17,7 @@
 
 ## Requirements
 
-### `Node.js 설치`
+### Node.js 설치
 이 웹앱은 Node.js를 기반으로 React.js 프레임워크를 사용하여 만들었습니다.
 
 Node.js 14.16.1 이후의 버전으로 다운받습니다.
@@ -27,7 +27,7 @@ Node.js 14.16.1 이후의 버전으로 다운받습니다.
 [Node.js github](https://github.com/nodejs/node)
 
 
-### `웹 앱 다운로드`
+### 웹 앱 다운로드
 
 웹앱의 소스코드를 다운받습니다. 
 
