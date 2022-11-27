@@ -1,11 +1,3 @@
-optimizer loss ui 카드
-
-전처리 스크롤, 영역별 하나 선택
-
-전처리 결과 저장
-
-예측 모델 선택
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
