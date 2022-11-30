@@ -17,9 +17,19 @@
 
 ## 사용
 
-도메인으로 접근하여 사용하려면 아래의 링크를 통해 접근할 수 있습니다.
+Docker 이미지를 사용하여 실행할 수 있습니다. [도커 허브 페이지](https://hub.docker.com/r/sy589610/mlwebapp)
 
-[Serverless Web App For Machine Learning Education](https://moongni.github.io/webappforMLEDU)
+Docker 사용자는 아래의 명령어를 통해 앱의 소스와 빌드하여 앱을 사용할 수 있습니다. 
+
+```
+docker pull sy589610/mlwebapp
+docker run -p 3000:3000 sy589610/mlwebapp
+```
+
+앱을 실행하면 브라우저에서 [http://localhost:3000](http://localhost:3000) 에서 앱을 실행할 수 있습니다.
+
+도커 이미지를 실행하는 포트 설정을 변화시키면 주소는 바뀔 수 있습니다.
+
 
 ## 소스코드 사용
 ### Requirements
@@ -48,6 +58,13 @@ npm install
 npm start
 ```
 
+의존성 문제로 인해 패키지가 다운이 완료되지 않는다면 아래의 명령어를 실행해주세요.
+
+```
+npm install --legacy-peer-deps
+npm start
+```
+
 앱을 실행하면 브라우저에서 [http://localhost:3000](http://localhost:3000) 에서 앱을 실행할 수 있습니다.
 
-실행하는 포트 설정을 변화하면 주소는 바뀔 수 있습니다.
+실행하는 포트 설정을 변화시키면 주소는 바뀔 수 있습니다.
