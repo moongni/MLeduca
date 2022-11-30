@@ -33,7 +33,7 @@ ChartJS.register(
     Tooltip,
     Legend,
     Colors
-  );
+);
 
 const Analytic = () => {
     const history = useSelector( state => state.history.info );

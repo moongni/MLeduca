@@ -289,7 +289,7 @@
           "title":"squaredHinge",
           "description":{
             "header":"제곱 힌지",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/MeanAbsolutePercentageError"
           }
         },
@@ -297,7 +297,7 @@
           "title":"hinge",
           "description":{
             "header":"힌지",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/Hinge"
           }
         },
@@ -305,7 +305,7 @@
           "title":"categoricalHinge",
           "description":{
             "header":"범주형 힌지",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalHinge"
           }
         },
@@ -313,7 +313,7 @@
           "title":"logcosh",
           "description":{
             "header":"로그 코사인",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/LogCosh"
           }
         },
@@ -329,7 +329,7 @@
           "title":"poisson",
           "description":{
             "header":"포이즌",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/Poisson"
           }
         },
@@ -337,7 +337,7 @@
           "title":"cosineProximity",
           "description":{
             "header":"코사인 프록시",
-            "content":"dasfds",
+            "content":"",
             "link": "https://www.tensorflow.org/api_docs/python/tf/keras/losses/CosineProximity"
           }
         }
