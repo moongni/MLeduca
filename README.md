@@ -1,4 +1,6 @@
-# Serverless Web App For Machine Learning Education V.1.0.0
+# MLeduca V.1.0.0
+
+## Serverless Web App For Machine Learning Education 
 
 서버리스 머신러닝 교육용 웹앱은 수학공식과 복잡한 텍스트 코딩이 필요한 머신러닝 교육에 앞서 머신러닝의 전반적인 흐름을 직접 조작하고 그 조작을 직관적으로 보여줄 수 있는 도구를 통해 머신러닝을 처음 접하는 이들을 위한 교육용 웹앱입니다. 
 
