@@ -49,7 +49,7 @@ Node.js에 더 자세한 내용은 [Node.js github](https://github.com/nodejs/no
 웹앱의 소스코드를 다운받습니다. 
 
 ```
-git clone https://github.com/moongni/ServerlessWebAppForMachineLearningEducation.git
+git clone https://github.com/moongni/MLeduca.git
 ```
 
 #### 앱 실행
