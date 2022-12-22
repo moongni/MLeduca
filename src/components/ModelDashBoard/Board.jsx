@@ -8,7 +8,7 @@ import { contentView } from "../Common/module/package";
 import boardStyle from "./ModelDashBoard.module.css";
 import mainStyle from "../Common/component.module.css";
 
-export const SideCompileBoard = ({children, className, style, ...props}) => {
+export const SideCompileBoard = ({ children, className, style, ...props }) => {
     const compile = useSelector( state => state.setting.compile );
 
     return (
@@ -31,13 +31,14 @@ export const SideCompileBoard = ({children, className, style, ...props}) => {
                             </li>  
                         )
                     }
-                    if (setting[0] === "loss" && !isEmptyStr(setting[1])){
+                    if ((setting[0] === "loss" || setting[0] === "matrics") && !isEmptyStr(setting[1])){
                         return (
                             <li style={{"paddingLeft":"0.5rem"}}>
                                 <p style={{"wordBreak":"break-all"}}>{setting[0]}:&nbsp; &nbsp;{setting[1]}</p>
                             </li>
                         )
-            }})}
+                    }
+            })}
            </Link>
         </ul>
     )

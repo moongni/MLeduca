@@ -86,36 +86,22 @@ const Analytic = () => {
 
     // 히스토리 데이터 뷰 업데이트
     useEffect(() => {
-        if ( !isEmptyObject(history) && 
-             !isEmptyArray(history.history.loss) &&
-             !isEmptyArray(history.history.acc) ) {
+        if ( !isEmptyObject(history) && !isEmptyObject(history.history) ) {
+            var newDatasets = [];
+
+            for( const [ name, values ] of Object.entries(history.history)) {
+                var data = {
+                    "label": name,
+                    data: values,
+                    fill: false
+                }
+
+                newDatasets.push(data);
+            }
+
             setHistData({
                 labels: history.epoch,
-                datasets: [
-                    {
-                        label: "loss",
-                        data: history.history.loss,
-                        fill: false,
-                        backgroundColor: "rgba(255, 99, 71, 0.05)",
-                        borderColor: "rgba(255, 99, 71, 1)",
-                        pointBackgroundColor: "rgba(255, 99, 71, 1)",
-                        pointBorderColor: "rgba(255, 99, 71, 1)",
-                        pointHoverBackgroundColor: "rgba(255, 99, 71, 1)",
-                        pointHoverBorderColor: "rgba(255, 99, 71, 1)",
-                    },
-                    {
-                        label: "accuracy",
-                        data: history.history.acc,
-                        fill: false,
-                        backgroundColor: "rgba(78, 115, 223, 0.05)",
-                        borderColor: "rgba(78, 115, 223, 1)",
-                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                        pointBorderColor: "rgba(78, 115, 223, 1)",
-                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-
-                    }
-                ]
+                datasets: newDatasets
             });
         }
     }, [ history ])

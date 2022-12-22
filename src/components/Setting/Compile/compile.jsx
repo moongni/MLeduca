@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Box from "./Box";
 import data from "../../../data/data.json"
 import { useNav } from "../../Common/singlePageNav/useNav";
@@ -20,6 +20,7 @@ const Compile = ({ ...props }) => {
             <Title title="컴파일 설정" icon={<AiOutlineControl/>} style={{"marginBottom":"1rem"}}/>
             <Optimizers {...props}/>
             <Losses {...props}/>
+            <Metrics {...props}/>
         </div>
     )
 }
@@ -30,7 +31,19 @@ function Optimizers({ ...props }) {
     const dispatch = useDispatch();
 
     const optimizers = data.Compile.filter(v => v.title === "optimizer")[0].info;
-    
+
+    const [ hovering, setHovering ] = useState(false);
+
+    const handleMouseOver = useCallback(() => {
+        !hovering &&
+        setHovering(true);
+    }, [hovering]);
+
+    const handleMouseOut = useCallback(() => {
+        !!hovering &&
+        setHovering(false);
+    }, [hovering]);
+
     // 최적화 선택 함수
     const selectHandler = (event, title, value) => {
         const setData = async () => {
@@ -83,8 +96,10 @@ function Optimizers({ ...props }) {
                 </Button>
 
             </div>
-
-            <div className={style.subContainer}>
+            <div className={`${hovering? "scrollhost":"disViable"} ${style.subContainer}`}
+                style={{"height": "18rem"}}
+                onMouseLeave={handleMouseOut}
+                onMouseEnter={handleMouseOver}>
                 {optimizers.map((info) => (
                     <Box 
                         info={info} 
@@ -101,6 +116,18 @@ function Losses({ ...props }) {
     const dispatch = useDispatch();
 
     const losses = data.Compile.filter(v => v.title === "loss")[0].info;
+
+    const [ hovering, setHovering ] = useState(false);
+
+    const handleMouseOver = useCallback(() => {
+        !hovering &&
+        setHovering(true);
+    }, [hovering]);
+
+    const handleMouseOut = useCallback(() => {
+        !!hovering &&
+        setHovering(false);
+    }, [hovering]);
 
     // 손실 함수 선택 함수
     const selectHandler = (event, title, value) => {
@@ -150,8 +177,94 @@ function Losses({ ...props }) {
                         초기화
                 </Button>
             </div>
-            <div className={style.subContainer}>
+            <div className={`${hovering? "scrollhost":"disViable"} ${style.subContainer}`}
+                style={{"height": "18rem"}}
+                onMouseLeave={handleMouseOut}
+                onMouseEnter={handleMouseOver}>
                 {losses.map((info) => (
+                    <Box 
+                        info={info} 
+                        style={{"minHeight": "200px"}}
+                        selectHandler={selectHandler}>
+                    </Box>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function Metrics({ ...props }) {
+    const dispatch = useDispatch();
+
+    const metrics = data.Compile.filter(v => v.title === "metrics")[0].info;
+    
+    const [ hovering, setHovering ] = useState(false);
+
+    const handleMouseOver = useCallback(() => {
+        !hovering &&
+        setHovering(true);
+    }, [hovering]);
+
+    const handleMouseOut = useCallback(() => {
+        !!hovering &&
+        setHovering(false);
+    }, [hovering]);
+
+    // 훈련 평가 지표 설정 함수
+    const selectHandler = (event, title, value) => {
+        const setData = async () => {
+            dispatch(settingActions.setMetrics(title));
+        }
+
+        event.preventDefault();
+        
+        setData()
+        .then( _ => {
+            props.setAlectMsg(`Metrics: ${title} saved`);
+            props.setAlectVisiable(true);  
+        })
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
+
+    }
+
+    // 훈련 평가 지표 삭제 함수
+    const handleRemove = () => {
+        const removeData = async () => {
+            dispatch(settingActions.removeMetrics());
+        }
+
+        removeData()
+        .then( _ => {
+            props.setAlectMsg("Metrics removed");
+            props.setAlectVisiable(true);
+        })
+        .catch( err => errorHandler({
+            message: err.message,
+            statuscode: err.status? err.status: null
+        }));
+
+    }
+
+    return (
+        <div>
+            <div style={{"display":"flex", "justifyContent":"space-between"}}>
+                <Title title="훈련 평가 지표"/>
+                <Button
+                    className="right"
+                    style={{"width":"4rem"}}
+                    type="button"
+                    onClick={handleRemove}>
+                        초기화
+                </Button>
+            </div>
+            <div className={`${hovering? "scrollhost":"disViable"} ${style.subContainer}`}
+                style={{"height": "18rem"}}
+                onMouseLeave={handleMouseOut}
+                onMouseEnter={handleMouseOver}>
+                {metrics.map((info) => (
                     <Box 
                         info={info} 
                         style={{"minHeight": "200px"}}
