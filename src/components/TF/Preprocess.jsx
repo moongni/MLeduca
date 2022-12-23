@@ -96,13 +96,24 @@ export async function preprocess(labelData, featureData, process) {
 
   function oneHotEncoding(dataFrame, column) {
     const encode = new dfd.OneHotEncoder();
-
+    
     encode.fit(dataFrame[column]);
 
     const sf_enc = encode.transform(dataFrame[column].values);
-
+    
     const encodedDataFrame = new dfd.DataFrame(sf_enc);
 
+    // onehotencoding rename 0, 1, 2 -> column-0, column-1, column-2
+    const onehotIndex = encodedDataFrame.columns;
+    const newColName = {}
+
+    for (var i of onehotIndex) {
+      newColName[`${i}`] = `${column}-${i}`
+    }
+
+    encodedDataFrame.rename(newColName, { inplace: true });
+
+    // 나머지 컬럼과 onehotencoding 결과 합치기
     dataFrame.drop({ columns: [column], inplace: true });
 
     const newDataFrame = dfd.concat({ dfList: [dataFrame, encodedDataFrame], axis: 1 });
