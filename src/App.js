@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import "./App.css"
+import "./static/css/App.css"
 import Router from "./routes"
 
 function App() {
+  // 앱 전체적인 스타일
   const style = {
     container: {
       position: "relative",

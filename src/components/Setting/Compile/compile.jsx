@@ -1,16 +1,17 @@
 import React, { useState, useCallback } from "react";
-import Box from "./Box";
-import data from "../../../data/data.json"
-import { useNav } from "../../Common/singlePageNav/useNav";
-import style from "../../Common/component.module.css";
-import Title from "../../Common/title/title";
-import { AiOutlineControl } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { Button } from "../../Common/button/Button";
+import { useNav } from "../../Common/singlePageNav/useNav";
 import { settingActions } from "../../../reducers/settingSlice";
+import data from "../../../data/data.json"
+import Box from "./Box";
+import Title from "../../Common/title/title";
+import { Button } from "../../Common/button/Button";
+import { AiOutlineControl } from "react-icons/ai";
 import { errorHandler } from "../../Common/module/errorHandler";
+import style from "../../../static/css/component.module.css";
 
 const Compile = ({ ...props }) => {
+    // 사이드 Nav 설정 Ref
     const compileRef = useNav("Compile");
 
     return (
@@ -30,8 +31,10 @@ export default Compile
 function Optimizers({ ...props }) {
     const dispatch = useDispatch();
 
+    // 최적화 함수의 Input 정보
     const optimizers = data.Compile.filter(v => v.title === "optimizer")[0].info;
 
+    // 커서가 컴포넌트 내에 있는지 확인
     const [ hovering, setHovering ] = useState(false);
 
     const handleMouseOver = useCallback(() => {
@@ -115,8 +118,10 @@ function Optimizers({ ...props }) {
 function Losses({ ...props }) {
     const dispatch = useDispatch();
 
+    // 손실 함수 리스트 정보
     const losses = data.Compile.filter(v => v.title === "loss")[0].info;
 
+    // 커서가 컴포넌트 내부에 있는지 확인
     const [ hovering, setHovering ] = useState(false);
 
     const handleMouseOver = useCallback(() => {
@@ -196,8 +201,10 @@ function Losses({ ...props }) {
 function Metrics({ ...props }) {
     const dispatch = useDispatch();
 
+    // 훈련 평가 지표 리스트 정보
     const metrics = data.Compile.filter(v => v.title === "metrics")[0].info;
     
+    // 커서가 컴포넌트 내에 있는지 확인
     const [ hovering, setHovering ] = useState(false);
 
     const handleMouseOver = useCallback(() => {

@@ -5,16 +5,20 @@ import Title from "../components/Common/title/title";
 import { Button } from "../components/Common/button/Button";
 import { LocalSave, SaveModal } from "../components/Common/modal/SaveModal";
 import { FaFileExport } from "react-icons/fa"
-import mainStyle from "../components/Common/component.module.css"
 import { errorHandler } from "../components/Common/module/errorHandler";
 import { ModelSelectModal } from "../components/Common/modal/modal";
+import mainStyle from "../static/css/component.module.css"
 
 const Download = () => {
+    // redux 정보
     const history = useSelector( state => state.history.info );
     const preprocess = useSelector( state => state.preprocess );
     const setting = useSelector( state => state.setting );
 
+    // 모델 정보
     const [ model, setModel ] = useOutletContext();
+
+    // 모달 정보
     const [ modelModal, setModelModal ] = useState(false);
 
     // 모델 파일 저장 함수
@@ -88,6 +92,7 @@ const Download = () => {
         })
     }
 
+    // 데이터 저장 방식
     const dataArr = [
         {
             title: "Model",
@@ -157,6 +162,7 @@ const Download = () => {
 }
 
 const DownloadList = ({ ...props }) => {
+    // 모달 정보
     const [ modalShow, setModalShow ] = useState(false);
     const [ locModShow, setLocModShow ] = useState(false);
     

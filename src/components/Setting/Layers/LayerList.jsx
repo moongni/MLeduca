@@ -1,9 +1,10 @@
 import React, { useState , useCallback } from "react";
-import "../../Common/table/scrollStyle.css";
+import "../../../static/css/scrollStyle.css";
 import tableStyle from "../../Common/table/table.module.css";
 import { AiOutlineDelete } from "react-icons/ai";
 
 export const LayerList = ({style, data, isModel, handleRemove, ...props}) => {
+    // 커서가 컴포넌트 내에 있는지 확인
     const [hovering, setHovering] = useState(false);
     
     const handleMouseOver = useCallback(() => {
@@ -16,6 +17,7 @@ export const LayerList = ({style, data, isModel, handleRemove, ...props}) => {
         setHovering(false);
     }, [hovering]);
     
+    // 레이어 리스트 중 가장 많은 설정을 가진 레이어 찾기
     const lengthArray = data.map(d => Object.keys(d.info).length);
     
     const maxLengthIndex = lengthArray.indexOf(Math.max(...lengthArray));
@@ -23,7 +25,6 @@ export const LayerList = ({style, data, isModel, handleRemove, ...props}) => {
     const columns = data[maxLengthIndex].idx == "input"? 
         [] : [...Object.keys(data[maxLengthIndex].info)];
 
-    
     return (
         <div 
             className={`${hovering? "scrollhost":"disViable"} ${tableStyle.container}`}

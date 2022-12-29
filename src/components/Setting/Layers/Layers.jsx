@@ -10,19 +10,22 @@ import { AdvancedSettingButton, Button } from "../../Common/button/Button";
 import { settingActions } from "../../../reducers/settingSlice";
 import { AiOutlineControl } from "react-icons/ai";
 import data from "../../../data/data.json"
-import style from "../../Common/component.module.css";
+import style from "../../../static/css/component.module.css";
 
 function Layers() {
     const dispatch = useDispatch();
     
+    // 레이어 구성 redux 정보
     const layers = useSelector(state => state.setting.layer);
 
+    // 사이드 Nav를 위한 Ref
     const layerRef = useNav("Layer");
 
-    const [ currentTab, setCurrentTab ] = useState('1');
     const [ disabled, setDisabled ] = useState(false);
+    
+    // 탭 메뉴에 따라 보이는 컴포넌트 설정
+    const [ currentTab, setCurrentTab ] = useState('1');
 
-    // 탭 매뉴에 따라 렌더링
     function tapContent(currentTab) {
         const curContent = data.Layers.filter(tab => `${tab.id}` == currentTab)
         switch (curContent[0].title) {
@@ -77,6 +80,7 @@ function Layers() {
 
 export default Layers
 
+// tf.model 모델 지원
 function Model({ disabled, setDisabled, ...props }) {
     const dispatch = useDispatch();
 
@@ -115,7 +119,7 @@ function Model({ disabled, setDisabled, ...props }) {
     )
 }
 
-
+// tf.sequential 모델 지원
 function Sequence({ disabled, setDisabled, ...props }) {
     const dispatch = useDispatch();
 

@@ -12,13 +12,13 @@ import { Loader } from "../Common/loader/Loader";
 import { testActions } from "../../reducers/testSlice";
 import { GrAdd } from "react-icons/gr";
 import * as dfd from "danfojs";
-import mainStyle from "../Common/component.module.css";
 import tableStyle from "../Common/table/table.module.css";
 
 export const PredictData = ({children, style, className, ...props}) => {
-    const [currentTab, setCurrentTab] = useState('1');
-
     const testSet = useSelector( state => state.test );
+
+    // 탭 메뉴 설정
+    const [ currentTab, setCurrentTab ] = useState('1');
 
     const tabData = [
         {
@@ -63,8 +63,8 @@ const CustomInput = ({children, className, style, ...props}) => {
     const [ sample, setSample ] = useState({});
     const [ inputShape, setInputShape ] = useState();
     const [ rangeArray, setRangeArray ] = useState([]);
-    const [ hovering, setHovering ] = useState(false);
 
+    // inputShape에 따라 사용자 입력 초기화
     useEffect(() => {
         if (!isEmptyArray(rangeArray)) {
             var newObj = new Object();
@@ -93,6 +93,9 @@ const CustomInput = ({children, className, style, ...props}) => {
         }
     }, [ rangeArray ])
 
+    // 커서가 컴포넌트 안에 있는지 확인
+    const [ hovering, setHovering ] = useState(false);
+
     const handleMouseOver = useCallback(() => {
         !hovering &&
         setHovering(true);
@@ -103,6 +106,7 @@ const CustomInput = ({children, className, style, ...props}) => {
         setHovering(false);
     }, [hovering]);
 
+    // 사용자 입력 데이터 추가 함수
     const addData = () => {
         try {
             var temp = new Object();
@@ -110,13 +114,14 @@ const CustomInput = ({children, className, style, ...props}) => {
             Object.entries(sample).map(value => {
                 temp[value[0]] = [value[1]]
             })
-    
+            
+            // 객체 내부 순서 보장을 위해 danfo 데이터프레임으로 변환 후 다시 객체로 변환
             var newSample = dfd.toJSON(new dfd.DataFrame(temp), {
                 format: "row"
             })
     
             dispatch(testActions.addSample(newSample));
-        } catch(err) {
+        } catch ( err ) {
             errorHandler({
                 message: err.message,
                 statuscode: err.statuscode? err.statuscode: null
@@ -217,6 +222,7 @@ const FileInput = ({children, className, ...props}) => {
     const [ url, setUrl ] = useState("");
     const [ isLoading, setLoading ] = useState(false);
 
+    // url로 데이터 불러오는 함수
     const onClickHandler = () => {
         setLoading(true);
 
@@ -239,7 +245,7 @@ const FileInput = ({children, className, ...props}) => {
         })
     }
 
-
+    // 파일로 데이터 불러오는 함수
     const readFile = (file, type) => {
         setLoading(true);
 
