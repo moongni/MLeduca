@@ -18,6 +18,7 @@ MLeduca는 서버리스 머신러닝 교육용 웹앱으로 수학공식과 복�
 
 ## 사용
 
+### Docker 이미지
 Docker 이미지를 사용하여 실행할 수 있습니다. [도커 허브 페이지](https://hub.docker.com/r/sy589610/mlwebapp)
 
 Docker 사용자는 아래의 명령어를 통해 앱의 소스와 빌드하여 앱을 사용할 수 있습니다. 
@@ -31,6 +32,10 @@ docker run -p 3000:3000 sy589610/mlwebapp
 
 도커 이미지를 실행하는 포트 설정을 변화시키면 주소는 바뀔 수 있습니다.
 
+### Github pages - MLeducaLite
+
+MLeducaLite는 본인의 깃허브 아이디의 깃허브 페이지를 사용해 도메인에 등록할 수 있습니다. 
+[MLeducaLite 페이지](https://github.com/moongni/MLeducaLite)
 
 ## 소스코드 사용
 ### Requirements
